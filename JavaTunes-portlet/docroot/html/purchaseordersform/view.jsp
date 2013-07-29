@@ -11,13 +11,21 @@
 		//create the dialog for adding a new payment
 		var addItemDialog = $("#itemSearchDialog").dialog({
 			modal : true,
-			title : "Add Item to Purchase Order"
+			title : "Add Item to Purchase Order",
+			width : "40%"
 		}).dialog("close");
 
 		//add event to the addItem button
 		$("#addItemsButton").on("click", function() {
 			addItemDialog.dialog("open");
 		});
+		
+		//create the quantity selector on the new item dialog
+		$("#newItemQuantity").spinner({
+			max : 100,
+			min : 1
+		});
+		
 	});
 </script>
 
@@ -62,28 +70,31 @@
 	<table id="itemInformation">
 		<tr>
 			<td align="right">Title:</td>
-			<td align="left"><input type="text" readonly /></td>
+			<td align="left"><input type="text" readonly size="20"/></td>
 		</tr>
 		<tr>
 			<td align="right">Artist:</td>
-			<td align="left"><input type="text" readonly /></td>
+			<td align="left"><input type="text" readonly size="20"/></td>
 		</tr>
 		<tr>
 			<td align="right">List Price:</td>
-			<td align="left"><input type="text" readonly /></td>
+			<td align="left"><input type="text" readonly size="20"/></td>
 		</tr>
 		<tr>
 			<td align="right">Your Price:</td>
-			<td align="left"><input type="text" readonly /></td>
+			<td align="left"><input type="text" readonly size="20"/></td>
 		</tr>
 		<tr>
 			<td align="right">Release Date:</td>
-			<td align="left"><input type="text" readonly /></td>
+			<td align="left"><input type="text" readonly size="20"/></td>
 		</tr>
 		<tr>
 			<td align="right">Version:</td>
-			<td align="left"><input type="text" readonly /></td>
+			<td align="left"><input type="text" readonly size="20"/></td>
 		</tr>
+		<tr>
+			<td align="right">Quantity: </td>
+			<td><input type="text" id="newItemQuantity" size="15" value="1"/></td>
 	</table>
 	<br>
 	<div align="right" style="width: 100%">
