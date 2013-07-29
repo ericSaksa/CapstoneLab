@@ -13,6 +13,7 @@ table {
 }
 
 .bordered {
+	background: #ffffff;
     border: solid #ccc 1px;
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;

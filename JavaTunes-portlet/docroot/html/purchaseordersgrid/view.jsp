@@ -2,7 +2,7 @@
 
 <portlet:defineObjects />
 
-<h2 align="center">Current Purchase Orders</h2>
+<h2 align="center">Purchase Orders History</h2>
 <br>
 <table class="bordered">
 	<tr>
