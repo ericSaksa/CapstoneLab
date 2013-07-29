@@ -1,7 +1,6 @@
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 
 <portlet:defineObjects />
-
 <h2 align="center">Current Purchase Orders</h2>
 <br>
 <table class="bordered">
