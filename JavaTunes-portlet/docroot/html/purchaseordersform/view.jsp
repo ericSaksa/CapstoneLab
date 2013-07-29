@@ -51,6 +51,7 @@
 		<td>number</td>
 	</tr>
 </table>
+<br>
 <div align="right" style="width: 100%">
 	<input id="addItemsButton" type="button" value="Add Items"
 		style="width: 25%" />
