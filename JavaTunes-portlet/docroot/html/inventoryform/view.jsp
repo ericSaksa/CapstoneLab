@@ -2,4 +2,4 @@
 
 <portlet:defineObjects />
 
-This is the <b>Inventory Form</b> portlet in View mode.
+This is the <b>Inventory Form</b> portlet in View mode
