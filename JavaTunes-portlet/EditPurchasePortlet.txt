@@ -1,12 +1,16 @@
 ResourceAction(name="updateItem")
-Parameters : {"ItemID":" ", "Quantity":" ")
+Parameters : {"PoId" :" ",
+			  "ItemID":" ", 
+			  "Quantity":" "}
 Result expected : {"ActivityStatus": "success/failure"}
 
-
 ResourceAction(name="deleteItem")
-parameters : {"ItemID":"  "}
+parameters : {"PoId" :" ",
+			  "ItemID":"  "}
 Result expected : {"ActivityStatus": "success/failure"}
 
 ResourceAction(name="addItem")
-parameters : {"ItemID":" ", Quantity: " "}
+parameters : {"PoId" :" ", 
+			  "ItemID":" ", 
+			  "Quantity": " "}
 Result expected : {"ActivityStatus": "success/failure"}
