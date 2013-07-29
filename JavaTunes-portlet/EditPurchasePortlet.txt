@@ -1,0 +1,12 @@
+ResourceAction(name="updateItem")
+Parameters : {"ItemID":" ", "Quantity":" ")
+Result expected : {"ActivityStatus": "success/failure"}
+
+
+ResourceAction(name="deleteItem")
+parameters : {"ItemID":"  "}
+Result expected : {"ActivityStatus": "success/failure"}
+
+ResourceAction(name="addItem")
+parameters : {"ItemID":" ", Quantity: " "}
+Result expected : {"ActivityStatus": "success/failure"}
