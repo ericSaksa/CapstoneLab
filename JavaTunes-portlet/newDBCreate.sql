@@ -1,6 +1,6 @@
-DROP database testtest;
-create database testtest character set utf8;
-use testtest;
+DROP database CapstoneLab;
+create database CapstoneLab  character set utf8;
+use CapstoneLab;
 
 DROP TABLE Inventory;
 DROP TABLE Item_BandMembers;
