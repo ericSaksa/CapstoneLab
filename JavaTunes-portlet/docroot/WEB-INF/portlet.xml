@@ -2,40 +2,10 @@
 
 <portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" version="2.0">
 	<portlet>
-		<portlet-name>JavaTunes</portlet-name>
-		<display-name>JavaTunes</display-name>
-		<portlet-class>com.liferay.util.bridges.mvc.MVCPortlet</portlet-class>
-		<init-param>
-			<name>view-template</name>
-			<value>/view.jsp</value>
-		</init-param>
-		<expiration-cache>0</expiration-cache>
-		<supports>
-			<mime-type>text/html</mime-type>
-		</supports>
-		<portlet-info>
-			<title>JavaTunes</title>
-			<short-title>JavaTunes</short-title>
-			<keywords>JavaTunes</keywords>
-		</portlet-info>
-		<security-role-ref>
-			<role-name>administrator</role-name>
-		</security-role-ref>
-		<security-role-ref>
-			<role-name>guest</role-name>
-		</security-role-ref>
-		<security-role-ref>
-			<role-name>power-user</role-name>
-		</security-role-ref>
-		<security-role-ref>
-			<role-name>user</role-name>
-		</security-role-ref>
-	</portlet>
-	<portlet>
 		<portlet-name>purchaseordersgrid</portlet-name>
 		<display-name>Purchase Orders Grid</display-name>
 		<portlet-class>
-			com.purchaseOrders.PurchaseOrdersGrid
+			org.springframework.web.portlet.DispatcherPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
@@ -68,7 +38,7 @@
 		<portlet-name>purchaseordersform</portlet-name>
 		<display-name>Purchase Orders Form</display-name>
 		<portlet-class>
-			com.purchaseOrders.PurchaseOrdersForm
+			org.springframework.web.portlet.DispatcherPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
@@ -101,7 +71,7 @@
 		<portlet-name>purchaseorderscontents</portlet-name>
 		<display-name>Purchase Orders Contents</display-name>
 		<portlet-class>
-			com.purchaseOrders.PurchaseOrdersContents
+			org.springframework.web.portlet.DispatcherPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
@@ -133,7 +103,9 @@
 	<portlet>
 		<portlet-name>inventorygrid</portlet-name>
 		<display-name>Inventory Grid</display-name>
-		<portlet-class>com.inventory.InventoryGrid</portlet-class>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
 		<init-param>
 			<name>view-template</name>
 			<value>/html/inventorygrid/view.jsp</value>
@@ -164,7 +136,9 @@
 	<portlet>
 		<portlet-name>inventoryform</portlet-name>
 		<display-name>Inventory Form</display-name>
-		<portlet-class>com.inventory.InventoryForm</portlet-class>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
 		<init-param>
 			<name>view-template</name>
 			<value>/html/inventoryform/view.jsp</value>
@@ -195,7 +169,9 @@
 	<portlet>
 		<portlet-name>itemdetails</portlet-name>
 		<display-name>Item Details</display-name>
-		<portlet-class>com.inventory.ItemDetails</portlet-class>
+		<portlet-class>
+			org.springframework.web.portlet.DispatcherPortlet
+		</portlet-class>
 		<init-param>
 			<name>view-template</name>
 			<value>/html/itemdetails/view.jsp</value>
