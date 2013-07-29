@@ -1,3 +1,7 @@
+ADD ORDER:
+	docroot/html/purchaseordercontents/view.jsp
+
+
 ResourceAction(name="updateItem")
 Parameters : {"PoId" :" ",
 			  "ItemID":" ", 
@@ -13,4 +17,4 @@ ResourceAction(name="addItem")
 parameters : {"PoId" :" ", 
 			  "ItemID":" ", 
 			  "Quantity": " "}
-Result expected : {"ActivityStatus": "success/failure"}
+Result expected : {"ActivityStatus": "success/failure", "PurchaseItemId": " "}
