@@ -1,0 +1,8 @@
+List JavaTunes Item:
+	docroot/html/inventorygrid/view.jsp
+	
+	public void doView:
+	Parameter : No parameter
+	Result expected : Object of List<Item>
+		name: items
+		

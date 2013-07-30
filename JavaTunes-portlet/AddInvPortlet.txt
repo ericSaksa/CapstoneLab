@@ -1,0 +1,22 @@
+Add New Item:
+	docroot/html/inventoryform/view.jsp
+	
+	ResourceAction(name="createNewItem)
+	Parameter: JSON object
+		{
+			"items" : [{
+				"Num":"",
+				"Title" : "",
+				"Artist" : "",
+				"ReleaseData" : "",
+				"ListPrice" : "",
+				"Price" : "",
+				"Version" : "",
+			},{...},...],
+			"quantity" : ""
+		}
+	Result expected : JSON object
+		{
+			"activityStatus" : "success"/"failure",
+			"ItemId" : ""
+		}
