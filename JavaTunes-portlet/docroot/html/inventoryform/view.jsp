@@ -17,6 +17,12 @@
 			alert("submit button clicked");
 			$("#newItemForm").submit();
 		});
+
+		//create the releaseDate date picker
+		var datepicker = $("#releaseDate").datepicker({
+			changeMonth : true,
+			changeYear : true
+		});
 	});
 </script>
 
@@ -51,8 +57,8 @@
 		</tr>
 		<tr>
 			<td align="right">Release Date:</td>
-			<td align="left"><input type="date" size="20" name="releaseDate"
-				id="releaseDate" /></td>
+			<td align="left"><input type="text" size="20" name="releaseDate"
+				id="releaseDate" value="08/02/2013" /></td>
 		</tr>
 		<tr>
 			<td align="right">Version:</td>
@@ -100,7 +106,7 @@
 			quantity : {
 				required : true,
 				digits : true,
-				rangeLength: [1, 10000]
+				rangeLength : [ 1, 10000 ]
 			}
 		};
 
