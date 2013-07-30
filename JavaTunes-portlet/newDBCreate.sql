@@ -124,7 +124,7 @@ INSERT INTO Inventory VALUES (12, 'http://localhost:8080/', 12, 'MP3');
 INSERT INTO Inventory VALUES (13, 'http://localhost:8080/', 13, 'MP3');
 INSERT INTO Inventory VALUES (14, 'http://localhost:8080/', 14, 'MP3');
 INSERT INTO Inventory VALUES (15, 'http://localhost:8080/', 15, 'MP3');
-INSERT INTO Inventory VALUES (16, 'http://localhost:8080/', 16 'MP3');
+INSERT INTO Inventory VALUES (16, 'http://localhost:8080/', 16, 'MP3');
 INSERT INTO Inventory VALUES (17, 'http://localhost:8080/', 17, 'MP3');
 INSERT INTO Inventory VALUES (18, 'http://localhost:8080/', 18, 'MP3');
 INSERT INTO Inventory VALUES (19, 'http://localhost:8080/', 19, 'MP3');
