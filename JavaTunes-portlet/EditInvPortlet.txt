@@ -13,7 +13,7 @@ Parameters : {"ItemBandMemberId":" ",
 Result expected : {"ActivityStatus": "success/failure"}
 
 serveResource(name="addMember")
-Parameters : {"Title":" ",
+Parameters : {"ItemId":" ",
 			  "Name":" "}
 Result expected : {"ActivityStatus": "success/failure"}
 			  
