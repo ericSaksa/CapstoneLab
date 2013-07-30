@@ -1,1 +1,21 @@
-Edit Inventory item
+EDIT INVENTORY ITEM:
+	docroot/html/itemdetails/view.jsp
+
+serveResource(name="editItem")
+Parameters : {"Title" :" ",
+			  "Artist":" ", 
+			  "ListPrice":" ",
+			  "YourPrice":" ",
+			  "ReleaseDate":" ",
+			  "Version":" "}
+Result expected : {"ActivityStatus": "success/failure"}
+
+serveResource(name="addMember")
+Parameters : {"Title":" ",
+			  "Name":" "}
+Result expected : {"ActivityStatus": "success/failure"}
+			  
+serveResource(name="deleteMember")
+Parameters : {"Title" :" ",
+			  "Name":" "}
+Result expected : {"ActivityStatus": "success/failure"}

@@ -64,10 +64,6 @@
 				<td align="right">Version:</td>
 				<td align="left"><input type="text" readonly size="20" /></td>
 			</tr>
-			<tr>
-				<td align="right">Band Members:</td>
-				<td align="left"><input type="text" readonly size="20" /></td>
-			</tr>
 		</table>
 		<br>
 		<div>
