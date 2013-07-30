@@ -7,5 +7,5 @@
 
 <portlet:defineObjects />
 
-<h2 align="center">Purchase Order Contents</h2>
+<h2 align="center">Item Details</h2>
 <br>
