@@ -6,8 +6,8 @@
 	href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 
 <script>
-	$(function() {
-		
+	jQuery(function() {
+
 		//create the dialog for adding a new payment
 		var addItemDialog = $("#itemSearchDialog").dialog({
 			modal : true,
@@ -25,8 +25,16 @@
 			max : 100,
 			min : 1
 		});
-
+		
+		 Liferay.on(
+		            'planTravel',
+		            function(event) {
+		               jQuery("#message").html(event.origin+" to "+event.destination);
+		            }
+		    );
 	});
+
+	
 </script>
 
 <portlet:defineObjects />
@@ -109,3 +117,4 @@
 			style="width: 25%" />
 	</div>
 </div>
+<div id="message"></div>
