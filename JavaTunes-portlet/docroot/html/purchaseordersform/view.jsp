@@ -7,7 +7,6 @@
 
 <script>
 	$(function() {
-
 		//create the dialog for adding a new payment
 		var addItemDialog = $("#itemSearchDialog").dialog({
 			modal : true,
