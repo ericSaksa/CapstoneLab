@@ -1,7 +1,7 @@
 Add New Item:
 	docroot/html/inventoryform/view.jsp
 	
-	ResourceAction(name="createNewItem)
+	serveResource(name="createNewItem)
 	Parameter: JSON object
 		{
 			"items" : [{

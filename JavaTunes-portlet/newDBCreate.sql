@@ -112,12 +112,25 @@ INSERT INTO Item_BandMembers VALUES (DEFAULT, 21, 'Madonna');
 
 
 INSERT INTO Inventory VALUES (DEFAULT, 1, 'http://localhost:8080/', 1, 'MP3');
-INSERT INTO Inventory VALUES (DEFAULT, 1, 'http://localhost:8080/', 2, 'MP3');
-INSERT INTO Inventory VALUES (DEFAULT, 1, 'http://localhost:8080/', 3, 'MP3');
-INSERT INTO Inventory VALUES (DEFAULT, 1, 'http://localhost:8080/', 4, 'MP3');
-INSERT INTO Inventory VALUES (DEFAULT, 1, 'http://localhost:8080/', 5, 'MP3');
-INSERT INTO Inventory VALUES (DEFAULT, 7, 'http://localhost:8080/', 6, 'MP3');
-INSERT INTO Inventory VALUES (DEFAULT, 8, 'http://localhost:8080/', 7, 'MP3');
-INSERT INTO Inventory VALUES (DEFAULT, 9, 'http://localhost:8080/', 8, 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 2, 'http://localhost:8080/', 2, 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 3, 'http://localhost:8080/', 3, 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 4, 'http://localhost:8080/', 4, 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 5, 'http://localhost:8080/', 5, 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 6, 'http://localhost:8080/', 6, 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 7, 'http://localhost:8080/', 7, 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 8, 'http://localhost:8080/', 8, 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 9, 'http://localhost:8080/', 9, 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 10, 'http://localhost:8080/', 10, 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 11, 'http://localhost:8080/', 11, 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 12, 'http://localhost:8080/', 12, 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 13, 'http://localhost:8080/', 13, 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 14, 'http://localhost:8080/', 14, 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 15, 'http://localhost:8080/', 15, 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 16, 'http://localhost:8080/', 16 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 17, 'http://localhost:8080/', 17, 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 18, 'http://localhost:8080/', 18, 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 19, 'http://localhost:8080/', 19, 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 20, 'http://localhost:8080/', 20, 'MP3');
+INSERT INTO Inventory VALUES (DEFAULT, 21, 'http://localhost:8080/', 21, 'MP3');
 
 COMMIT;
