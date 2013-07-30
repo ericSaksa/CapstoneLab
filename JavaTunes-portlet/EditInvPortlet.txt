@@ -2,7 +2,8 @@ EDIT INVENTORY ITEM:
 	docroot/html/itemdetails/view.jsp
 
 serveResource(name="editItem")
-Parameters : {"ItemId":" ",
+Parameters : {"ItemBandMemberId":" ",
+			  "ItemId":" ",
 			  "Title" :" ",
 			  "Artist":" ", 
 			  "ListPrice":" ",
