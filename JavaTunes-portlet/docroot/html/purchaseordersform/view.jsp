@@ -36,18 +36,22 @@
 	<tr>
 		<th>Item Name</th>
 		<th>Quantity</th>
+		<th>Delete</th>
 	</tr>
 	<tr>
 		<td>name</td>
 		<td>number</td>
+		<td><input type="button" value="delete"/></td>
 	</tr>
 	<tr>
 		<td>name</td>
 		<td>number</td>
+		<td><input type="button" value="delete"/></td>
 	</tr>
 	<tr>
 		<td>name</td>
 		<td>number</td>
+		<td><input type="button" value="delete"/></td>
 	</tr>
 </table>
 <br>
