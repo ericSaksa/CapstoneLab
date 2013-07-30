@@ -2,18 +2,18 @@ EDIT ORDER:
 	docroot/html/purchaseordercontents/view.jsp
 
 
-ResourceAction(name="updateItem")
+serveResource(name="updateItem")
 Parameters : {"PoId" :" ",
 			  "ItemID":" ", 
 			  "Quantity":" "}
 Result expected : {"ActivityStatus": "success/failure"}
 
-ResourceAction(name="deleteItem")
+serveResource(name="deleteItem")
 parameters : {"PoId" :" ",
 			  "ItemID":"  "}
 Result expected : {"ActivityStatus": "success/failure"}
 
-ResourceAction(name="addItem")
+serveResource(name="addItem")
 parameters : {"PoId" :" ", 
 			  "ItemID":" ", 
 			  "Quantity": " "}
