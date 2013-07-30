@@ -1,6 +1,6 @@
 DROP database CapstoneLab;
-create database CapstoneLab  character set utf8;
-use CapstoneLab;
+
+use lportal;
 
 DROP TABLE Inventory;
 DROP TABLE Item_BandMembers;
