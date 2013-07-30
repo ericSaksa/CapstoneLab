@@ -18,6 +18,5 @@ Parameters : {"ItemId":" ",
 Result expected : {"ActivityStatus": "success/failure"}
 			  
 serveResource(name="deleteMember")
-Parameters : {"Title" :" ",
-			  "Name":" "}
+Parameters : {"ItemBandMemberId" :" "}
 Result expected : {"ActivityStatus": "success/failure"}
