@@ -18,7 +18,7 @@
 
 <h2 align="center">New Inventory Item Form</h2>
 <br>
-<table id="itemInformation">
+<table id="itemInformation" style="margin-left:auto; margin-right:auto">
 	<tr>
 		<td align="right">Title:</td>
 		<td align="left"><input type="text" readonly size="20" /></td>
