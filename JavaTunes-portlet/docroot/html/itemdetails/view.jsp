@@ -15,6 +15,18 @@
 			active : 0
 		});
 
+		//create the dialog for adding a new member
+		var addMemberDialog = $("#newMemberDialog").dialog({
+			modal : true,
+			title : "Add Member to Item",
+			width : "40%"
+		}).dialog("close");
+
+		//add event to the addItem button
+		$("#addMember").on("click", function() {
+			addMemberDialog.dialog("open");
+		});
+		
 	});
 </script>
 
@@ -59,11 +71,12 @@
 		</table>
 		<br>
 		<div>
-		<table>
-		<tr>
-			<td align="right">Quantity:</td>
-			<td><input type="text" id="newItemQuantity" size="15" value="1" /></td>
-			</tr>
+			<table>
+				<tr>
+					<td align="right">Quantity:</td>
+					<td><input type="text" id="newItemQuantity" size="15"
+						value="1" /></td>
+				</tr>
 			</table>
 		</div>
 		<br>
@@ -75,6 +88,46 @@
 	<div id="tabs-2">
 		<h2 align="center">Band Member Details</h2>
 		<br />
+		<table class="bordered">
+			<tr>
+				<th>Member Name</th>
+				<th>Member ID</th>
+				<th>Delete</th>
+			</tr>
+			<tr>
+				<td>name</td>
+				<td>number</td>
+				<td><input type="button" value="delete" /></td>
+			</tr>
+			<tr>
+				<td>name</td>
+				<td>number</td>
+				<td><input type="button" value="delete" /></td>
+			</tr>
+			<tr>
+				<td>name</td>
+				<td>number</td>
+				<td><input type="button" value="delete" /></td>
+			</tr>
+		</table>
+		<br>
+		<div align="right" style="width: 100%">
+			<input id="addMember" type="button" value="Add Member"
+				style="width: 25%" />
+		</div>
+		<div id="newMemberDialog">
+			<table id="memberInformation">
+				<tr>
+					<td align="right">Name:</td>
+					<td align="left"><input type="text" size="20" /></td>
+				</tr>
+			</table>
+			<br>
+			<div align="right" style="width: 100%">
+				<input id="addMemberButton" type="button" value="Submit"
+					style="width: 25%" />
+			</div>
+		</div>
 	</div>
 </div>
 
