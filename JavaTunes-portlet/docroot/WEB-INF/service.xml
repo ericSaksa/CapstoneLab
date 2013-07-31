@@ -4,5 +4,46 @@
 	<author>amifxw0</author>
 	<namespace>capstone</namespace>
 
-	<entity name=""></entity>
+	<entity name="Inventory" local-service="true" remote-service="false" table="inventory">
+		<column name="InvId" type="int" primary="true" id-type="identity"></column>
+        <column name="ItemId" type="int"></column>
+        <column name="URL" type="String"></column>
+        <column name="NoOfLicence" type="int"></column>
+        <column name="FileType" type="String"></column>
+    </entity>
+    <entity name="Item" local-service="true" remote-service="false" table="item">
+        <column name="ItemId" type="int" primary="true" id-type="identity"></column>
+        <column name="Num" type="String"></column>
+        <column name="Title" type="String"></column>
+        <column name="Artist" type="String"></column>
+        <column name="ReleaseDate" type="Date"></column>
+        <column name="ListPrice" type="double"></column>
+        <column name="Price" type="double"></column>
+        <column name="Version" type="int"></column>
+        <column name="BandMembers" type="Collection" entity="ItemBandMembers" mapping-key="ItemId"></column>
+        <column name="Inventory" type="Collection" entity="Inventory" mapping-key="ItemId"></column>
+    </entity>
+    <entity name="ItemBandMembers" local-service="true" remote-service="false" table="Item_BandMembers">
+        <column name="ItemBandMemberId" type="int" primary="true" id-type="identity"></column>
+        <column name="ItemId" type="int"></column>
+        <column name="Member" type="String"></column>
+    </entity>
+    <entity name="PurchaseItem" local-service="true" remote-service="false" table="PurchaseItem">
+        <column name="PurchaseItemId" type="int" primary="true" id-type="identity"></column>
+        <column name="PoId" type="int"></column>
+        <column name="ItemId" type="int"></column>
+        <column name="Quantity" type="int"></column>
+        <column name="UnitPrice" type="double"></column>
+    </entity>
+    <entity name="PurchaseOrder" local-service="true" remote-service="false">
+        <column name="PoId" type="int" primary="true" id-type="identity"></column>
+        <column name="Status" type="int"></column>
+        <column name="OrderDate" type="Date"></column>
+        <column name="UserId" type="int"></column>
+        <column name="PurchaseItems" type="Collection" entity="PurchaseItem" mapping-key="PoId"></column>
+        <finder name="OrderByUserId" return-type="PurchaseOrder">
+            <finder-column name="UserId" comparator="="></finder-column>
+        </finder>
+    </entity>
+
 </service-builder>
