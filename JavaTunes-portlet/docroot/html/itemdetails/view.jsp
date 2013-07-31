@@ -281,7 +281,8 @@
 	$("#changeItemButtonSubmitChange").on("click", function(){
 		$.get("<%=editItem%>", 
 			{
-			"editItemString ": $("#itemDetailID").val()
+			"editItemString ": "{\"ItemId\":"+$("#itemDetailID").val() + ","
+				+
 			}, 
 			function(data) {
 				console.log(data);

@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+	<persistence-unit-metadata>
+		<xml-mapping-metadata-complete/>
+		<persistence-unit-defaults>
+			<access>PROPERTY</access>
+		</persistence-unit-defaults>
+	</persistence-unit-metadata>
+	<mapped-superclass class="com.sb.model.impl.InventoryModelImpl">
+		<attributes>
+			<id name="InvId" />
+			<basic name="ItemId" />
+			<basic name="URL" />
+			<basic name="NoOfLicence" />
+			<basic name="FileType" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="com.sb.model.impl.ItemModelImpl">
+		<attributes>
+			<id name="ItemId" />
+			<basic name="Num" />
+			<basic name="Title" />
+			<basic name="Artist" />
+			<basic name="ReleaseDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="ListPrice" />
+			<basic name="Price" />
+			<basic name="Version" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="com.sb.model.impl.ItemBandMembersModelImpl">
+		<attributes>
+			<id name="ItemBandMemberId" />
+			<basic name="ItemId" />
+			<basic name="Member" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="com.sb.model.impl.PurchaseItemModelImpl">
+		<attributes>
+			<id name="PurchaseItemId" />
+			<basic name="PoId" />
+			<basic name="ItemId" />
+			<basic name="Quantity" />
+			<basic name="UnitPrice" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="com.sb.model.impl.PurchaseOrderModelImpl">
+		<attributes>
+			<id name="PoId" />
+			<basic name="Status" />
+			<basic name="OrderDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="UserId" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<entity class="com.sb.model.impl.InventoryImpl" name="Inventory">
+		<table name="inventory" />
+		<attributes />
+	</entity>
+	<entity class="com.sb.model.impl.ItemImpl" name="Item">
+		<table name="item" />
+		<attributes />
+	</entity>
+	<entity class="com.sb.model.impl.ItemBandMembersImpl" name="ItemBandMembers">
+		<table name="Item_BandMembers" />
+		<attributes />
+	</entity>
+	<entity class="com.sb.model.impl.PurchaseItemImpl" name="PurchaseItem">
+		<table name="PurchaseItem" />
+		<attributes />
+	</entity>
+	<entity class="com.sb.model.impl.PurchaseOrderImpl" name="PurchaseOrder">
+		<table name="PurchaseOrder" />
+		<attributes />
+	</entity>
+</entity-mappings>
