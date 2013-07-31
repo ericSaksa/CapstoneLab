@@ -69,7 +69,7 @@ public class ItemDetails {
 	public void editItem(ResourceRequest request, ResourceResponse response) throws IOException, PortletException, JSONException{
 		// Receive search criteria string
 		String editItemString = request.getParameter("editItemString");
-		
+System.out.println(editItemString + " ====>>>> ");		
 		// Convert parameter to JSON Object
 		JSONObject editItemJson = JSONFactoryUtil.createJSONObject(editItemString);
 		

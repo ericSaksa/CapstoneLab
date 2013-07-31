@@ -2,6 +2,8 @@ package com.purchaseOrders;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -19,11 +21,19 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
-import com.inventory.ItemDetails;
+import com.liferay.counter.service.CounterLocalServiceUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.sb.model.Item;
+import com.sb.model.PurchaseItem;
+import com.sb.model.PurchaseOrder;
+import com.sb.service.ItemLocalServiceUtil;
+import com.sb.service.PurchaseItemLocalServiceUtil;
+import com.sb.service.PurchaseOrderLocalServiceUtil;
 
 
 /**
@@ -139,38 +149,54 @@ public class PurchaseOrdersForm {
 	 * @param response
 	 * @throws IOException
 	 * @throws PortletException
-	 * @throws JSONException
+	 * @throws SystemException 
+	 * @throws PortalException 
 	 */
 	@ResourceMapping(value = "submitOrderForm")
-	public void submitOrderForm(ResourceRequest request, ResourceResponse response) throws IOException, PortletException, JSONException{
-		String purchaseOrder = request.getParameter("purchaseOrder");
+	public void submitOrderForm(ResourceRequest request, ResourceResponse response) throws SystemException, PortalException, IOException {
+		
+		String purchaseOrderString = request.getParameter("purchaseOrder");
 		
 		JSONObject resultJson = JSONFactoryUtil.createJSONObject();
 		JSONArray purchaseItemsID = JSONFactoryUtil.createJSONArray();
 		
-		JSONObject orderFormJson = JSONFactoryUtil.createJSONObject(purchaseOrder);
+		JSONObject orderFormJson;
+		orderFormJson = JSONFactoryUtil.createJSONObject(purchaseOrderString);
+		
 		JSONArray purchaseItems = orderFormJson.getJSONArray("PurchaseItems");
 		
 		// Create order object
+		PurchaseOrder purchaseOrder = PurchaseOrderLocalServiceUtil.createPurchaseOrder( new Long(CounterLocalServiceUtil.increment(PurchaseOrder.class.getName())).intValue() );
+		
+		// Set default attributes
+		purchaseOrder.setOrderDate(new Date());
+		purchaseOrder.setStatus(0);
+		purchaseOrder.setUserId(Integer.parseInt(request.getRemoteUser()));
+		
+		purchaseOrder = PurchaseOrderLocalServiceUtil.addPurchaseOrder(purchaseOrder);
 		
 		for(int i = 0; i < purchaseItems.length(); i++) {
 			JSONObject purchaseItem = purchaseItems.getJSONObject(i);
 			
-			String itemID = purchaseItem.getString("ItemId");
-			String quantity = purchaseItem.getString("Quantity");
-			
+			int itemID = Integer.parseInt(purchaseItem.getString("ItemId"));
+			int quantity = Integer.parseInt(purchaseItem.getString("Quantity"));
+
 			// Create purchase item
+			PurchaseItem newCreatedPurchaseItem = PurchaseItemLocalServiceUtil.createPurchaseItem( new Long(CounterLocalServiceUtil.increment(PurchaseItem.class.getName())).intValue() );
+			newCreatedPurchaseItem.setItemId(itemID);
+			newCreatedPurchaseItem.setPoId(purchaseOrder.getPoId());
 			
-			/*
-			 * Save to purchase order for each item
-			 */
+			newCreatedPurchaseItem.setQuantity(quantity);
+			newCreatedPurchaseItem.setUnitPrice( ItemLocalServiceUtil.getItem(newCreatedPurchaseItem.getItemId()).getPrice()*newCreatedPurchaseItem.getQuantity() );
+	
+			PurchaseItem it = PurchaseItemLocalServiceUtil.addPurchaseItem(newCreatedPurchaseItem);
 			
 			JSONObject resultObject = JSONFactoryUtil.createJSONObject();
 			resultObject.put("purchaseItemId", "");
 			purchaseItemsID.put(resultObject);
 		}
 		
-		String activityStatus = "";
+		String activityStatus = "success";
 		String poID = "";
 		
 		resultJson.put("ActivityStatus", activityStatus);
