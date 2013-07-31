@@ -19,7 +19,7 @@
 		var addMemberDialog = $("#newMemberDialog").dialog({
 			modal : true,
 			title : "Add Member to Item",
-			width : "40%"
+			width : "25%"
 		}).dialog("close");
 
 		//add event to the addItem button
@@ -38,7 +38,7 @@
 	<div id="tabs-1">
 		<h2 align="center">Item Details</h2>
 		<br>
-		<form id="newMemberForm">
+		<form id="editItemForm">
 		<table id="itemInformation"
 			style="margin-left: auto; margin-right: auto">
 			<tr>
@@ -115,17 +115,15 @@
 		</div>
 		<div id="newMemberDialog">
 			<form id=newMemberForm>
-				<table id="memberInformation">
+				<br>
+				<table id="memberInformation" style="margin-left:auto; margin-right:auto">
 					<tr>
 						<td align="right">Name:</td>
-						<td align="left"><input type="text" size="20" name="name" id="name"/></td>
+						<td align="left"><input type="text" size="20" name="name" id="name" value="Enter name"/></td>
+						<td><input id="addMemberButton" type="button" value="Submit"/></td>
 					</tr>
 				</table>
 				<br>
-				<div align="right" style="width: 100%">
-					<input id="addMemberButton" type="button" value="Submit"
-						style="width: 25%" />
-				</div>
 			</form>
 		</div>
 	</div>
@@ -174,7 +172,7 @@
 
 		//create the form validator
 		new Y.FormValidator({
-			boundingBox : '#editForm',
+			boundingBox : '#editItemForm',
 			rules : editRules
 		});
 
