@@ -88,7 +88,7 @@
 		<attributes />
 	</entity>
 	<entity class="com.sb.model.impl.PurchaseOrderImpl" name="PurchaseOrder">
-		<table name="capstone_PurchaseOrder" />
+		<table name="PurchaseOrder" />
 		<attributes />
 	</entity>
 </entity-mappings>

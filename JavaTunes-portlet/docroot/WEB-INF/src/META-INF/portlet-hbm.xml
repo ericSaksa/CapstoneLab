@@ -48,7 +48,7 @@
 		<property name="Quantity" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
 		<property name="UnitPrice" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
 	</class>
-	<class name="com.sb.model.impl.PurchaseOrderImpl" table="capstone_PurchaseOrder">
+	<class name="com.sb.model.impl.PurchaseOrderImpl" table="PurchaseOrder">
 		<cache usage="read-write" />
 		<id name="PoId" type="int">
 			<generator class="identity" />

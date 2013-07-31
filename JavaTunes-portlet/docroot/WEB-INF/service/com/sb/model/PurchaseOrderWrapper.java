@@ -212,7 +212,7 @@ public class PurchaseOrderWrapper implements PurchaseOrder,
 		return new PurchaseOrderWrapper((PurchaseOrder)_purchaseOrder.clone());
 	}
 
-	public int compareTo(PurchaseOrder purchaseOrder) {
+	public int compareTo(com.sb.model.PurchaseOrder purchaseOrder) {
 		return _purchaseOrder.compareTo(purchaseOrder);
 	}
 
@@ -221,11 +221,11 @@ public class PurchaseOrderWrapper implements PurchaseOrder,
 		return _purchaseOrder.hashCode();
 	}
 
-	public com.liferay.portal.model.CacheModel<PurchaseOrder> toCacheModel() {
+	public com.liferay.portal.model.CacheModel<com.sb.model.PurchaseOrder> toCacheModel() {
 		return _purchaseOrder.toCacheModel();
 	}
 
-	public PurchaseOrder toEscapedModel() {
+	public com.sb.model.PurchaseOrder toEscapedModel() {
 		return new PurchaseOrderWrapper(_purchaseOrder.toEscapedModel());
 	}
 

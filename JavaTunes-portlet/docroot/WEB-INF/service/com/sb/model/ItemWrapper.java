@@ -311,7 +311,7 @@ public class ItemWrapper implements Item, ModelWrapper<Item> {
 		return new ItemWrapper((Item)_item.clone());
 	}
 
-	public int compareTo(Item item) {
+	public int compareTo(com.sb.model.Item item) {
 		return _item.compareTo(item);
 	}
 
@@ -320,11 +320,11 @@ public class ItemWrapper implements Item, ModelWrapper<Item> {
 		return _item.hashCode();
 	}
 
-	public com.liferay.portal.model.CacheModel<Item> toCacheModel() {
+	public com.liferay.portal.model.CacheModel<com.sb.model.Item> toCacheModel() {
 		return _item.toCacheModel();
 	}
 
-	public Item toEscapedModel() {
+	public com.sb.model.Item toEscapedModel() {
 		return new ItemWrapper(_item.toEscapedModel());
 	}
 

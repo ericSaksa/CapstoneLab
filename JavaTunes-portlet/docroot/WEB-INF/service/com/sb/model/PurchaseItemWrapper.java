@@ -236,7 +236,7 @@ public class PurchaseItemWrapper implements PurchaseItem,
 		return new PurchaseItemWrapper((PurchaseItem)_purchaseItem.clone());
 	}
 
-	public int compareTo(PurchaseItem purchaseItem) {
+	public int compareTo(com.sb.model.PurchaseItem purchaseItem) {
 		return _purchaseItem.compareTo(purchaseItem);
 	}
 
@@ -245,11 +245,11 @@ public class PurchaseItemWrapper implements PurchaseItem,
 		return _purchaseItem.hashCode();
 	}
 
-	public com.liferay.portal.model.CacheModel<PurchaseItem> toCacheModel() {
+	public com.liferay.portal.model.CacheModel<com.sb.model.PurchaseItem> toCacheModel() {
 		return _purchaseItem.toCacheModel();
 	}
 
-	public PurchaseItem toEscapedModel() {
+	public com.sb.model.PurchaseItem toEscapedModel() {
 		return new PurchaseItemWrapper(_purchaseItem.toEscapedModel());
 	}
 

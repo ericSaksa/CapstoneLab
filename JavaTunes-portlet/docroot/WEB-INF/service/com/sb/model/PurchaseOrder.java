@@ -17,7 +17,7 @@ package com.sb.model;
 import com.liferay.portal.model.PersistedModel;
 
 /**
- * The extended model interface for the PurchaseOrder service. Represents a row in the &quot;capstone_PurchaseOrder&quot; database table, with each column mapped to a property of this class.
+ * The extended model interface for the PurchaseOrder service. Represents a row in the &quot;PurchaseOrder&quot; database table, with each column mapped to a property of this class.
  *
  * @author amifxw0
  * @see PurchaseOrderModel

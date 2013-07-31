@@ -35,7 +35,7 @@
         <column name="Quantity" type="int"></column>
         <column name="UnitPrice" type="double"></column>
     </entity>
-    <entity name="PurchaseOrder" local-service="true" remote-service="false">
+    <entity name="PurchaseOrder" local-service="true" remote-service="false" table="PurchaseOrder"> 
         <column name="PoId" type="int" primary="true" id-type="identity"></column>
         <column name="Status" type="int"></column>
         <column name="OrderDate" type="Date"></column>

@@ -12,6 +12,13 @@ create table PurchaseItem (
 	UnitPrice DOUBLE
 );
 
+create table PurchaseOrder (
+	PoId INTEGER not null primary key IDENTITY,
+	Status INTEGER,
+	OrderDate DATE null,
+	UserId INTEGER
+);
+
 create table capstone_PurchaseOrder (
 	PoId INTEGER not null primary key IDENTITY,
 	Status INTEGER,

@@ -186,7 +186,7 @@ public class ItemBandMembersWrapper implements ItemBandMembers,
 		return new ItemBandMembersWrapper((ItemBandMembers)_itemBandMembers.clone());
 	}
 
-	public int compareTo(ItemBandMembers itemBandMembers) {
+	public int compareTo(com.sb.model.ItemBandMembers itemBandMembers) {
 		return _itemBandMembers.compareTo(itemBandMembers);
 	}
 
@@ -195,11 +195,11 @@ public class ItemBandMembersWrapper implements ItemBandMembers,
 		return _itemBandMembers.hashCode();
 	}
 
-	public com.liferay.portal.model.CacheModel<ItemBandMembers> toCacheModel() {
+	public com.liferay.portal.model.CacheModel<com.sb.model.ItemBandMembers> toCacheModel() {
 		return _itemBandMembers.toCacheModel();
 	}
 
-	public ItemBandMembers toEscapedModel() {
+	public com.sb.model.ItemBandMembers toEscapedModel() {
 		return new ItemBandMembersWrapper(_itemBandMembers.toEscapedModel());
 	}
 

@@ -1145,7 +1145,7 @@ public class PurchaseOrderPersistenceImpl extends BasePersistenceImpl<PurchaseOr
 	private static final String _SQL_SELECT_PURCHASEORDER_WHERE = "SELECT purchaseOrder FROM PurchaseOrder purchaseOrder WHERE ";
 	private static final String _SQL_COUNT_PURCHASEORDER = "SELECT COUNT(purchaseOrder) FROM PurchaseOrder purchaseOrder";
 	private static final String _SQL_COUNT_PURCHASEORDER_WHERE = "SELECT COUNT(purchaseOrder) FROM PurchaseOrder purchaseOrder WHERE ";
-	private static final String _SQL_GETPURCHASEITEMS = "SELECT {PurchaseItem.*} FROM PurchaseItem INNER JOIN capstone_PurchaseOrder ON (capstone_PurchaseOrder.PoId = PurchaseItem.PoId) WHERE (capstone_PurchaseOrder.PoId = ?)";
+	private static final String _SQL_GETPURCHASEITEMS = "SELECT {PurchaseItem.*} FROM PurchaseItem INNER JOIN PurchaseOrder ON (PurchaseOrder.PoId = PurchaseItem.PoId) WHERE (PurchaseOrder.PoId = ?)";
 	private static final String _SQL_GETPURCHASEITEMSSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM PurchaseItem WHERE PoId = ?";
 	private static final String _SQL_CONTAINSPURCHASEITEM = "SELECT COUNT(*) AS COUNT_VALUE FROM PurchaseItem WHERE PoId = ? AND PurchaseItemId = ?";
 	private static final String _FINDER_COLUMN_ORDERBYUSERID_USERID_2 = "purchaseOrder.UserId = ?";

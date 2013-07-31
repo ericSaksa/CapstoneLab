@@ -235,7 +235,7 @@ public class InventoryWrapper implements Inventory, ModelWrapper<Inventory> {
 		return new InventoryWrapper((Inventory)_inventory.clone());
 	}
 
-	public int compareTo(Inventory inventory) {
+	public int compareTo(com.sb.model.Inventory inventory) {
 		return _inventory.compareTo(inventory);
 	}
 
@@ -244,11 +244,11 @@ public class InventoryWrapper implements Inventory, ModelWrapper<Inventory> {
 		return _inventory.hashCode();
 	}
 
-	public com.liferay.portal.model.CacheModel<Inventory> toCacheModel() {
+	public com.liferay.portal.model.CacheModel<com.sb.model.Inventory> toCacheModel() {
 		return _inventory.toCacheModel();
 	}
 
-	public Inventory toEscapedModel() {
+	public com.sb.model.Inventory toEscapedModel() {
 		return new InventoryWrapper(_inventory.toEscapedModel());
 	}
 
