@@ -62,6 +62,18 @@
 				data: JSON.stringify(items)
 			});
 		});
+		/* jQuery("#submitPurchaseButton").click(function(event) {
+			
+			 Liferay.fire(
+			            'PurchaseOrderEvent', {
+			           	 PoId : 'wert1234',
+			             OrderDate : '2013/07/31',
+			             status : 'In Progress'
+			        }
+			    );
+			return false;
+		}); */
+		
 	});
 	
 	function resetItemSearchDialog() {
