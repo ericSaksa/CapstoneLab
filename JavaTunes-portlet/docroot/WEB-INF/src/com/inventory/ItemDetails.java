@@ -1,6 +1,9 @@
 package com.inventory;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -17,9 +20,12 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.sb.model.Item;
+import com.sb.service.ItemLocalServiceUtil;
 
 /**
  * @author FW
@@ -64,12 +70,14 @@ public class ItemDetails {
 	 * @throws IOException
 	 * @throws PortletException
 	 * @throws JSONException
+	 * @throws SystemException 
+	 * @throws ParseException 
 	 */
 	@ResourceMapping(value = "editItem")
-	public void editItem(ResourceRequest request, ResourceResponse response) throws IOException, PortletException, JSONException{
+	public void editItem(ResourceRequest request, ResourceResponse response) throws IOException, PortletException, JSONException, SystemException, ParseException{
 		// Receive search criteria string
 		String editItemString = request.getParameter("editItemString");
-System.out.println(editItemString + " ====>>>> ");		
+System.out.println("--->   "+editItemString);
 		// Convert parameter to JSON Object
 		JSONObject editItemJson = JSONFactoryUtil.createJSONObject(editItemString);
 		
@@ -77,23 +85,35 @@ System.out.println(editItemString + " ====>>>> ");
 		JSONObject resultJson = JSONFactoryUtil.createJSONObject();
 		
 		// Indicator for the activity status
-		String activityStatus = "";
+		String activityStatus = "success";
 		
-		String itmeID = editItemJson.getString("ItemId");
+		int itemID = Integer.parseInt(editItemJson.getString("ItemId"));
 		String title = editItemJson.getString("Title");
 		String artist = editItemJson.getString("Artist");
-		String listPrice = editItemJson.getString("ListPrice");
-		String yourPrice = editItemJson.getString("YourPrice");
-		String releaseDate = editItemJson.getString("ReleaseDate");
-		String version = editItemJson.getString("Version");
+		double listPrice = Double.parseDouble(editItemJson.getString("ListPrice"));
+		double yourPrice = Double.parseDouble(editItemJson.getString("YourPrice"));
+
+		//		Date releaseDate = new Date(editItemJson.getString("ReleaseDate"));
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date releaseDate = sdf.parse(editItemJson.getString("ReleaseDate"));
+		
+		int version = Integer.parseInt(editItemJson.getString("Version"));
 		
 		// Retrieve Item object via item ID
+		Item currentItem = ItemLocalServiceUtil.fetchItem(itemID);
 		
 		// Set attributes
+		currentItem.setTitle(title);
+		currentItem.setArtist(artist);
+		currentItem.setListPrice(listPrice);
+		currentItem.setPrice(yourPrice);
+		currentItem.setReleaseDate(releaseDate);
+		currentItem.setVersion(version);
 		
 		/*
-		 * Call service util
+		 * Call service util to save
 		 */
+		ItemLocalServiceUtil.updateItem(currentItem);
 		
 		// Put back acitivity status
 		resultJson.put("ActivityStatus", activityStatus);

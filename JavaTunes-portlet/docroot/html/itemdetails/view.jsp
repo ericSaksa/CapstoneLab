@@ -279,14 +279,18 @@
 	
 	
 	$("#changeItemButtonSubmitChange").on("click", function(){
-		$.get("<%=editItem%>", 
-			{
-			"editItemString ": "{\"ItemId\":"+$("#itemDetailID").val() + ","
-				+
-			}, 
-			function(data) {
+		var editItemString = {
+				ItemId: $("#itemDetailID").val(),
+				Title: $("#itemDetailTitle").val(),
+				Artist: $("#itemDetailArtist").val(),
+				ListPrice: $("#itemDetailListPrice").val(),
+				YourPrice: $("#itemDetailYourPrice").val(),
+				ReleaseDate: $("#itemDetailReleaseDate").val(),
+				Version: $("#itemDetailVersion").val()
+		};
+		$.get("<%=editItem%>", {"editItemString" : JSON.stringify(editItemString)}, function(data) {
 				console.log(data);
-		});
+			});
 	});
 	
 </script>
