@@ -1,0 +1,19 @@
+List Order:
+	docroot/html/purchaseordersgrid/view.jsp
+	
+	public void doView
+	Parameter : No parameter
+	Result expected : Object of List<PurchaseOrder>
+		name : purchaseOrders
+		
+serveResource(name="getPurchaseContents")
+Parameters : {"PoId" :" "}
+Result expected : {"ActivityStatus": "success/failure",
+				   "purchaseItems":[{
+				   						"PurchaseItemId": " ",
+				   						"PoId": " ",
+				   						"ItemId": " ",
+				   						"Quantity": " ",
+				   						"UnitPrice": " "
+				   					},{...},...]
+				  }

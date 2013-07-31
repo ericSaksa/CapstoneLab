@@ -1,7 +1,0 @@
-List Order:
-	docroot/html/purchaseordersgrid/view.jsp
-	
-	public void doView
-	Parameter : No parameter
-	Result expected : Object of List<PurchaseOrder>
-		name : purchaseOrders
