@@ -5,14 +5,14 @@ Add New Item:
 	Parameter: JSON object
 		{
 			"items" : [{
-				"Num":"",
-				"Title" : "",
-				"Artist" : "",
-				"ReleaseData" : "",
-				"ListPrice" : "",
-				"Price" : "",
-				"Version" : "",
-			},{...},...],
+							"Num":"",
+							"Title" : "",
+							"Artist" : "",
+							"ReleaseData" : "",
+							"ListPrice" : "",
+							"Price" : "",
+							"Version" : "",
+						},{...},...],
 			"quantity" : ""
 		}
 	Result expected : JSON object

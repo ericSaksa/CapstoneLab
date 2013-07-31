@@ -1,0 +1,27 @@
+List JavaTunes Item:
+	docroot/html/inventorygrid/view.jsp
+	
+	public void doView:
+	Parameter : No parameter
+	Result expected : Object of List<Item>
+		name: items
+		
+serveResource(name="getItemDetails")
+Parameters : {"ItemId" :" "}
+Result expected : {"ActivityStatus": "success/failure",
+				   "bandMembers":[{
+				   					"ItemBandMemberId": " ",
+				   					"Member": " "
+				   				  },{...},...],
+				   "itemDetails": {
+				   						"Title": "",
+				   						"Num": "",
+				   						"Artist": "",
+				   						"ReleaseDate": "",
+				   						"ListPrice": "",
+				   						"Price": "",
+				   						"Version": "",
+				   						"URL" : "",		// get from Inventory be ItemId
+				   						"NoOfLicence": "" // get from Inventory be ItemId as well
+				   				   }
+				  }

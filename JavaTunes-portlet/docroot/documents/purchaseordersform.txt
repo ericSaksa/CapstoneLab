@@ -9,7 +9,7 @@ ADD ORDER:
 	
 	
 
-	(1).ResourceAction(name="autoComplete")
+	(1).serveResource(name="autoComplete")
 	Parameters= searchString (can be String depending on the search criteria).
 	Result expected = JSON object in the form:
 					{"ActivityStatus": "success/failure",
@@ -25,7 +25,7 @@ ADD ORDER:
 					      {..},..]
 					}
 
-	(2). ReasourceAction(name="submitOrderForm")
+	(2). serveResource(name="submitOrderForm")
 		
 	Parameter= JSON object in the form:
 	
