@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.sb.model.Inventory">
+		<field name="InvId" type="int" />
+		<field name="ItemId" type="int" />
+		<field name="URL" type="String" />
+		<field name="NoOfLicence" type="int" />
+		<field name="FileType" type="String" />
+	</model>
+	<model name="com.sb.model.Item">
+		<field name="ItemId" type="int" />
+		<field name="Num" type="String" />
+		<field name="Title" type="String" />
+		<field name="Artist" type="String" />
+		<field name="ReleaseDate" type="Date" />
+		<field name="ListPrice" type="double" />
+		<field name="Price" type="double" />
+		<field name="Version" type="int" />
+	</model>
+	<model name="com.sb.model.ItemBandMembers">
+		<field name="ItemBandMemberId" type="int" />
+		<field name="ItemId" type="int" />
+		<field name="Member" type="String" />
+	</model>
+	<model name="com.sb.model.PurchaseItem">
+		<field name="PurchaseItemId" type="int" />
+		<field name="PoId" type="int" />
+		<field name="ItemId" type="int" />
+		<field name="Quantity" type="int" />
+		<field name="UnitPrice" type="double" />
+	</model>
+	<model name="com.sb.model.PurchaseOrder">
+		<field name="PoId" type="int" />
+		<field name="Status" type="int" />
+		<field name="OrderDate" type="Date" />
+		<field name="UserId" type="int" />
+	</model>
+</model-hints>

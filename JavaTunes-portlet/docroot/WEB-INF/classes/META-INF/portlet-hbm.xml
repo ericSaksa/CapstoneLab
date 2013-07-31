@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="com.sb.model.Inventory" />
+	<import class="com.sb.model.Item" />
+	<import class="com.sb.model.ItemBandMembers" />
+	<import class="com.sb.model.PurchaseItem" />
+	<import class="com.sb.model.PurchaseOrder" />
+	<class name="com.sb.model.impl.InventoryImpl" table="inventory">
+		<cache usage="read-write" />
+		<id name="InvId" type="int">
+			<generator class="identity" />
+		</id>
+		<property name="ItemId" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="URL" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="NoOfLicence" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="FileType" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="com.sb.model.impl.ItemImpl" table="item">
+		<cache usage="read-write" />
+		<id name="ItemId" type="int">
+			<generator class="identity" />
+		</id>
+		<property name="Num" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="Title" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="Artist" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="ReleaseDate" type="org.hibernate.type.TimestampType" />
+		<property name="ListPrice" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
+		<property name="Price" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
+		<property name="Version" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+	</class>
+	<class name="com.sb.model.impl.ItemBandMembersImpl" table="Item_BandMembers">
+		<cache usage="read-write" />
+		<id name="ItemBandMemberId" type="int">
+			<generator class="identity" />
+		</id>
+		<property name="ItemId" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="Member" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="com.sb.model.impl.PurchaseItemImpl" table="PurchaseItem">
+		<cache usage="read-write" />
+		<id name="PurchaseItemId" type="int">
+			<generator class="identity" />
+		</id>
+		<property name="PoId" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="ItemId" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="Quantity" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="UnitPrice" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
+	</class>
+	<class name="com.sb.model.impl.PurchaseOrderImpl" table="capstone_PurchaseOrder">
+		<cache usage="read-write" />
+		<id name="PoId" type="int">
+			<generator class="identity" />
+		</id>
+		<property name="Status" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="OrderDate" type="org.hibernate.type.TimestampType" />
+		<property name="UserId" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+	</class>
+</hibernate-mapping>
