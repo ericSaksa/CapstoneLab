@@ -12,16 +12,32 @@
 			min : 1
 		});
 
-		//submit the form when the button is clicked
-		$("#addItemButton").on("click", function() {
-			alert("submit button clicked");
-			$("#newItemForm").submit();
-		});
-
 		//create the releaseDate date picker
 		var datepicker = $("#releaseDate").datepicker({
 			changeMonth : true,
 			changeYear : true
+		});
+		
+		jQuery("#addItemButton").click(function(event) {
+			 Liferay.fire(
+			            'AddItemEvent', {
+			           	 ItemId : 'qwerty',
+			             Title : $("#title").val(),
+			             Artist : $("#artist").val(),
+			             ListPrice : $("#listPrice").val(),
+			             YourPrice : $("#yourPrice").val(),
+			             ReleaseDate : $("#releaseDate").val(),
+			             Version : $("#version").val(),
+			             Quantity : $("#quantity").val()
+			        }
+			    );
+			 $("#title").val("");
+             $("#artist").val("");
+             $("#listPrice").val("");
+             $("#yourPrice").val("");
+             $("#releaseDate").val("08/02/2013");
+             $("#version").val("");
+             $("#quantity").val("1");
 		});
 	});
 </script>
