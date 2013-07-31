@@ -7,7 +7,7 @@
 
 <script>
 	$(function() {
-		$("#newItemQuantity").spinner({
+		jQuery("#quantity").spinner({
 			min : 1
 		});
 
@@ -23,8 +23,14 @@
 		}).dialog("close");
 
 		//add event to the addItem button
-		$("#addMember").on("click", function() {
+		jQuery("#addMember").on("click", function() {
 			addMemberDialog.dialog("open");
+		});
+
+		//create the releaseDate date picker
+		jQuery("#itemReleaseDate").datepicker({
+			changeMonth : true,
+			changeYear : true
 		});
 
 	});
@@ -39,48 +45,54 @@
 		<h2 align="center">Item Details</h2>
 		<br>
 		<form id="editItemForm">
-		<table id="itemInformation"
-			style="margin-left: auto; margin-right: auto">
-			<tr>
-				<td align="right">Title:</td>
-				<td align="left"><input type="text" size="20" name="title" id="title"/></td>
-			</tr>
-			<tr>
-				<td align="right">Artist:</td>
-				<td align="left"><input type="text" size="20" name="artist" id="artist"/></td>
-			</tr>
-			<tr>
-				<td align="right">List Price:</td>
-				<td align="left"><input type="text" size="20" name="listPrice" id="listPrice"/></td>
-			</tr>
-			<tr>
-				<td align="right">Your Price:</td>
-				<td align="left"><input type="text" size="20" name="yourPrice" id="yourPrice"/></td>
-			</tr>
-			<tr>
-				<td align="right">Release Date:</td>
-				<td align="left"><input type="text" size="20" name="releaseDate" id="releaseDate"/></td>
-			</tr>
-			<tr>
-				<td align="right">Version:</td>
-				<td align="left"><input type="text" size="20" name="version" id="version"/></td>
-			</tr>
-		</table>
-		<br>
-		<div>
-			<table>
+			<table id="itemInformation"
+				style="margin-left: auto; margin-right: auto">
 				<tr>
-					<td align="right">Quantity:</td>
-					<td><input type="text" id="newItemQuantity" size="15"
-						value="1" name="quantity"/></td>
+					<td align="right">Title:</td>
+					<td align="left"><input type="text" size="20" name="title"
+						id="title" /></td>
+				</tr>
+				<tr>
+					<td align="right">Artist:</td>
+					<td align="left"><input type="text" size="20" name="artist"
+						id="artist" /></td>
+				</tr>
+				<tr>
+					<td align="right">List Price:</td>
+					<td align="left"><input type="text" size="20" name="listPrice"
+						id="listPrice" /></td>
+				</tr>
+				<tr>
+					<td align="right">Your Price:</td>
+					<td align="left"><input type="text" size="20" name="yourPrice"
+						id="yourPrice" /></td>
+				</tr>
+				<tr>
+					<td align="right">Release Date:</td>
+					<td align="left"><input type="text" size="20"
+						name="releaseDate" id="itemReleaseDate" /></td>
+				</tr>
+				<tr>
+					<td align="right">Version:</td>
+					<td align="left"><input type="text" size="20" name="version"
+						id="version" /></td>
 				</tr>
 			</table>
-		</div>
-		<br>
-		<div align="right" style="width: 100%">
-			<input id="changeItemButton" type="button" value="Submit Changes"
-				style="width: 25%" />
-		</div>
+			<br>
+			<div>
+				<table>
+					<tr>
+						<td align="right">Quantity:</td>
+						<td><input type="text" id="quantity" size="15"
+							value="1" name="quantity" /></td>
+					</tr>
+				</table>
+			</div>
+			<br>
+			<div align="right" style="width: 100%">
+				<input id="changeItemButton" type="button" value="Submit Changes"
+					style="width: 25%" />
+			</div>
 		</form>
 	</div>
 	<div id="tabs-2">
@@ -116,11 +128,13 @@
 		<div id="newMemberDialog">
 			<form id=newMemberForm>
 				<br>
-				<table id="memberInformation" style="margin-left:auto; margin-right:auto">
+				<table id="memberInformation"
+					style="margin-left: auto; margin-right: auto">
 					<tr>
 						<td align="right">Name:</td>
-						<td align="left"><input type="text" size="20" name="name" id="name" value="Enter name"/></td>
-						<td><input id="addMemberButton" type="button" value="Submit"/></td>
+						<td align="left"><input type="text" size="20" name="name"
+							id="name" value="Enter name" /></td>
+						<td><input id="addMemberButton" type="button" value="Submit" /></td>
 					</tr>
 				</table>
 				<br>
@@ -165,9 +179,9 @@
 
 		//create the rules for the form validation
 		var newMemberRules = {
-				name : {
-					required : true
-				}
+			name : {
+				required : true
+			}
 		};
 
 		//create the form validator

@@ -1,4 +1,4 @@
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>
 
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
@@ -7,10 +7,27 @@
 
 <portlet:defineObjects />
 
+<script>
+	jQuery("#itemTable").click(function(event) {
+
+		alert("event fired");
+		Liferay.fire('itemInfo', {
+			title : 'title',
+			artist : 'artist',
+			listPrice : '7.99',
+			yourPrice : '5.99',
+			releaseDate : '8/8/2000',
+			version : '1',
+			quantity : '5'
+		});
+		return false;
+	});
+</script>
+
 <h2 align="center">Current Inventory</h2>
 <br>
-<table class="bordered">
-	<tr>
+<table class="bordered" >
+	<tr id="itemTable">
 		<th>Item ID</th>
 		<th>Title</th>
 		<th>Artist</th>

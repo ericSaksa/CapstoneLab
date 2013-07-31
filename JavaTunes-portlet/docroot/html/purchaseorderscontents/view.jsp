@@ -27,7 +27,7 @@
 		});
 		
 		 Liferay.on(
-		            'planTravel',
+		            'purchaseOrderInfo',
 		            function(event) {
 		               jQuery("#message").html(event.origin+" to "+event.destination);
 		            }

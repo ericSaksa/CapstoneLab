@@ -20,19 +20,28 @@
 		jQuery("#PO").click(function(event) {
 			
 			 Liferay.fire(
-			            'planTravel', {
+			            'purchaseOrderInfo', {
 			            origin: 'pune',
 			            destination : 'mumbai'
 			        }
 			    );
 			return false;
 		});
+		
+		Liferay.on(
+	            'PurchaseOrderEvent',
+	            function(event) {
+	               jQuery("#message1").html(event.PoId+"  "+event.OrderDate+ " "+event.status);
+	               var tableContents=jQuery(".bordered").html();
+	               jQuery("#purchaseOrdersTable").html(tableContents+"<tr><td>"+ event.OrderDate +"</td><td>"+event.PoId +"</td><td>"+ event.status+"</td></tr>");
+	            }
+	    );
 	});
 </script>
 
 <h2 align="center">Purchase Orders History</h2>
 <br>
-<table class="bordered">
+<table class="bordered" id="purchaseOrdersTable">
 	<tr id="PO">
 		<th>Purchase Order Date</th>
 		<th>Purchase Order ID</th>
