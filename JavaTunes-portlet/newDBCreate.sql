@@ -56,7 +56,7 @@ CREATE TABLE PurchaseItem
    Quantity         INTEGER              NOT NULL,
    UnitPrice        DECIMAL(5,2)         NOT NULL,
    
-   CONSTRAINT  PK_PurchaseItem  PRIMARY KEY(PurchaseItemId),
+   CONSTRAINT  PK_PurchaseItem  PRIMARY KEY(PurchaseItemId)
 );
 
 
