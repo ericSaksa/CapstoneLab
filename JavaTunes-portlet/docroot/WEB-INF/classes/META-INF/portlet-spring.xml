@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="com.sb.service.InventoryLocalService" class="com.sb.service.impl.InventoryLocalServiceImpl" />
+	<bean id="com.sb.service.persistence.InventoryPersistence" class="com.sb.service.persistence.InventoryPersistenceImpl" parent="basePersistence" />
+	<bean id="com.sb.service.ItemLocalService" class="com.sb.service.impl.ItemLocalServiceImpl" />
+	<bean id="com.sb.service.persistence.ItemPersistence" class="com.sb.service.persistence.ItemPersistenceImpl" parent="basePersistence" />
+	<bean id="com.sb.service.ItemBandMembersLocalService" class="com.sb.service.impl.ItemBandMembersLocalServiceImpl" />
+	<bean id="com.sb.service.persistence.ItemBandMembersPersistence" class="com.sb.service.persistence.ItemBandMembersPersistenceImpl" parent="basePersistence" />
+	<bean id="com.sb.service.PurchaseItemLocalService" class="com.sb.service.impl.PurchaseItemLocalServiceImpl" />
+	<bean id="com.sb.service.persistence.PurchaseItemPersistence" class="com.sb.service.persistence.PurchaseItemPersistenceImpl" parent="basePersistence" />
+	<bean id="com.sb.service.PurchaseOrderLocalService" class="com.sb.service.impl.PurchaseOrderLocalServiceImpl" />
+	<bean id="com.sb.service.persistence.PurchaseOrderPersistence" class="com.sb.service.persistence.PurchaseOrderPersistenceImpl" parent="basePersistence" />
+</beans>
