@@ -2,7 +2,7 @@ ADD ORDER:
 	docroot/html/purchaseorderform/view.jsp
 		
 	ProcessAction
-	Parameters Name and Defination
+	Parameters Name and Definition
 	
 	ResourceAction
 	name, parameters passed, result expected
@@ -34,13 +34,10 @@ ADD ORDER:
 		},{..}]}
 				
 	Result Expected: (1). ActivityStatus: success or failure depending on the back-end implementation.
-					(2). PoId purchase order ID. 
-					(3). list of PurchaseItemIDs with the same indices as the list provided to the controller.
-					 
+					(2). PoId purchase order ID and UserId.
 					 
 					 {"ActivityStatus":"success/failure", 
-					 "PoId":"", 
-					 "PurchaseItemIdList":[
-						{"purchaseItemId":" "},
-						{..}]}
+					 "PoId":"",
+					 "UserId":""}
+					 
 
