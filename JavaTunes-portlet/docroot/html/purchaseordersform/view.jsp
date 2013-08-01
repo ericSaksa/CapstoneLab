@@ -61,6 +61,8 @@
 				url: '${submitOrderForm}',
 				data: JSON.stringify(items)
 			});
+			
+			clearNewItemList();
 		});
 		/* jQuery("#submitPurchaseButton").click(function(event) {
 			
@@ -80,7 +82,9 @@
 		$('#addItemSearchDialog :input').not(':submit, :button, #addNewItemQuantity').val('');
 	}
 	
-	
+	function clearNewItemList() {
+		$('table#addOrderItemTable tbody > tr').remove();
+	}
 	
 	// publish item information to the table
 	function completeItemInformation(event, ui) {
