@@ -51,6 +51,9 @@ public class PurchaseOrdersGrid {
 		// Get a list of Purchase Orders using the user ID
 		List<PurchaseOrder> orders = PurchaseOrderLocalServiceUtil.findByOrderByUserId(Integer.parseInt(loggedInUserID));
 		
+		System.out.println(loggedInUserID);
+		System.out.println(orders);
+		
 		request.getPortletSession().setAttribute("purchaseOrders", orders);
 	}
 
@@ -67,7 +70,7 @@ public class PurchaseOrdersGrid {
 		
 		// Get items from the DB using PoId, and put them in the JSON Array
 		List<PurchaseItem> purchaseItems = PurchaseOrderLocalServiceUtil.getItems(PoId);
-		
+		System.out.println(purchaseItems.size());
 		for(PurchaseItem item : purchaseItems) {
 			
 			JSONObject itemJSONObj = JSONFactoryUtil.createJSONObject();
@@ -99,6 +102,7 @@ public class PurchaseOrdersGrid {
 		/*
 		 * If the logged in user ID is not in the session,
 		 */
+		System.out.println(":::: Login Information is ::::::");
 		if (loggedInUserID != null
 				&& request.getPortletSession().getAttribute("loggedInUserID") == null)
 			request.getPortletSession().setAttribute("loggedInUserID",
@@ -106,6 +110,9 @@ public class PurchaseOrdersGrid {
 		
 		// Get a list of Purchase Orders using the user ID
 		List<PurchaseOrder> orders = PurchaseOrderLocalServiceUtil.findByOrderByUserId(Integer.parseInt(loggedInUserID));
+		
+		System.out.println(loggedInUserID);
+		System.out.println(orders.size());
 		
 		request.getPortletSession().setAttribute("purchaseOrders", orders);
 

@@ -2,7 +2,9 @@ package com.purchaseOrders;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -12,8 +14,10 @@ import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
@@ -121,9 +125,9 @@ public class PurchaseOrdersContents {
 		String deleteInfo = request.getParameter("deleteInfo");
 		
 		System.out.println(":::::::Deleting. Delete Info is:::::"+ deleteInfo);
-		JSONObject json = JSONFactoryUtil.createJSONObject(deleteInfo);
+		//JSONObject json = JSONFactoryUtil.createJSONObject("{"+deleteInfo+"}");
 		
-		int purchaseItemID = json.getInt("PurchahseItemID");
+		int purchaseItemID = Integer.parseInt(deleteInfo);
 		Boolean status = Boolean.TRUE;
 		
 		/*
@@ -132,7 +136,7 @@ public class PurchaseOrdersContents {
 		try {
 			
 			PurchaseItemLocalServiceUtil.deletePurchaseItem(purchaseItemID);
-			System.out.println(":::::Deleted::::");
+			System.out.println(":::::Deleted from DB::::");
 		} catch (PortalException e) {
 			// TODO Auto-generated catch block
 			status = Boolean.FALSE;
@@ -160,11 +164,20 @@ public class PurchaseOrdersContents {
 		
 		String addInfo = request.getParameter("addInfo");
 		
+		String cur = null;
+		System.out.println("#####################\nenter CP::editPayment");
+		for (Enumeration<String> p = request.getParameterNames(); p.hasMoreElements();) {
+			cur = p.nextElement();
+			System.out.println("##################################");
+			System.out.println(cur + "=" + request.getParameter(cur));
+			System.out.println("##################################");
+		}
+		
+		
 		System.out.println("::::Adding Info:::: "+ addInfo);
 		JSONObject json =  JSONFactoryUtil.createJSONObject(addInfo);
-		
 		int purchaseId = json.getInt("PoId");
-		int itemId = json.getInt("ItemID");
+		int itemId = json.getInt("ItemId");
 		int quantity = json.getInt("Quantity");
 		Boolean status = Boolean.TRUE;
 		/*

@@ -13,7 +13,7 @@
 
 <%
 	List<PurchaseOrder> purchaseOrders = (List<PurchaseOrder>) portletSession.getAttribute("purchaseOrders",javax.portlet.PortletSession.PORTLET_SCOPE);
-	System.out.println(purchaseOrders.size());
+	System.out.println("from jsp: "+purchaseOrders.size());
 	/* System.out.println(purchaseOrders); */
 %>
 
@@ -30,12 +30,12 @@
 			
 			$.get("<%=getPurchaseContents%>", {"purchaseContents":poId}, function(resp){
 				console.log(resp);
-				 /* Liferay.fire(
+				 Liferay.fire(
 				            'purchaseOrderInfo', {
-				            purchaseOrderContent: resp,
+				            purchaseItems: resp,
 							destination : 'mumbai'
 				        }
-				    ); */
+				    ); 
 			});
 			
 			

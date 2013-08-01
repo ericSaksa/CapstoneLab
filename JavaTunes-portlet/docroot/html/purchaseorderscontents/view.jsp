@@ -7,11 +7,19 @@
 
 
 <portlet:resourceURL var="autoComplete" id="autoComplete"></portlet:resourceURL>
+<portlet:resourceURL var="deleteItem" id="deleteItem"></portlet:resourceURL>
+<portlet:resourceURL var="addItem" id="addItem"></portlet:resourceURL>
+<%-- <portlet:actionURL var="addItem" id="addItem"></portlet:actionURL> --%>
 
 <script>
 	jQuery(function() {
+		var itemIdToAdd;
+		$('#editPO_addPI').prop('disabled',true);
+		$("#editPO_addPI").on("click", function() {
 
+            addItemDialog.dialog("open");
 
+   		 });
 
 
 		/* Liferay.on('purchaseOrderInfo', function(event) {
@@ -23,7 +31,7 @@
                 modal : true,
                 title : "Add Item to Purchase Order",
                 width : "40%",
-                close: resetItemSearchDialog
+                close: function(){$('#editPO_addPIDialog :input').not(':submit, :button').val('');}
         }).dialog("close");
         //add event to the addItem button
 
@@ -31,110 +39,59 @@
                 max : 100,
                 min : 1
         });
-		/********************* DELETE PURCHASE ITEM '****************************/
-		//add event to the addItem button
-		$("#editPO_addPI").on("click", function() {
-			addItemDialog.dialog("open");
-		});
-        $('#editPO_PITable').on('click', 'input.editPO_removePI', function(){
 
-                // TODO submit PurchaseItem removing
-                // remove row from DOM
-                $(this).closest('tr').remove();
-                updateTotalPrice();
-        });
-
-        /********************* DELETE PURCHASE ORDER '****************************/
-
-        $('#editPO_deletePO').on('click',function(){
-                // TODO submit PurchseOrder removing
-                // remove item table from DOM
-                $('#editPO_PITable').find('tbody tr').slice(0,-1).remove();
-                updateTotalPrice();
-        });
-
-
-
-		console.log("autoComplete creating");
 		$("#editPO_searchToAdd").autocomplete({
 			source : "<%= autoComplete%>",
 			minLength : 2,
 			// publish item information to the table
 			select : function completeItemInformation(event, ui) 	{
-				console.log(ui.item);
 				$(".itemTitle").val(ui.item.item_title);
 				$(".itemArtist").val(ui.item.item_artist);
 				$(".itemListPrice").val(ui.item.item_listPrice);
 				$(".itemYourPrice").val(ui.item.item_price);
 				$(".itemReleaseDate").val(ui.item.item_releaseDate);
 				$(".itemVersion").val(ui.item.item_version);
+				itemIdToAdd = ui.item.item_itemId;
 			}
 		});
+		
+		
+		
+		/********************* ADD PURCHASE ITEM '****************************/
 		$('#editPO_submitAddPI').on('click',function(){
             // submit to server
-            
+            var datatopassback = {
+            		PoId: $('#PoIdSpan').text(),
+            		ItemId: itemIdToAdd,
+            		Quantity: $('#editPO_addPIQuantity').val()
+				  };
+            $.ajax({
+            	type: 'POST',
+            	url: '${addItem}',
+            	data: {"addInfo" : JSON.stringify(datatopassback)}
+            });
             // append to table
             $("#editPO_PITable_head").after("<tr><td>" + $(".itemTitle").val() +"</td>"
 											+ "<td>" + $("#editPO_addPIQuantity").val() +"</td>"
 											+ "<td>" + $(".itemYourPrice").val() +"</td>"
-			+ "<td><input type=\"button\" value=\"remove\" style=\"width: 100%\" class=\"editPO_removePI\"/></td></tr>");
+			+ "<td><button value=\""+itemIdToAdd+"\" class=\"editPO_removePI\">remove</button></td></tr>");
             
             addItemDialog.dialog('close');
     	}); 
 		
 		/********************* DELETE PURCHASE ITEM '****************************/
-		$('#editPO_PITable').on('click', 'input.editPO_removePI', function(){
+		$('#editPO_PITable').on('click', 'button.editPO_removePI', function(){
 			// TODO submit PurchaseItem removing
-			
+			 $.ajax({
+				url: '${deleteItem}',
+				type: 'POST',
+				data: {deleteInfo: $(this).val()}
+				
+			}); 
 			// remove row from DOM
 			$(this).closest('tr').remove();
-			updateTotalPrice();
+			/*updateTotalPrice();*/
 		});
-		
-		/********************* DELETE PURCHASE ORDER '****************************/
-		
-		$('#editPO_deletePO').on('click',function(){
-			// TODO submit PurchseOrder removing
-			
-			// remove item table from DOM
-			$('#editPO_PITable').find('tbody tr').slice(0,-1).remove();
-			updateTotalPrice();
-			
-		});
-		
-		
-		/********************* DELETE PURCHASE ORDER '****************************/
-		 /* Liferay.on(
-		            'purchaseOrderInfo',
-		            function(event) {
-		               jQuery("#message").html(event.origin+" to "+event.destination);
-		            }
-		    ); */
-		    
-	    $('#editPO_submitAddPI').on('click',function(){
-			//items.push({'ItemId':responseitem[0].itemInfo.id,'Quantity':$('#addNewItemQuantity').val()});
-			//$('table#editPO_PITable tbody').append("<tr><td>"+responseitem[0].itemInfo.title+"</td><td>"+$('#editPO_addPIQuantity').val()+"</td><td><input type='button' value='delete'/></td></tr>");
-			addItemDialog.dialog('close');
-		});    
-		    
-		    
-		var responseitem = [{
-			label:"abc",
-			value:"bcd",
-			itemInfo: {
-					id: "id",
-					title: "title",
-					artist: "artist",
-					listPrice: "list price",
-					yourPrice: "your_price",
-					releaseDate: "release_date",
-					version: "version"
-				   }
-		  }];
-		$('#editPO_searchToAdd').autocomplete({
-		      source: responseitem,
-		      select: completeItemInformation
-	    });
 		
 	});
 	function resetItemSearchDialog() {
@@ -148,9 +105,9 @@
 		$('.itemReleaseDate').val(ui.item.itemInfo.releaseDate);
 		$('.itemVersion').val(ui.item.itemInfo.version);
 	}
-	function resetItemSearchDialog() {
+	/* function resetItemSearchDialog() {
 		$('#addItemSearchDialog :input').not(':submit, :button, #addNewItemQuantity').val('');
-	}
+	} */
 	function updateTotalPrice() {
 		// display the correct total 
 		/* $('table#editPO_PITable tbody > tr').each(function(index,domEle){
@@ -158,16 +115,36 @@
 		}); */
 	}
 	
+	
+	Liferay.on(
+            'purchaseOrderInfo',
+            function(event) {
+            	var jsonobj = $.parseJSON(event.purchaseItems);
+            	generatePItemTable(jsonobj);
+               jQuery("#message").html(event.purchaseItems+" to "+event.destination);
+            }
+    ); 
+	
+	function generatePItemTable(jsonobj) {
+		if (jsonobj.purchaseItems.length > 0) {
+			console.log(jsonobj.purchaseItems[0].PoId);
+			$('#header2').append("Order Number: <span id='PoIdSpan'>"+jsonobj.purchaseItems[0].PoId+"</span>");
+			$.each(jsonobj.purchaseItems, function(i,item){
+				$('table#editPO_PITable tbody').prepend("<tr><td>"+item.ItemId+"</td><td>"+item.Quantity+" </td><td>"+item.UnitPrice+"</td><td><input type='hidden' name='PurchaseItemId' value='"+item.PurchaseItemId+"' ><button class='editPO_removePI' value='"+item.PurchaseItemId+"'>remove</button></td></tr>");
+			});
+			$('#editPO_addPI').prop('disabled',false);
+		}
+	}
 </script>
 
 <portlet:defineObjects />
 
-<h2 align="center">Purchase Order Contents</h2>
+<h2 align="center" id='header2'></h2>
 <br>
 <table class="bordered" id='editPO_PITable'>
 	<thead id="editPO_PITable_head">
 		<tr>
-			<th>Item Name</th>
+			<th>Item Id</th>
 			<th>Quantity</th>
 			<th>Unit Price</th>
 			<th>Remove</th>
@@ -175,21 +152,9 @@
 	</thead>
 	<tbody>
 		<tr>
-			<td>2</td>
-			<td>3</td>
-			<td>4</td>
-			<td><input type="button" value="remove" style="width: 100%" class='editPO_removePI'/></td>
-		</tr>
-		<tr>
-			<td>7</td>
-			<td>8</td>
-			<td>9</td>
-			<td><input type="button" value="remove" style="width: 100%" class='editPO_removePI'/></td>
-		</tr>
-		<tr>
 			<td colspan="2" align="right">Total:</td>
 			<td>$100.00</td>
-			<td><input type="button" value="Delete Order" style="width: 100%" id='editPO_deletePO'/></td>
+			<td></td>
 		</tr>
 	</tbody>
 </table>
