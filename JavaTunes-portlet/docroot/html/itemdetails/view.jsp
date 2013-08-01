@@ -33,7 +33,11 @@
 			var memberName = $("#addMemberNameField").val();
 			$.get("<%=addMemberResourceURL%>", {"itemID":itemID, "memberName":memberName}, function(data){
 				var itemMemberID = $.trim(data);
-				$("#BandMemberTable").after("<tr><td>"+itemMemberID+"</td><td>"+memberName+"</td><td><input type='button' value='delete' onclick='deleteMember("+ItemBandMemberId+")'/></td></tr>")
+				
+				//$("#itemBandMemberDataRow_"+itemMemberID).after("<tr><td>"+itemMemberID+"</td><td>"+memberName+"</td><td><input type='button' value='delete' onclick='deleteMember("+itemMemberID+")'/></td></tr>")
+				$("#newMemberDialog").dialog("close");
+				$("#BandMemberTable > tr:lastChild").after("<tr><td>"+itemMemberID+"</td><td>"+memberName+"</td><td><input type='button' value='delete' onclick='deleteMember("+itemMemberID+")'/></td></tr>")
+				$("#inventoryListRow_"+itemID).click();
 			});
 		});
 		

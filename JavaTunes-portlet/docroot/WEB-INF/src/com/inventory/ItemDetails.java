@@ -153,7 +153,6 @@ public class ItemDetails {
 		
 		// Add member
 		ItemBandMembersLocalServiceUtil.addItemBandMembers(newMember);
-System.out.println(newMember.getItemBandMemberId());		
 		// Return JSON back
 		response.getWriter().println(newMember.getItemBandMemberId());
 	}
