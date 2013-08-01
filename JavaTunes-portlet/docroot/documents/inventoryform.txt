@@ -4,15 +4,14 @@ Add New Item:
 	serveResource(name="createNewItem)
 	Parameter: JSON object
 		{
-			"items" : {
-							"Num":"",
-							"Title" : "",
-							"Artist" : "",
-							"ReleaseDate" : "",
-							"ListPrice" : "",
-							"Price" : "",
-							"Version" : "",
-						}
+			
+			"Num":"",
+			"Title" : "",
+			"Artist" : "",
+			"ReleaseDate" : "",
+			"ListPrice" : "",
+			"Price" : "",
+			"Version" : "",
 			"quantity" : ""
 		}
 	Result expected : JSON object

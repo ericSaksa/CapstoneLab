@@ -4,6 +4,9 @@
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <link rel="stylesheet"
 	href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+	
+	<portlet:defineObjects />
+	<portlet:resourceURL var="createNewItem" id="createNewItem"></portlet:resourceURL>
 
 <script>
 	$(function() {
@@ -31,13 +34,32 @@
 			             Quantity : $("#quantity").val()
 			        }
 			    );
-			 $("#title").val("");
+			 
+			var newItem = {
+					
+					 ItemId : 'qwerty',
+		             Title : $("#title").val(),
+		             Artist : $("#artist").val(),
+		             ListPrice : $("#listPrice").val(),
+		             YourPrice : $("#yourPrice").val(),
+		             ReleaseDate : $("#releaseDate").val(),
+		             Version : $("#version").val(),
+		             Quantity : $("#quantity").val()
+			}; 
+			 
+			 
+			 $.get("<%=createNewItem%>", {"newItemInfo" : JSON.stringify(newItem)}, function(resp){
+				 
+				 alert(resp);
+			 });
+			 
+/* 			 $("#title").val("");
              $("#artist").val("");
              $("#listPrice").val("");
              $("#yourPrice").val("");
              $("#releaseDate").val("08/02/2013");
              $("#version").val("");
-             $("#quantity").val("1");
+             $("#quantity").val("1"); */
 		});
 	});
 </script>

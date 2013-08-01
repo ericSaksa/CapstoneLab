@@ -51,6 +51,9 @@ public class PurchaseOrdersGrid {
 		// Get a list of Purchase Orders using the user ID
 		List<PurchaseOrder> orders = PurchaseOrderLocalServiceUtil.findByOrderByUserId(Integer.parseInt(loggedInUserID));
 		
+		System.out.println(loggedInUserID);
+		System.out.println(orders);
+		
 		request.getPortletSession().setAttribute("purchaseOrders", orders);
 	}
 
@@ -58,11 +61,8 @@ public class PurchaseOrdersGrid {
 	public void getPurchaseContents(ResourceRequest request,
 			ResourceResponse response) throws JSONException, IOException, SystemException {
 		
-		String inputJSONStr = (String) request.getAttribute("jString");
-		
-		JSONObject inputJSONObj = JSONFactoryUtil.createJSONObject(inputJSONStr);
-		
-		int PoId = inputJSONObj.getInt("PoId");
+		//int PoId = (Integer) request.getAttribute("purchaseContents");
+		int PoId = Integer.parseInt(request.getParameter("purchaseContents"));
 		
 		JSONObject outputJSONObj = JSONFactoryUtil.createJSONObject();
 		
@@ -93,7 +93,27 @@ public class PurchaseOrdersGrid {
 	
 	@RenderMapping
 	public String defaultRenderrer(RenderRequest request,
-			RenderResponse response, Model model) {
+			RenderResponse response, Model model)
+			throws NoSuchPurchaseOrderException, NumberFormatException, SystemException {
+		
+		// Get the current logged in user ID
+		String loggedInUserID = request.getRemoteUser();
+
+		/*
+		 * If the logged in user ID is not in the session,
+		 */
+		if (loggedInUserID != null
+				&& request.getPortletSession().getAttribute("loggedInUserID") == null)
+			request.getPortletSession().setAttribute("loggedInUserID",
+					loggedInUserID);
+		
+		// Get a list of Purchase Orders using the user ID
+		List<PurchaseOrder> orders = PurchaseOrderLocalServiceUtil.findByOrderByUserId(Integer.parseInt(loggedInUserID));
+		
+		System.out.println(loggedInUserID);
+		System.out.println(orders);
+		
+		request.getPortletSession().setAttribute("purchaseOrders", orders);
 
 		return "view";
 	}

@@ -46,25 +46,36 @@ public class InventoryForm {
  ResourceResponse response)
 			throws JSONException, IOException, ParseException, SystemException {
 		
-		String inputJSONStr = (String) request.getAttribute("jString");
+		String inputJSONStr = (String) request.getParameter("newItemInfo");
+		
+		System.out.println(inputJSONStr);
+		
 		
 		JSONObject inputJSONObj = JSONFactoryUtil.createJSONObject(inputJSONStr);
 		
-		JSONObject newItemJSONObj = inputJSONObj.getJSONObject("items");
-		int quantity = inputJSONObj.getInt("quantity");
+		int quantity = Integer.parseInt(inputJSONObj.getString("Quantity"));
 		
-		String num = newItemJSONObj.getString("Num");
-		String title = newItemJSONObj.getString("Title");
-		String artist = newItemJSONObj.getString("Artist");
+		System.out.println("quantity: " + quantity);
+		
+		String num = inputJSONObj.getString("Num");
+		String title = inputJSONObj.getString("Title");
+		String artist = inputJSONObj.getString("Artist");
+		
+		
 		
 		// Parse Date
-		String releaseDateStr = newItemJSONObj.getString("ReleaseDate");
-		SimpleDateFormat sdf = new SimpleDateFormat("");
+		String releaseDateStr = inputJSONObj.getString("ReleaseDate");
+		SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yyyy");
 		Date releaseDate = sdf.parse(releaseDateStr);
 		
-		double listPrice = newItemJSONObj.getDouble("ListPrice");
-		double price = newItemJSONObj.getDouble("Price");
-		int version = newItemJSONObj.getInt("Version");
+		System.out.println("2");
+		
+		double listPrice = inputJSONObj.getDouble("ListPrice");
+		double price = inputJSONObj.getDouble("YourPrice");
+		int version = inputJSONObj.getInt("Version");
+		
+		System.out.println("3");
+		
 		// Creating a new Item
 		Item newItem = ItemLocalServiceUtil.createItem( new Long(CounterLocalServiceUtil.increment(Item.class.getName())).intValue() );
 		
@@ -76,6 +87,8 @@ public class InventoryForm {
 		newItem.setTitle(title);
 		newItem.setVersion(version);
 		ItemLocalServiceUtil.addItem(newItem);
+		
+		System.out.println("1");
 
 		JSONObject outputJSONObj = JSONFactoryUtil.createJSONObject();
 				
