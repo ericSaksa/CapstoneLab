@@ -96,52 +96,6 @@
 			var itemDetailartist = itemString.split("*")[2];
 			var itemDetailreleaseDate = itemString.split("*")[3];
 
-			var year = itemDetailreleaseDate.split(" ")[5];
-			var month = itemDetailreleaseDate.split(" ")[1];
-			var day = itemDetailreleaseDate.split(" ")[2];
-
-			switch (month) {
-			case 'Jan':
-				month = "01";
-				break;
-			case 'Feb':
-				month = "02";
-				break;
-			case 'Mar':
-				month = "03";
-				break;
-			case 'Apr':
-				month = "04";
-				break;
-			case 'May':
-				month = "05";
-				break;
-			case 'Jun':
-				month = "06";
-				break;
-			case 'Jul':
-				month = "07";
-				break;
-			case 'Aug':
-				month = "08";
-				break;
-			case 'Sep':
-				month = "09";
-				break;
-			case 'Oct':
-				month = "10";
-				break;
-			case 'Nov':
-				month = "11";
-				break;
-			case 'Dec':
-				month = "12";
-				break;
-
-			}
-
-			var itemDetailformattedDate = year + "-" + month + "-" + day;
-
 			var itemDetailversion = itemString.split("*")[4];
 			var itemDetaillistPrice = itemString.split("*")[5];
 			var itemDetailyourPrice = itemString.split("*")[6];
@@ -152,9 +106,9 @@
 
 			$("#itemDetailTitle").val(itemDetailtitle);
 			$("#itemDetailArtist").val(itemDetailartist);
-			$("#itemDetailListPrice").val(itemDetaillistPrice);
-			$("#itemDetailYourPrice").val(itemDetailyourPrice);
-			$("#itemDetailReleaseDate").val(itemDetailformattedDate);
+			$("#itemDetailListPrice").val(itemDetaillistPrice.substring(1));
+			$("#itemDetailYourPrice").val(itemDetailyourPrice.substring(1));
+			$("#itemDetailReleaseDate").val(itemDetailreleaseDate);
 			$("#itemDetailVersion").val(itemDetailversion);
 		});
 

@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>
 <%@page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" session="false" import="java.util.*, com.sb.model.*" %>
+    pageEncoding="ISO-8859-1" session="false" import="java.text.*, java.util.*, com.sb.model.*" %>
 
 
 
@@ -79,17 +79,34 @@
 	
 	<% 
 		for(Item item : items) {
+			String itemRowIdentialID = "inventoryListRow_" + ((Integer)item.getItemId()).toString().trim();
 	%>		
 	
-	<tr class="inventoryListRow">
+	<tr class="inventoryListRow" id=<%=itemRowIdentialID%>>
 		<!--  <td><input class="itemRadio" type="radio" value ="<%=item.getItemId()%>*<%=item.getTitle()%>*<%=item.getArtist()%>*<%=item.getReleaseDate()%>*<%=item.getVersion()%>*<%=item.getListPrice()%>*<%=item.getPrice()%>*<%=item.getNum()%>" class="itemIDButton"></input><%=item.getItemId()%></td>-->
 		<td><%=item.getItemId() %></td>
 		<td><%=item.getTitle() %></td>
 		<td><%=item.getArtist() %></td>
-		<td><%=item.getReleaseDate() %></td>
+		
+		<%
+			Date rawDate = item.getReleaseDate();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String formattedDateString = sdf.format(rawDate);
+			
+			double listPrice= item.getListPrice();
+			double yourPrice= item.getPrice();
+			
+			DecimalFormat formatter = new DecimalFormat("$#,##0.00");
+        	formatter.setGroupingSize(3);
+        	
+        	String listPriceAmount = formatter.format(listPrice);
+        	String yourPriceAmount = formatter.format(yourPrice);
+		
+		%>
+		<td><%=formattedDateString%></td>
 		<td><%=item.getVersion() %></td>
-		<td><%=item.getListPrice() %></td>
-		<td><%=item.getPrice() %></td>
+		<td><%=listPriceAmount%></td>
+		<td><%=yourPriceAmount%></td>
 		<td><%=item.getNum() %></td>
 	</tr>
 		<%
