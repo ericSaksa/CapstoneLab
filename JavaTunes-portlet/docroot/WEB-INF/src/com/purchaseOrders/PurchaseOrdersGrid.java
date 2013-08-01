@@ -51,9 +51,6 @@ public class PurchaseOrdersGrid {
 		// Get a list of Purchase Orders using the user ID
 		List<PurchaseOrder> orders = PurchaseOrderLocalServiceUtil.findByOrderByUserId(Integer.parseInt(loggedInUserID));
 		
-		System.out.println(loggedInUserID);
-		System.out.println(orders);
-		
 		request.getPortletSession().setAttribute("purchaseOrders", orders);
 	}
 
@@ -109,9 +106,6 @@ public class PurchaseOrdersGrid {
 		
 		// Get a list of Purchase Orders using the user ID
 		List<PurchaseOrder> orders = PurchaseOrderLocalServiceUtil.findByOrderByUserId(Integer.parseInt(loggedInUserID));
-		
-		System.out.println(loggedInUserID);
-		System.out.println(orders);
 		
 		request.getPortletSession().setAttribute("purchaseOrders", orders);
 
