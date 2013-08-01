@@ -266,6 +266,18 @@ public class PurchaseOrderLocalServiceWrapper
 			arguments);
 	}
 
+	public java.util.List<com.sb.model.PurchaseItem> getItems(int orderId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _purchaseOrderLocalService.getItems(orderId);
+	}
+
+	public java.util.List<com.sb.model.PurchaseOrder> findByOrderByUserId(
+		int UserId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.sb.NoSuchPurchaseOrderException {
+		return _purchaseOrderLocalService.findByOrderByUserId(UserId);
+	}
+
 	/**
 	 * @deprecated Renamed to {@link #getWrappedService}
 	 */

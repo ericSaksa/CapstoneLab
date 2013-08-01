@@ -275,6 +275,18 @@ public class ItemLocalServiceUtil {
 		return getService().getInventory(itemId);
 	}
 
+	public static java.util.List<com.sb.model.Item> findByTitle(
+		java.lang.String Title)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().findByTitle(Title);
+	}
+
+	public static java.util.List<com.sb.model.Item> findByArtist(
+		java.lang.String Artist)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().findByArtist(Artist);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

@@ -111,6 +111,14 @@ public class ItemLocalServiceClpInvoker {
 		_methodName59 = "getInventory";
 
 		_methodParameterTypes59 = new String[] { "int" };
+
+		_methodName60 = "findByTitle";
+
+		_methodParameterTypes60 = new String[] { "java.lang.String" };
+
+		_methodName61 = "findByArtist";
+
+		_methodParameterTypes61 = new String[] { "java.lang.String" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -222,6 +230,16 @@ public class ItemLocalServiceClpInvoker {
 			return ItemLocalServiceUtil.getInventory(((Integer)arguments[0]).intValue());
 		}
 
+		if (_methodName60.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes60, parameterTypes)) {
+			return ItemLocalServiceUtil.findByTitle((java.lang.String)arguments[0]);
+		}
+
+		if (_methodName61.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes61, parameterTypes)) {
+			return ItemLocalServiceUtil.findByArtist((java.lang.String)arguments[0]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -265,4 +283,8 @@ public class ItemLocalServiceClpInvoker {
 	private String[] _methodParameterTypes58;
 	private String _methodName59;
 	private String[] _methodParameterTypes59;
+	private String _methodName60;
+	private String[] _methodParameterTypes60;
+	private String _methodName61;
+	private String[] _methodParameterTypes61;
 }

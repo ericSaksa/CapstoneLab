@@ -245,4 +245,11 @@ public interface ItemLocalService extends BaseLocalService, InvokableLocalServic
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.sb.model.Inventory> getInventory(int itemId)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<com.sb.model.Item> findByTitle(java.lang.String Title)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<com.sb.model.Item> findByArtist(
+		java.lang.String Artist)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }
