@@ -84,13 +84,13 @@
 				id="artist" /></td>
 		</tr>
 		<tr>
-			<td align="right">List Price:</td>
-			<td align="left">$<input type="text" size="20" name="listPrice"
+			<td align="right">List Price ($):</td>
+			<td align="left"><input type="text" size="20" name="listPrice"
 				id="listPrice" /></td>
 		</tr>
 		<tr>
-			<td align="right">Your Price:</td>
-			<td align="left">$<input type="text" size="20" name="yourPrice"
+			<td align="right">Your Price ($):</td>
+			<td align="left"><input type="text" size="20" name="yourPrice"
 				id="yourPrice" /></td>
 		</tr>
 		<tr>
