@@ -48,33 +48,21 @@ public class InventoryForm {
 		
 		String inputJSONStr = (String) request.getParameter("newItemInfo");
 		
-		System.out.println(inputJSONStr);
-		
-		
 		JSONObject inputJSONObj = JSONFactoryUtil.createJSONObject(inputJSONStr);
 		
 		int quantity = Integer.parseInt(inputJSONObj.getString("Quantity"));
-		
-		System.out.println("quantity: " + quantity);
-		
 		String num = inputJSONObj.getString("Num");
 		String title = inputJSONObj.getString("Title");
 		String artist = inputJSONObj.getString("Artist");
-		
-		
 		
 		// Parse Date
 		String releaseDateStr = inputJSONObj.getString("ReleaseDate");
 		SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yyyy");
 		Date releaseDate = sdf.parse(releaseDateStr);
 		
-		System.out.println("2");
-		
 		double listPrice = inputJSONObj.getDouble("ListPrice");
 		double price = inputJSONObj.getDouble("YourPrice");
 		int version = inputJSONObj.getInt("Version");
-		
-		System.out.println("3");
 		
 		// Creating a new Item
 		Item newItem = ItemLocalServiceUtil.createItem( new Long(CounterLocalServiceUtil.increment(Item.class.getName())).intValue() );
@@ -87,13 +75,12 @@ public class InventoryForm {
 		newItem.setTitle(title);
 		newItem.setVersion(version);
 		ItemLocalServiceUtil.addItem(newItem);
-		
-		System.out.println("1");
 
 		JSONObject outputJSONObj = JSONFactoryUtil.createJSONObject();
 				
 		outputJSONObj.put("ActivityStatus", "success");
 		outputJSONObj.put("ItemId", newItem.getItemId());
+		
 		// Return JSON back
 		response.getWriter().println(outputJSONObj.toString());
 	}
