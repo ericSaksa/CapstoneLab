@@ -32,7 +32,14 @@
 		
 		$('.searchString').autocomplete({
 		      source: "<%=autoComplete%>",
-		      select: completeItemInformation
+		      select: function completeItemInformation(event, ui) {
+		  		$(".itemTitle").val(ui.item.item_title);
+		  		$(".itemArtist").val(ui.item.item_artist);
+		  		$(".itemListPrice").val(ui.item.item_listPrice);
+		  		$(".itemYourPrice").val(ui.item.item_price);
+		  		$(".itemReleaseDate").val(ui.item.item_releaseDate);
+		  		$(".itemVersion").val(ui.item.item_version);
+		  	}
 	    });
 		$('#addAddItemButton').on('click',function(){
 			items.push({'ItemId':responseitem[0].items.id,'Quantity':$('#addNewItemQuantity').val()});
@@ -69,19 +76,6 @@
 	function resetItemSearchDialog() {
 		$('#addItemSearchDialog :input').not(':submit, :button, #addNewItemQuantity').val('');
 	};
-	
-	
-	
-	// publish item information to the table
-	function completeItemInformation(event, ui) {
-		$('.itemTitle').val(ui.item.items.title);
-		$('.itemArtist').val(ui.item.items.artist);
-		$('.itemListPrice').val(ui.item.items.listPrice);
-		$('.itemYourPrice').val(ui.item.items.yourPrice);
-		$('.itemReleaseDate').val(ui.item.items.releaseDate);
-		$('.itemVersion').val(ui.item.items.version);
-	}
-	
 </script>
 
 <portlet:defineObjects />
