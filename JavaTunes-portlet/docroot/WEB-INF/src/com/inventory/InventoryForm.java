@@ -51,12 +51,15 @@ public class InventoryForm {
 		JSONObject inputJSONObj = JSONFactoryUtil.createJSONObject(inputJSONStr);
 		
 		int quantity = Integer.parseInt(inputJSONObj.getString("Quantity"));
-		String num = inputJSONObj.getString("Num");
+		
 		String title = inputJSONObj.getString("Title");
 		String artist = inputJSONObj.getString("Artist");
 		
 		// Parse Date
 		String releaseDateStr = inputJSONObj.getString("ReleaseDate");
+		if(releaseDateStr.contains("-")) {
+			releaseDateStr = releaseDateStr.split("-")[1]+"/"+releaseDateStr.split("-")[2]+"/"+releaseDateStr.split("-")[0];
+		}
 		SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yyyy");
 		Date releaseDate = sdf.parse(releaseDateStr);
 		
@@ -69,7 +72,7 @@ public class InventoryForm {
 		
 		newItem.setArtist(artist);
 		newItem.setListPrice(listPrice);
-		newItem.setNum(num);
+		newItem.setNum("0");
 		newItem.setPrice(price);
 		newItem.setReleaseDate(releaseDate);
 		newItem.setTitle(title);
@@ -82,7 +85,8 @@ public class InventoryForm {
 		outputJSONObj.put("ItemId", newItem.getItemId());
 		
 		// Return JSON back
-		response.getWriter().println(outputJSONObj.toString());
+		//response.getWriter().println(outputJSONObj.toString());
+		response.getWriter().println(newItem.getItemId());
 	}
 	
 	@RenderMapping

@@ -85,7 +85,6 @@ public class ItemDetails {
 		String editItemString = request.getParameter("editItemString");
 		// Convert parameter to JSON Object
 		JSONObject editItemJson = JSONFactoryUtil.createJSONObject(editItemString);
-		
 		// JSON Object for returning result
 		JSONObject resultJson = JSONFactoryUtil.createJSONObject();
 		

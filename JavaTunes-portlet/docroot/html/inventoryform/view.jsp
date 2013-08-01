@@ -4,54 +4,80 @@
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <link rel="stylesheet"
 	href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-	
-	<portlet:defineObjects />
-	<portlet:resourceURL var="createNewItem" id="createNewItem"></portlet:resourceURL>
+
+<portlet:defineObjects />
+<portlet:resourceURL var="createNewItem" id="createNewItem"></portlet:resourceURL>
 
 <script>
+
 	$(function() {
 		//create the quantity selector on the new item dialog
 		$("#newItemQuantity").spinner({
 			min : 1
 		});
 
+		//create the form not full dialog
+		$("#formNotFullDialog").dialog({
+			modal : true,
+			title : "Incomplete Form",
+			buttons : {
+				"Close" : function(){
+					$(this).dialog("close");
+				}
+			}
+		}).dialog("close");
+		
 		//create the releaseDate date picker
+		/*
 		var datepicker = $("#releaseDate").datepicker({
 			changeMonth : true,
 			changeYear : true
 		});
+		*/
 		
 		jQuery("#addItemButton").click(function(event) {
-			 Liferay.fire(
-			            'AddItemEvent', {
-			           	 ItemId : 'qwerty',
-			             Title : $("#title").val(),
+			if($.trim($("#title").val()) == "" ||
+			   $.trim($("#artist").val()) == "" ||
+			$.trim($("#listPrice").val()) == "" ||
+			$.trim($("#yourPrice").val()) == "" ||
+			$.trim($("#releaseDate").val()) == "" ||
+			$.trim($("#version").val()) == "" ||
+			$.trim($("#quantity").val()) == ""){
+				$("#formNotFullDialog").dialog("open");
+			}
+			else{
+				var newItem = {
+						
+						 Title : $("#title").val(),
 			             Artist : $("#artist").val(),
 			             ListPrice : $("#listPrice").val(),
 			             YourPrice : $("#yourPrice").val(),
 			             ReleaseDate : $("#releaseDate").val(),
 			             Version : $("#version").val(),
 			             Quantity : $("#quantity").val()
-			        }
-			    );
+				}; 
+				$.get("<%=createNewItem%>", {"newItemInfo" : JSON.stringify(newItem)}, function(resp){
+					 
+					Liferay.fire(
+				            'AddItemEvent', {
+				           	 ItemId : resp,
+				             Title : $("#title").val(),
+				             Artist : $("#artist").val(),
+				             ListPrice : $("#listPrice").val(),
+				             YourPrice : $("#yourPrice").val(),
+				             ReleaseDate : $("#releaseDate").val(),
+				             Version : $("#version").val(),
+				             Quantity : $("#quantity").val()
+				        }
+				);
+					clickableRow(); 
+				 });
+			
+			}
+			
 			 
-			var newItem = {
-					
-					 ItemId : 'qwerty',
-		             Title : $("#title").val(),
-		             Artist : $("#artist").val(),
-		             ListPrice : $("#listPrice").val(),
-		             YourPrice : $("#yourPrice").val(),
-		             ReleaseDate : $("#releaseDate").val(),
-		             Version : $("#version").val(),
-		             Quantity : $("#quantity").val()
-			}; 
 			 
 			 
-			 $.get("<%=createNewItem%>", {"newItemInfo" : JSON.stringify(newItem)}, function(resp){
-				 
-				 alert(resp);
-			 });
 			 
 /* 			 $("#title").val("");
              $("#artist").val("");
@@ -95,8 +121,8 @@
 		</tr>
 		<tr>
 			<td align="right">Release Date:</td>
-			<td align="left"><input type="text" size="20" name="releaseDate"
-				id="releaseDate" value="08/02/2013" /></td>
+			<td align="left"><input type="date" size="20" name="releaseDate"
+				id="releaseDate" value="2013-08-02" /></td>
 		</tr>
 		<tr>
 			<td align="right">Version:</td>
@@ -113,6 +139,11 @@
 <div align="right" style="width: 100%">
 	<input id="addItemButton" type="button" value="Submit"
 		style="width: 25%" />
+</div>
+
+<div id="formNotFullDialog">
+	<br>
+	<h4 align="center">Please fill out all fields on the form.</h4>
 </div>
 <script>
 	AUI().use('aui-form-validator', function(Y) {

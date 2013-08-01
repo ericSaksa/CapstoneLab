@@ -124,6 +124,23 @@
 			}
 		});
 	};
+	
+	function changeItemDetail() {
+		
+			var editItemString = {
+					ItemId: $("#itemDetailID").val(),
+					Title: $("#itemDetailTitle").val(),
+					Artist: $("#itemDetailArtist").val(),
+					ListPrice: $("#itemDetailListPrice").val(),
+					YourPrice: $("#itemDetailYourPrice").val(),
+					ReleaseDate: $("#itemDetailReleaseDate").val(),
+					Version: $("#itemDetailVersion").val()
+			};
+			
+			$.get("<%=editItem%>", {"editItemString" : JSON.stringify(editItemString)}, function(data) {
+					console.log(data);
+			});
+	};
 </script>
 
 <div id="tabs">
@@ -183,8 +200,7 @@
 			</div>
 			<br>
 			<div align="right" style="width: 100%">
-				<input id="changeItemButtonSubmitChange" type="button" value="Submit Changes"
-					style="width: 25%" />
+				<input id="changeItemButtonSubmitChange" onclick="changeItemDetail()" type="button" value="Submit a Changes" style="width: 25%" />
 			</div>
 		</form>
 	</div>
@@ -263,21 +279,5 @@
 			boundingBox : '#newMemberForm',
 			rules : newMemberRules
 		});
-	});
-	
-	
-	$("#changeItemButtonSubmitChange").on("click", function(){
-		var editItemString = {
-				ItemId: $("#itemDetailID").val(),
-				Title: $("#itemDetailTitle").val(),
-				Artist: $("#itemDetailArtist").val(),
-				ListPrice: $("#itemDetailListPrice").val(),
-				YourPrice: $("#itemDetailYourPrice").val(),
-				ReleaseDate: $("#itemDetailReleaseDate").val(),
-				Version: $("#itemDetailVersion").val()
-		};
-		$.get("<%=editItem%>", {"editItemString" : JSON.stringify(editItemString)}, function(data) {
-				console.log(data);
-			});
 	});
 </script>

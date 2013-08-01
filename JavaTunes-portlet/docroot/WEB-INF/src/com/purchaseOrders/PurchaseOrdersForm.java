@@ -95,9 +95,10 @@ public class PurchaseOrdersForm {
 		try {
 			itemsByTitle = ItemLocalServiceUtil.findByTitle(search);
 			itemsByArtist = ItemLocalServiceUtil.findByArtist(search);
-System.out.println("itemsByTitle size " + itemsByTitle.size());
-System.out.println("itemsByArtist size " + itemsByArtist.size());
-//			itemsByTitle.removeAll(itemsByArtist);
+			
+			//itemsByTitle.removeAll(itemsByArtist);
+			itemsByTitle = new ArrayList<Item>(itemsByTitle);
+			itemsByTitle.removeAll(itemsByArtist);
 			
 			/*for(int i =0; i< itemsByArtist.size(); i++){
 			jsonArray.add(itemsByArtist.get(i));
@@ -114,6 +115,7 @@ System.out.println("itemsByArtist size " + itemsByArtist.size());
 				obj.put("item_releaseDate", item.getReleaseDate());
 				obj.put("item_version", item.getVersion());
 				obj.put("item_searchCriteria", 1);
+				obj.put("value", item.getArtist() + " (Artist)");
 				jsonArray.put(obj);
 			}
 			
@@ -128,6 +130,7 @@ System.out.println("itemsByArtist size " + itemsByArtist.size());
 				obj.put("item_releaseDate", item.getReleaseDate());
 				obj.put("item_version", item.getVersion());
 				obj.put("item_searchCriteria", 0);
+				obj.put("value", item.getTitle() + " (Title)");
 				jsonArray.put(obj);
 			}
 			
@@ -136,14 +139,9 @@ System.out.println("itemsByArtist size " + itemsByArtist.size());
 			e.printStackTrace();
 		}
 		
-		result.put("Items", jsonArray);
-		
-		if( (itemsByArtist!=null && !itemsByArtist.isEmpty()) || (itemsByTitle!=null && !itemsByTitle.isEmpty()) )
-			result.put("ActivityStatus", "success");
-		else
-			result.put("ActivityStatus", "failure");
-		// Return JSON back
-		response.getWriter().println(result.toString());
+		//result.put( search, jsonArray);
+		System.out.println(jsonArray.toString());
+		response.getWriter().print(jsonArray.toString());
 	}
 	
 //	@ResourceMapping(value = "autoComplete")

@@ -58,8 +58,6 @@
 				url: '${submitOrderForm}',
 				data: {items:"{\"purchaseItems\":"+JSON.stringify(items)+"}"}
 			});
-			
-			clearNewItemList();
 		});
 		/* jQuery("#submitPurchaseButton").click(function(event) {
 			

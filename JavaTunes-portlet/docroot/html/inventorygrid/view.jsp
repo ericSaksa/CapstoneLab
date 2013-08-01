@@ -2,8 +2,6 @@
 <%@page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" session="false" import="java.text.*, java.util.*, com.sb.model.*" %>
 
-
-
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <link rel="stylesheet"
@@ -16,8 +14,12 @@
 	List<Item> items = (List<Item>)portletSession.getAttribute("items", javax.portlet.PortletSession.PORTLET_SCOPE);
 %>
 
+<portlet:defineObjects />
+
 <script>
+var clickableRow;
 	$(function() {
+		clickableRow = function(){
 		jQuery(".inventoryListRow").on("click", function(event) {
 			
 			$(".inventoryListRow").css("background-color","white");
@@ -48,16 +50,17 @@
 			
 			return false;
 		});
-
+		};
+		clickableRow();
 		Liferay.on('AddItemEvent', function(event) {
-			$("#itemTable").after("<tr><td>"+event.ItemId+"</td>"
+			$("#itemTable").after("<tr class='inventoryListRow' id='inventoryListRow_"+$.trim(event.ItemId)+"'><td>"+event.ItemId+"</td>"
 								+"<td>"+event.Title+"</td>"
 								+"<td>"+event.Artist+"</td>"
 								+"<td>"+event.ReleaseDate+"</td>"
 								+"<td>"+event.Version+"</td>"
-								+"<td>"+event.ListPrice+"</td>"
-								+"<td>"+event.YourPrice+"</td>"
-								+"<td>"+event.Quantity+"</td></tr>");
+								+"<td>$"+event.ListPrice+"</td>"
+								+"<td>$"+event.YourPrice+"</td>"
+								+"</tr>");
 		});
 	});
 </script>
@@ -74,7 +77,6 @@
 		<th>Version</th>
 		<th>List Price</th>
 		<th>Our Price</th>
-		<th>Stock</th>
 	</tr>
 	
 	<% 
@@ -107,7 +109,6 @@
 		<td><%=item.getVersion() %></td>
 		<td><%=listPriceAmount%></td>
 		<td><%=yourPriceAmount%></td>
-		<td><%=item.getNum() %></td>
 	</tr>
 		<%
 		}
