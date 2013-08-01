@@ -20,12 +20,18 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import com.liferay.counter.service.CounterLocalServiceUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.sb.model.Item;
+import com.sb.model.ItemBandMembers;
+import com.sb.model.PurchaseOrder;
+import com.sb.service.ItemBandMembersLocalServiceUtil;
 import com.sb.service.ItemLocalServiceUtil;
+import com.sb.service.PurchaseOrderLocalServiceUtil;
 
 /**
  * @author FW
@@ -77,7 +83,6 @@ public class ItemDetails {
 	public void editItem(ResourceRequest request, ResourceResponse response) throws IOException, PortletException, JSONException, SystemException, ParseException{
 		// Receive search criteria string
 		String editItemString = request.getParameter("editItemString");
-System.out.println("--->   "+editItemString);
 		// Convert parameter to JSON Object
 		JSONObject editItemJson = JSONFactoryUtil.createJSONObject(editItemString);
 		
@@ -129,37 +134,28 @@ System.out.println("--->   "+editItemString);
 	 * @param response
 	 * @throws IOException
 	 * @throws PortletException
-	 * @throws JSONException
+	 * @throws SystemException 
 	 */
 	@ResourceMapping(value = "addMember")
-	public void addMember(ResourceRequest request, ResourceResponse response) throws IOException, PortletException, JSONException{
+	public void addMember(ResourceRequest request, ResourceResponse response) throws IOException, PortletException, SystemException{
+	
+		// Receive request
+		int itemID = Integer.parseInt(request.getParameter("itemID"));
+		String memberName = request.getParameter("memberName");
+		System.out.println(itemID);	
+		System.out.println(memberName);	
+		// Create a new member
+		ItemBandMembers newMember = ItemBandMembersLocalServiceUtil.createItemBandMembers(new Long(CounterLocalServiceUtil.increment(ItemBandMembers.class.getName())).intValue());
 		
-		// Receive search criteria string
-		String addMemberString = request.getParameter("addMemberString");
+		// Set attributes
+		newMember.setItemId(itemID);
+		newMember.setMember(memberName);
 		
-		// Convert parameter to JSON Object
-		JSONObject addMemberJson = JSONFactoryUtil.createJSONObject(addMemberString);
-		
-		// JSON Object for returning result
-		JSONObject resultJson = JSONFactoryUtil.createJSONObject();
-		
-		// Indicator for the activity status
-		String activityStatus = "";
-		
-		String itemID = addMemberJson.getString("itemID");
-		String name = addMemberJson.getString("Name");
-		
-		// Create member object
-		
-		/*
-		 * Call service util
-		 */
-		
-		// Put back acitivity status
-		resultJson.put("ActivityStatus", activityStatus);
-		
+		// Add member
+		ItemBandMembersLocalServiceUtil.addItemBandMembers(newMember);
+System.out.println(newMember.getItemBandMemberId());		
 		// Return JSON back
-		response.getWriter().println(resultJson.toString());
+		response.getWriter().println(newMember.getItemBandMemberId());
 	}
 	
 	/**
@@ -174,28 +170,21 @@ System.out.println("--->   "+editItemString);
 	@ResourceMapping(value = "deleteMember")
 	public void deleteMember(ResourceRequest request, ResourceResponse response) throws IOException, PortletException, JSONException{
 		
-		// Receive request JSON String
-		String deleteMemberString = request.getParameter("deleteMemberString");
+		// Receive request 
+		int itemBandMemberID = Integer.parseInt(request.getParameter("itemBandMemberID"));
 		
-		// Convert parameter to JSON Object
-		JSONObject deleteMemberJson = JSONFactoryUtil.createJSONObject(deleteMemberString);
+		String activityStatus = "success";
 		
-		// JSON Object for returning result
-		JSONObject resultJson = JSONFactoryUtil.createJSONObject();
-		
-		// Indicator for the activity status
-		String activityStatus = "";
-		
-		String memberID = deleteMemberJson.getString("memberID");
-		
-		/*
-		 * Call service util
-		 */
-		
-		// Put back acitivity status
-		resultJson.put("ActivityStatus", activityStatus);
-		
+		try {
+			ItemBandMembersLocalServiceUtil.deleteItemBandMembers(itemBandMemberID);
+		} catch (PortalException e) {
+			e.printStackTrace();
+			activityStatus = "failure";
+		} catch (SystemException e) {
+			e.printStackTrace();
+			activityStatus = "failure";
+		}
 		// Return JSON back
-		response.getWriter().println(resultJson.toString());
+		response.getWriter().println(activityStatus);
 	}
 }

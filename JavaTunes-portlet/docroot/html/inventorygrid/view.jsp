@@ -10,17 +10,42 @@
 	href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 
 <portlet:defineObjects />
+<portlet:resourceURL var="getItemBandMembers" id="getItemBandMembers"></portlet:resourceURL>
 
 <%
-    List<Item> items = (List<Item>)portletSession.getAttribute("items", javax.portlet.PortletSession.PORTLET_SCOPE);
+	List<Item> items = (List<Item>)portletSession.getAttribute("items", javax.portlet.PortletSession.PORTLET_SCOPE);
 %>
 
 <script>
 	$(function() {
-		jQuery("input[type='radio']").on("change", function(event) {
-			Liferay.fire('itemInfo', {
-				item : $(this).val()
+		jQuery(".inventoryListRow").on("click", function(event) {
+			
+			$(".inventoryListRow").css("background-color","white");
+			$(this).css("background-color","gray");
+			
+			var itemID = $.trim($($(this).children()[0]).html());
+			
+			$.get("<%=getItemBandMembers%>", {"itemID":itemID}, function(data){
+				Liferay.fire('itemBandMembers',{itemID:itemID, bandMemberList:data})
 			});
+			
+			Liferay.fire('itemInfo', {
+				item : $.trim($($(this).children()[0]).html())+"*"
+				+
+				$.trim($($(this).children()[1]).html())+"*"
+				+
+				$.trim($($(this).children()[2]).html())+"*"
+				+
+				$.trim($($(this).children()[3]).html())+"*"
+				+
+				$.trim($($(this).children()[4]).html())+"*"
+				+
+				$.trim($($(this).children()[5]).html())+"*"
+				+
+				$.trim($($(this).children()[6]).html())
+				
+			});
+			
 			return false;
 		});
 
@@ -56,8 +81,9 @@
 		for(Item item : items) {
 	%>		
 	
-	<tr>
-		<td><input class="itemRadio" type="radio" value ="<%=item.getItemId()%>*<%=item.getTitle()%>*<%=item.getArtist()%>*<%=item.getReleaseDate()%>*<%=item.getVersion()%>*<%=item.getListPrice()%>*<%=item.getPrice()%>*<%=item.getNum()%>" class="itemIDButton"></input><%=item.getItemId()%></td>
+	<tr class="inventoryListRow">
+		<!--  <td><input class="itemRadio" type="radio" value ="<%=item.getItemId()%>*<%=item.getTitle()%>*<%=item.getArtist()%>*<%=item.getReleaseDate()%>*<%=item.getVersion()%>*<%=item.getListPrice()%>*<%=item.getPrice()%>*<%=item.getNum()%>" class="itemIDButton"></input><%=item.getItemId()%></td>-->
+		<td><%=item.getItemId() %></td>
 		<td><%=item.getTitle() %></td>
 		<td><%=item.getArtist() %></td>
 		<td><%=item.getReleaseDate() %></td>
