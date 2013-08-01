@@ -5,27 +5,82 @@
 <link rel="stylesheet"
 	href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 
+
+<portlet:resourceURL var="autoComplete" id="autoComplete"></portlet:resourceURL>
+
 <script>
 	jQuery(function() {
 
-		//create the dialog for adding a new payment
-		var addItemDialog = $("#editPO_addPIDialog").dialog({
-			modal : true,
-			title : "Add Item to Purchase Order",
-			width : "40%",
-			close: resetItemSearchDialog
-		}).dialog("close");
 
+
+
+		/* Liferay.on('purchaseOrderInfo', function(event) {
+			jQuery("#message").html(event.origin + " to " + event.destination);
+		});
+		 */
+		//create the dialog for adding a new payment
+        var addItemDialog = $("#editPO_addPIDialog").dialog({
+                modal : true,
+                title : "Add Item to Purchase Order",
+                width : "40%",
+                close: resetItemSearchDialog
+        }).dialog("close");
+        //add event to the addItem button
+
+        $("#editPO_addPIQuantity").spinner({
+                max : 100,
+                min : 1
+        });
+		/********************* DELETE PURCHASE ITEM '****************************/
 		//add event to the addItem button
 		$("#editPO_addPI").on("click", function() {
 			addItemDialog.dialog("open");
 		});
+        $('#editPO_PITable').on('click', 'input.editPO_removePI', function(){
 
-		//create the quantity selector on the new item dialog
-		$("#editPO_addPIQuantity").spinner({
-			max : 100,
-			min : 1
+                // TODO submit PurchaseItem removing
+                // remove row from DOM
+                $(this).closest('tr').remove();
+                updateTotalPrice();
+        });
+
+        /********************* DELETE PURCHASE ORDER '****************************/
+
+        $('#editPO_deletePO').on('click',function(){
+                // TODO submit PurchseOrder removing
+                // remove item table from DOM
+                $('#editPO_PITable').find('tbody tr').slice(0,-1).remove();
+                updateTotalPrice();
+        });
+
+
+
+		console.log("autoComplete creating");
+		$("#editPO_searchToAdd").autocomplete({
+			source : "<%= autoComplete%>",
+			minLength : 2,
+			// publish item information to the table
+			select : function completeItemInformation(event, ui) 	{
+				console.log(ui.item);
+				$(".itemTitle").val(ui.item.item_title);
+				$(".itemArtist").val(ui.item.item_artist);
+				$(".itemListPrice").val(ui.item.item_listPrice);
+				$(".itemYourPrice").val(ui.item.item_price);
+				$(".itemReleaseDate").val(ui.item.item_releaseDate);
+				$(".itemVersion").val(ui.item.item_version);
+			}
 		});
+		$('#editPO_submitAddPI').on('click',function(){
+            // submit to server
+            
+            // append to table
+            $("#editPO_PITable_head").after("<tr><td>" + $(".itemTitle").val() +"</td>"
+											+ "<td>" + $("#editPO_addPIQuantity").val() +"</td>"
+											+ "<td>" + $(".itemYourPrice").val() +"</td>"
+			+ "<td><input type=\"button\" value=\"remove\" style=\"width: 100%\" class=\"editPO_removePI\"/></td></tr>");
+            
+            addItemDialog.dialog('close');
+    	}); 
 		
 		/********************* DELETE PURCHASE ITEM '****************************/
 		$('#editPO_PITable').on('click', 'input.editPO_removePI', function(){
@@ -82,6 +137,9 @@
 	    });
 		
 	});
+	function resetItemSearchDialog() {
+		$('#editPO_addPIDialog :input').not(':submit, :button').val('');
+	}
 	function completeItemInformation(event, ui) {
 		$('.itemTitle').val(ui.item.itemInfo.title);
 		$('.itemArtist').val(ui.item.itemInfo.artist);
@@ -107,9 +165,8 @@
 <h2 align="center">Purchase Order Contents</h2>
 <br>
 <table class="bordered" id='editPO_PITable'>
-	<thead>
+	<thead id="editPO_PITable_head">
 		<tr>
-			<th>Item ID</th>
 			<th>Item Name</th>
 			<th>Quantity</th>
 			<th>Unit Price</th>
@@ -118,21 +175,19 @@
 	</thead>
 	<tbody>
 		<tr>
-			<td>1</td>
 			<td>2</td>
 			<td>3</td>
 			<td>4</td>
 			<td><input type="button" value="remove" style="width: 100%" class='editPO_removePI'/></td>
 		</tr>
 		<tr>
-			<td>6</td>
 			<td>7</td>
 			<td>8</td>
 			<td>9</td>
 			<td><input type="button" value="remove" style="width: 100%" class='editPO_removePI'/></td>
 		</tr>
 		<tr>
-			<td colspan="3" align="right">Total:</td>
+			<td colspan="2" align="right">Total:</td>
 			<td>$100.00</td>
 			<td><input type="button" value="Delete Order" style="width: 100%" id='editPO_deletePO'/></td>
 		</tr>

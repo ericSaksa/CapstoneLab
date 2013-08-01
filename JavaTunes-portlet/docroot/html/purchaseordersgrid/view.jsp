@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1" session="false"
 	import="java.util.*,javax.portlet.*,com.liferay.portal.service.*,com.sb.model.PurchaseOrder;"%>
@@ -14,7 +13,7 @@
 
 <%
 	List<PurchaseOrder> purchaseOrders = (List<PurchaseOrder>) portletSession.getAttribute("purchaseOrders",javax.portlet.PortletSession.PORTLET_SCOPE);
-
+	System.out.println(purchaseOrders.size());
 	/* System.out.println(purchaseOrders); */
 %>
 
