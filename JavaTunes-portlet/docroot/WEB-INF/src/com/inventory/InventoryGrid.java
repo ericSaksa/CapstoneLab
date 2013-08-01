@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.sb.model.Item;
+import com.sb.model.ItemBandMembers;
 import com.sb.service.ItemLocalServiceUtil;
 
 /**
@@ -60,32 +61,26 @@ public class InventoryGrid {
 		
 	}
 	
-	@ResourceMapping(value = "getItemDetails")
+	@ResourceMapping(value = "getItemBandMembers")
 	public void getItemDetails(ResourceRequest request,
 			ResourceResponse response) throws JSONException, IOException, SystemException {
 		
-		String inputJSONStr = (String) request.getAttribute("jString");
+		int itemID = Integer.parseInt(request.getParameter("itemID"));
+		List<ItemBandMembers> bandMemberList = ItemLocalServiceUtil.getBandMembers(itemID);
 		
-		JSONObject inputJSONObj = JSONFactoryUtil.createJSONObject(inputJSONStr);
-		
-		int ItemId = inputJSONObj.getInt("ItemId");
-		
-		
-		JSONObject outputJSONObj = JSONFactoryUtil.createJSONObject();
-		
-		JSONArray bandMembersArray = JSONFactoryUtil.createJSONArray();
-		JSONArray itemDetailsArray = JSONFactoryUtil.createJSONArray();
-		
-		// Get items from the DB using PoId, and put them in the JSON Array
-		ItemLocalServiceUtil.getBandMembers(ItemId);
-		
-		
-		outputJSONObj.put("ActivityStatus", "success");
-		outputJSONObj.put("purchaseItems", bandMembersArray);
-		outputJSONObj.put("itemDetails", itemDetailsArray);
-		
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+		JSONObject resultJson = JSONFactoryUtil.createJSONObject();
+		for(ItemBandMembers mem : bandMemberList) {
+			
+			JSONObject eachMemberJson = JSONFactoryUtil.createJSONObject();
+			eachMemberJson.put("ItemBandMemberId", mem.getItemBandMemberId());
+			eachMemberJson.put("ItemId", mem.getItemId());
+			eachMemberJson.put("Member", mem.getMember());
+			jsonArray.put(eachMemberJson);
+		}
+		resultJson.put("bandMemberList", jsonArray);
 		// Return JSON back
-		response.getWriter().println(outputJSONObj.toString());
+		response.getWriter().println(resultJson.toString());
 	}
 
 }

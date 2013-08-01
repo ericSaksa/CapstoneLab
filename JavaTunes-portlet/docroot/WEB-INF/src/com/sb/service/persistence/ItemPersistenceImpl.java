@@ -534,7 +534,7 @@ public class ItemPersistenceImpl extends BasePersistenceImpl<Item>
 			}
 
 			String sql = query.toString();
-
+System.out.println(sql + "   " + Title);
 			Session session = null;
 
 			try {

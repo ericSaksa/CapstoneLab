@@ -4,7 +4,9 @@
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <link rel="stylesheet"
 	href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+	
 <portlet:resourceURL id="submitOrderForm" var="submitOrderForm"></portlet:resourceURL>
+<portlet:resourceURL id="autoComplete" var="autoComplete"></portlet:resourceURL>
 
 <script>
 	var items = [];
@@ -27,26 +29,21 @@
 			max : 100,
 			min : 1
 		});
-		var responseitem = [{
-					label:"abc",
-					value:"bcd",
-					itemInfo: {
-							id: "id",
-							title: "title",
-							artist: "artist",
-							listPrice: "list price",
-							yourPrice: "your_price",
-							releaseDate: "release_date",
-							version: "version"
-						   }
-				  }];
+		
 		$('.searchString').autocomplete({
-		      source: responseitem,
-		      select: completeItemInformation
+		      source: "<%=autoComplete%>",
+		      select: function completeItemInformation(event, ui) {
+		  		$(".itemTitle").val(ui.item.item_title);
+		  		$(".itemArtist").val(ui.item.item_artist);
+		  		$(".itemListPrice").val(ui.item.item_listPrice);
+		  		$(".itemYourPrice").val(ui.item.item_price);
+		  		$(".itemReleaseDate").val(ui.item.item_releaseDate);
+		  		$(".itemVersion").val(ui.item.item_version);
+		  	}
 	    });
 		$('#addAddItemButton').on('click',function(){
-			items.push({'ItemId':responseitem[0].itemInfo.id,'Quantity':$('#addNewItemQuantity').val()});
-			$('table#addOrderItemTable tbody').append("<tr><td>"+responseitem[0].itemInfo.title+"</td><td>"+$('#addNewItemQuantity').val()+"</td><td><input type='button' value='delete'/></td></tr>");
+			items.push({'ItemId':responseitem[0].items.id,'Quantity':$('#addNewItemQuantity').val()});
+			$('table#addOrderItemTable tbody').append("<tr><td>"+responseitem[0].items.title+"</td><td>"+$('#addNewItemQuantity').val()+"</td><td><input type='button' value='delete'/></td></tr>");
 			addItemDialog.dialog('close');
 		});
 		$('table#addOrderItemTable').on('click','input:button',function(){
@@ -59,7 +56,7 @@
 			$.ajax({
 				type: 'POST',
 				url: '${submitOrderForm}',
-				data: JSON.stringify(items)
+				data: {items:"{\"purchaseItems\":"+JSON.stringify(items)+"}"}
 			});
 			
 			clearNewItemList();
@@ -80,22 +77,7 @@
 	
 	function resetItemSearchDialog() {
 		$('#addItemSearchDialog :input').not(':submit, :button, #addNewItemQuantity').val('');
-	}
-	
-	function clearNewItemList() {
-		$('table#addOrderItemTable tbody > tr').remove();
-	}
-	
-	// publish item information to the table
-	function completeItemInformation(event, ui) {
-		$('.itemTitle').val(ui.item.itemInfo.title);
-		$('.itemArtist').val(ui.item.itemInfo.artist);
-		$('.itemListPrice').val(ui.item.itemInfo.listPrice);
-		$('.itemYourPrice').val(ui.item.itemInfo.yourPrice);
-		$('.itemReleaseDate').val(ui.item.itemInfo.releaseDate);
-		$('.itemVersion').val(ui.item.itemInfo.version);
-	}
-	
+	};
 </script>
 
 <portlet:defineObjects />

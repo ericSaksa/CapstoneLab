@@ -9,9 +9,38 @@
 	
 <portlet:defineObjects />
 <portlet:resourceURL var="editItem" id="editItem"></portlet:resourceURL>
+<portlet:resourceURL var="deleteMember" id="deleteMember"></portlet:resourceURL>
+<portlet:resourceURL var="addMemberResourceURL" id="addMember"></portlet:resourceURL>
 
 <script>
 	$(function() {
+		
+		// Hide the dialog
+		$("#newMemberDialog").hide();
+		
+		//add event to the addItem button
+		$("#addMemberOpenDialogButton").on("click", function(){
+			//create the dialog for adding a new member
+			$("#newMemberDialog").dialog({
+				modal : true,
+				title : "Add Member to Item",
+				width : "25%"
+			});
+		});
+		
+		$("#addMemberSubmitButton").on("click", function(){
+			var itemID = $("#addMemberItemIDField").val();
+			var memberName = $("#addMemberNameField").val();
+			$.get("<%=addMemberResourceURL%>", {"itemID":itemID, "memberName":memberName}, function(data){
+				var itemMemberID = $.trim(data);
+				
+				//$("#itemBandMemberDataRow_"+itemMemberID).after("<tr><td>"+itemMemberID+"</td><td>"+memberName+"</td><td><input type='button' value='delete' onclick='deleteMember("+itemMemberID+")'/></td></tr>")
+				$("#newMemberDialog").dialog("close");
+				$("#BandMemberTable > tr:lastChild").after("<tr><td>"+itemMemberID+"</td><td>"+memberName+"</td><td><input type='button' value='delete' onclick='deleteMember("+itemMemberID+")'/></td></tr>")
+				$("#inventoryListRow_"+itemID).click();
+			});
+		});
+		
 		jQuery("#quantity").spinner({
 			min : 1
 		});
@@ -20,97 +49,81 @@
 			active : 0
 		});
 
-		//create the dialog for adding a new member
-		var addMemberDialog = $("#newMemberDialog").dialog({
-			modal : true,
-			title : "Add Member to Item",
-			width : "25%"
-		}).dialog("close");
-
-		//add event to the addItem button
-		jQuery("#addMember").on("click", function() {
-			addMemberDialog.dialog("open");
-		});
-
 		//create the releaseDate date picker
 		jQuery("#itemReleaseDate").datepicker({
 			changeMonth : true,
 			changeYear : true
 		});
 		
-		Liferay.on('itemInfo', function(event) {
+		Liferay.on('itemBandMembers', function(event){
 			
+			var itemID = event.itemID;
+			$("#addMemberItemIDField").val(itemID);
+			var bandMemberListString = event.bandMemberList;
+
+			var json = JSON.parse(bandMemberListString);
+			var array = json.bandMemberList;
+	
+			var memberListTableString = "<table id=\"BandMemberTable\" class='bordered'>";
+
+			if(array.length===0) {
+				memberListTableString += "<tr><th>Member ID</th><th>Member Name</th><th>Action</th></tr><tr><td align='center'colspan='3'>No data found</td></tr></table>";
+				
+			} else {
+				memberListTableString += "<tr><th>Member ID</th><th>Member Name</th><th>Action</th></tr>";
+				for ( var key in array) {
+					if (array.hasOwnProperty(key)) {
+						var ItemBandMemberId = array[key].ItemBandMemberId;
+						var ItemID = array[key].ItemId;
+						var Member = array[key].Member;
+						memberListTableString+="<tr id='itemBandMemberDataRow_"+ItemBandMemberId+"'><td>"+ItemBandMemberId+"</td><td>"+Member+"</td><td><input type='button' value='delete' onclick='deleteMember("+ItemBandMemberId+")'/></td></tr>";
+					}
+				}
+			}
+			
+			memberListTableString+="</table>";
+			
+			$("#bandMemberTable").html(memberListTableString);
+			
+		});
+
+		Liferay.on('itemInfo', function(event) {
+
 			// Call ajax to get item Detail
 			var itemString = event.item;
-			
 			var itemDetailID = itemString.split("*")[0];
 			var itemDetailtitle = itemString.split("*")[1];
 			var itemDetailartist = itemString.split("*")[2];
 			var itemDetailreleaseDate = itemString.split("*")[3];
 
-			var year = itemDetailreleaseDate.split(" ")[5];
-			var month = itemDetailreleaseDate.split(" ")[1];
-			var day = itemDetailreleaseDate.split(" ")[2];
-			
-			switch(month) {
-				case 'Jan':
-					month="01";
-					break;
-				case 'Feb':
-					month="02";
-					break;
-				case 'Mar':
-					month="03";
-					break;
-				case 'Apr':
-					month="04";
-					break;
-				case 'May':
-					month="05";
-					break;
-				case 'Jun':
-					month="06";
-					break;
-				case 'Jul':
-					month="07";
-					break;
-				case 'Aug':
-					month="08";
-					break;
-				case 'Sep':
-					month="09";
-					break;
-				case 'Oct':
-					month="10";
-					break;
-				case 'Nov':
-					month="11";
-					break;
-				case 'Dec':
-					month="12";
-					break;
-					
-			}
-			
-			var itemDetailformattedDate = year+"-"+month+"-"+day;
-			
 			var itemDetailversion = itemString.split("*")[4];
 			var itemDetaillistPrice = itemString.split("*")[5];
 			var itemDetailyourPrice = itemString.split("*")[6];
 			var itemDetailNum = itemString.split("*")[7];
-			
+
 			$("#itemDetailID").val(itemDetailID);
 			$("#itemDetailNum").val(itemDetailNum);
-			
+
 			$("#itemDetailTitle").val(itemDetailtitle);
 			$("#itemDetailArtist").val(itemDetailartist);
-			$("#itemDetailListPrice").val(itemDetaillistPrice);
-			$("#itemDetailYourPrice").val(itemDetailyourPrice);
-			$("#itemDetailReleaseDate").val(itemDetailformattedDate);
+			$("#itemDetailListPrice").val(itemDetaillistPrice.substring(1));
+			$("#itemDetailYourPrice").val(itemDetailyourPrice.substring(1));
+			$("#itemDetailReleaseDate").val(itemDetailreleaseDate);
 			$("#itemDetailVersion").val(itemDetailversion);
 		});
 
 	});
+	
+	function deleteMember(itemBandMemberID) {
+		$.get("<%=deleteMember%>",{"itemBandMemberID":itemBandMemberID}, function(data){
+			if($.trim(data)==="success") {
+				console.log("itemBandMemberDataRow_"+itemBandMemberID);
+				$("#itemBandMemberDataRow_"+itemBandMemberID).fadeOut(500, function(){
+					$("#itemBandMemberDataRow_"+itemBandMemberID).detach();
+				});
+			}
+		});
+	};
 </script>
 
 <div id="tabs">
@@ -137,13 +150,13 @@
 						id="itemDetailArtist" /></td>
 				</tr>
 				<tr>
-					<td align="right">List Price:</td>
-					<td align="left">$<input type="text" size="20" name="listPrice"
+					<td align="right">List Price ($):</td>
+					<td align="left"><input type="text" size="20" name="listPrice"
 						id="itemDetailListPrice" /></td>
 				</tr>
 				<tr>
-					<td align="right">Your Price:</td>
-					<td align="left">$<input type="text" size="20" name="yourPrice"
+					<td align="right">Your Price ($):</td>
+					<td align="left"><input type="text" size="20" name="yourPrice"
 						id="itemDetailYourPrice" /></td>
 				</tr>
 				
@@ -178,47 +191,22 @@
 	<div id="tabs-2">
 		<h2 align="center">Band Member Details</h2>
 		<br />
-		<table class="bordered">
-			<tr>
-				<th>Member Name</th>
-				<th>Member ID</th>
-				<th>Delete</th>
-			</tr>
-			<tr>
-				<td>name</td>
-				<td>number</td>
-				<td><input type="button" value="delete" /></td>
-			</tr>
-			<tr>
-				<td>name</td>
-				<td>number</td>
-				<td><input type="button" value="delete" /></td>
-			</tr>
-			<tr>
-				<td>name</td>
-				<td>number</td>
-				<td><input type="button" value="delete" /></td>
-			</tr>
-		</table>
+		<div id="bandMemberTable"></div>
 		<br>
-		<div align="right" style="width: 100%">
-			<input id="addMember" type="button" value="Add Member"
-				style="width: 25%" />
-		</div>
+		<button id="addMemberOpenDialogButton" style="width: 25%">Add Member</button>
+		
 		<div id="newMemberDialog">
-			<form id=newMemberForm>
-				<br>
-				<table id="memberInformation"
-					style="margin-left: auto; margin-right: auto">
-					<tr>
-						<td align="right">Name:</td>
-						<td align="left"><input type="text" size="20" name="name"
-							id="name" value="Enter name" /></td>
-						<td><input id="addMemberButton" type="button" value="Submit" /></td>
-					</tr>
-				</table>
-				<br>
-			</form>
+			<br>
+			<table id="memberInformation"
+				style="margin-left: auto; margin-right: auto">
+				<tr>
+					<td align="right">Name:</td>
+					<td align="left"><input type="text" id="addMemberItemIDField"/><input type="text" size="20" name="name"
+						id="addMemberNameField" value="Enter name"/></td>
+					<td><input id="addMemberSubmitButton" type="button" value="Submit" /></td>
+				</tr>
+			</table>
+			<br>
 		</div>
 	</div>
 </div>
@@ -292,5 +280,4 @@
 				console.log(data);
 			});
 	});
-	
 </script>
