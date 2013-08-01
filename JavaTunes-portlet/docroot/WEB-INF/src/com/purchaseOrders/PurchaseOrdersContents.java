@@ -1,6 +1,7 @@
 package com.purchaseOrders;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -200,10 +201,10 @@ public class PurchaseOrdersContents {
 	}
 
 @ResourceMapping(value="autoComplete")
-public void autoComplete (ResourceRequest request, ResourceResponse response){
+public void autoComplete (ResourceRequest request, ResourceResponse response) throws IOException{
 	
-	System.out.println("::::::Receiving:::: "+ request.getParameter("search"));
-	String search = "%"+request.getParameter("search")+"%";
+	System.out.println("::::::Receiving:::: "+ request.getParameter("term"));
+	String search = "%"+request.getParameter("term")+"%";
 	JSONObject result = JSONFactoryUtil.createJSONObject();
 	JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 	List<Item> itemsByTitle = null;
@@ -212,6 +213,8 @@ public void autoComplete (ResourceRequest request, ResourceResponse response){
 		itemsByTitle = ItemLocalServiceUtil.findByTitle(search);
 		itemsByArtist = ItemLocalServiceUtil.findByArtist(search);
 		
+		//itemsByTitle.removeAll(itemsByArtist);
+		itemsByTitle = new ArrayList<Item>(itemsByTitle);
 		itemsByTitle.removeAll(itemsByArtist);
 		
 		/*for(int i =0; i< itemsByArtist.size(); i++){
@@ -229,6 +232,7 @@ public void autoComplete (ResourceRequest request, ResourceResponse response){
 			obj.put("item_releaseDate", item.getReleaseDate());
 			obj.put("item_version", item.getVersion());
 			obj.put("item_searchCriteria", 1);
+			obj.put("value", item.getArtist() + " (Artist)");
 			jsonArray.put(obj);
 		}
 		
@@ -243,6 +247,7 @@ public void autoComplete (ResourceRequest request, ResourceResponse response){
 			obj.put("item_releaseDate", item.getReleaseDate());
 			obj.put("item_version", item.getVersion());
 			obj.put("item_searchCriteria", 0);
+			obj.put("value", item.getTitle() + " (Title)");
 			jsonArray.put(obj);
 		}
 		
@@ -251,11 +256,9 @@ public void autoComplete (ResourceRequest request, ResourceResponse response){
 		e.printStackTrace();
 	}
 	
-	result.put("Items", jsonArray);
-	if( (itemsByArtist!=null && !itemsByArtist.isEmpty()) || (itemsByTitle!=null && !itemsByTitle.isEmpty()) )
-		result.put("ActivityStatus", "success");
-	else
-		result.put("ActivityStatus", "failure");
+	//result.put( search, jsonArray);
+	System.out.println(jsonArray.toString());
+	response.getWriter().print(jsonArray.toString());
 }
 
 }
