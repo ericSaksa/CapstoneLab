@@ -72,7 +72,10 @@ public class ItemModelImpl extends BaseModelImpl<Item> implements ItemModel {
 				"value.object.entity.cache.enabled.com.sb.model.Item"), true);
 	public static final boolean FINDER_CACHE_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.finder.cache.enabled.com.sb.model.Item"), true);
-	public static final boolean COLUMN_BITMASK_ENABLED = false;
+	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
+				"value.object.column.bitmask.enabled.com.sb.model.Item"), true);
+	public static long ARTIST_COLUMN_BITMASK = 1L;
+	public static long TITLE_COLUMN_BITMASK = 2L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.sb.model.Item"));
 
@@ -201,7 +204,17 @@ public class ItemModelImpl extends BaseModelImpl<Item> implements ItemModel {
 	}
 
 	public void setTitle(String Title) {
+		_columnBitmask |= TITLE_COLUMN_BITMASK;
+
+		if (_originalTitle == null) {
+			_originalTitle = _Title;
+		}
+
 		_Title = Title;
+	}
+
+	public String getOriginalTitle() {
+		return GetterUtil.getString(_originalTitle);
 	}
 
 	public String getArtist() {
@@ -214,7 +227,17 @@ public class ItemModelImpl extends BaseModelImpl<Item> implements ItemModel {
 	}
 
 	public void setArtist(String Artist) {
+		_columnBitmask |= ARTIST_COLUMN_BITMASK;
+
+		if (_originalArtist == null) {
+			_originalArtist = _Artist;
+		}
+
 		_Artist = Artist;
+	}
+
+	public String getOriginalArtist() {
+		return GetterUtil.getString(_originalArtist);
 	}
 
 	public Date getReleaseDate() {
@@ -247,6 +270,10 @@ public class ItemModelImpl extends BaseModelImpl<Item> implements ItemModel {
 
 	public void setVersion(int Version) {
 		_Version = Version;
+	}
+
+	public long getColumnBitmask() {
+		return _columnBitmask;
 	}
 
 	@Override
@@ -324,6 +351,13 @@ public class ItemModelImpl extends BaseModelImpl<Item> implements ItemModel {
 
 	@Override
 	public void resetOriginalValues() {
+		ItemModelImpl itemModelImpl = this;
+
+		itemModelImpl._originalTitle = itemModelImpl._Title;
+
+		itemModelImpl._originalArtist = itemModelImpl._Artist;
+
+		itemModelImpl._columnBitmask = 0;
 	}
 
 	@Override
@@ -451,10 +485,13 @@ public class ItemModelImpl extends BaseModelImpl<Item> implements ItemModel {
 	private int _ItemId;
 	private String _Num;
 	private String _Title;
+	private String _originalTitle;
 	private String _Artist;
+	private String _originalArtist;
 	private Date _ReleaseDate;
 	private double _ListPrice;
 	private double _Price;
 	private int _Version;
+	private long _columnBitmask;
 	private Item _escapedModelProxy;
 }

@@ -82,10 +82,22 @@ public class PurchaseOrderPersistenceImpl extends BasePersistenceImpl<PurchaseOr
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
-	public static final FinderPath FINDER_PATH_FETCH_BY_ORDERBYUSERID = new FinderPath(PurchaseOrderModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_ORDERBYUSERID =
+		new FinderPath(PurchaseOrderModelImpl.ENTITY_CACHE_ENABLED,
 			PurchaseOrderModelImpl.FINDER_CACHE_ENABLED,
-			PurchaseOrderImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByOrderByUserId", new String[] { Integer.class.getName() },
+			PurchaseOrderImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByOrderByUserId",
+			new String[] {
+				Integer.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ORDERBYUSERID =
+		new FinderPath(PurchaseOrderModelImpl.ENTITY_CACHE_ENABLED,
+			PurchaseOrderModelImpl.FINDER_CACHE_ENABLED,
+			PurchaseOrderImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByOrderByUserId", new String[] { Integer.class.getName() },
 			PurchaseOrderModelImpl.USERID_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_ORDERBYUSERID = new FinderPath(PurchaseOrderModelImpl.ENTITY_CACHE_ENABLED,
 			PurchaseOrderModelImpl.FINDER_CACHE_ENABLED, Long.class,
@@ -111,10 +123,6 @@ public class PurchaseOrderPersistenceImpl extends BasePersistenceImpl<PurchaseOr
 	public void cacheResult(PurchaseOrder purchaseOrder) {
 		EntityCacheUtil.putResult(PurchaseOrderModelImpl.ENTITY_CACHE_ENABLED,
 			PurchaseOrderImpl.class, purchaseOrder.getPrimaryKey(),
-			purchaseOrder);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_ORDERBYUSERID,
-			new Object[] { Integer.valueOf(purchaseOrder.getUserId()) },
 			purchaseOrder);
 
 		purchaseOrder.resetOriginalValues();
@@ -172,8 +180,6 @@ public class PurchaseOrderPersistenceImpl extends BasePersistenceImpl<PurchaseOr
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(purchaseOrder);
 	}
 
 	@Override
@@ -184,14 +190,7 @@ public class PurchaseOrderPersistenceImpl extends BasePersistenceImpl<PurchaseOr
 		for (PurchaseOrder purchaseOrder : purchaseOrders) {
 			EntityCacheUtil.removeResult(PurchaseOrderModelImpl.ENTITY_CACHE_ENABLED,
 				PurchaseOrderImpl.class, purchaseOrder.getPrimaryKey());
-
-			clearUniqueFindersCache(purchaseOrder);
 		}
-	}
-
-	protected void clearUniqueFindersCache(PurchaseOrder purchaseOrder) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_ORDERBYUSERID,
-			new Object[] { Integer.valueOf(purchaseOrder.getUserId()) });
 	}
 
 	/**
@@ -318,33 +317,32 @@ public class PurchaseOrderPersistenceImpl extends BasePersistenceImpl<PurchaseOr
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
-		EntityCacheUtil.putResult(PurchaseOrderModelImpl.ENTITY_CACHE_ENABLED,
-			PurchaseOrderImpl.class, purchaseOrder.getPrimaryKey(),
-			purchaseOrder);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_ORDERBYUSERID,
-				new Object[] { Integer.valueOf(purchaseOrder.getUserId()) },
-				purchaseOrder);
-		}
 		else {
 			if ((purchaseOrderModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_ORDERBYUSERID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ORDERBYUSERID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						Integer.valueOf(purchaseOrderModelImpl.getOriginalUserId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ORDERBYUSERID,
 					args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_ORDERBYUSERID,
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ORDERBYUSERID,
 					args);
 
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_ORDERBYUSERID,
-					new Object[] { Integer.valueOf(purchaseOrder.getUserId()) },
-					purchaseOrder);
+				args = new Object[] {
+						Integer.valueOf(purchaseOrderModelImpl.getUserId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ORDERBYUSERID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ORDERBYUSERID,
+					args);
 			}
 		}
+
+		EntityCacheUtil.putResult(PurchaseOrderModelImpl.ENTITY_CACHE_ENABLED,
+			PurchaseOrderImpl.class, purchaseOrder.getPrimaryKey(),
+			purchaseOrder);
 
 		return purchaseOrder;
 	}
@@ -466,82 +464,97 @@ public class PurchaseOrderPersistenceImpl extends BasePersistenceImpl<PurchaseOr
 	}
 
 	/**
-	 * Returns the purchase order where UserId = &#63; or throws a {@link com.sb.NoSuchPurchaseOrderException} if it could not be found.
+	 * Returns all the purchase orders where UserId = &#63;.
 	 *
 	 * @param UserId the user ID
-	 * @return the matching purchase order
-	 * @throws com.sb.NoSuchPurchaseOrderException if a matching purchase order could not be found
+	 * @return the matching purchase orders
 	 * @throws SystemException if a system exception occurred
 	 */
-	public PurchaseOrder findByOrderByUserId(int UserId)
-		throws NoSuchPurchaseOrderException, SystemException {
-		PurchaseOrder purchaseOrder = fetchByOrderByUserId(UserId);
-
-		if (purchaseOrder == null) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("UserId=");
-			msg.append(UserId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchPurchaseOrderException(msg.toString());
-		}
-
-		return purchaseOrder;
-	}
-
-	/**
-	 * Returns the purchase order where UserId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param UserId the user ID
-	 * @return the matching purchase order, or <code>null</code> if a matching purchase order could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public PurchaseOrder fetchByOrderByUserId(int UserId)
+	public List<PurchaseOrder> findByOrderByUserId(int UserId)
 		throws SystemException {
-		return fetchByOrderByUserId(UserId, true);
+		return findByOrderByUserId(UserId, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns the purchase order where UserId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 * Returns a range of all the purchase orders where UserId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
 	 *
 	 * @param UserId the user ID
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching purchase order, or <code>null</code> if a matching purchase order could not be found
+	 * @param start the lower bound of the range of purchase orders
+	 * @param end the upper bound of the range of purchase orders (not inclusive)
+	 * @return the range of matching purchase orders
 	 * @throws SystemException if a system exception occurred
 	 */
-	public PurchaseOrder fetchByOrderByUserId(int UserId,
-		boolean retrieveFromCache) throws SystemException {
-		Object[] finderArgs = new Object[] { UserId };
+	public List<PurchaseOrder> findByOrderByUserId(int UserId, int start,
+		int end) throws SystemException {
+		return findByOrderByUserId(UserId, start, end, null);
+	}
 
-		Object result = null;
+	/**
+	 * Returns an ordered range of all the purchase orders where UserId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param UserId the user ID
+	 * @param start the lower bound of the range of purchase orders
+	 * @param end the upper bound of the range of purchase orders (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching purchase orders
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<PurchaseOrder> findByOrderByUserId(int UserId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_ORDERBYUSERID,
-					finderArgs, this);
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ORDERBYUSERID;
+			finderArgs = new Object[] { UserId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ORDERBYUSERID;
+			finderArgs = new Object[] { UserId, start, end, orderByComparator };
 		}
 
-		if (result instanceof PurchaseOrder) {
-			PurchaseOrder purchaseOrder = (PurchaseOrder)result;
+		List<PurchaseOrder> list = (List<PurchaseOrder>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-			if ((UserId != purchaseOrder.getUserId())) {
-				result = null;
+		if ((list != null) && !list.isEmpty()) {
+			for (PurchaseOrder purchaseOrder : list) {
+				if ((UserId != purchaseOrder.getUserId())) {
+					list = null;
+
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(2);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
 
 			query.append(_SQL_SELECT_PURCHASEORDER_WHERE);
 
 			query.append(_FINDER_COLUMN_ORDERBYUSERID_USERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
 
 			String sql = query.toString();
 
@@ -556,48 +569,272 @@ public class PurchaseOrderPersistenceImpl extends BasePersistenceImpl<PurchaseOr
 
 				qPos.add(UserId);
 
-				List<PurchaseOrder> list = q.list();
-
-				result = list;
-
-				PurchaseOrder purchaseOrder = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_ORDERBYUSERID,
-						finderArgs, list);
-				}
-				else {
-					purchaseOrder = list.get(0);
-
-					cacheResult(purchaseOrder);
-
-					if ((purchaseOrder.getUserId() != UserId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_ORDERBYUSERID,
-							finderArgs, purchaseOrder);
-					}
-				}
-
-				return purchaseOrder;
+				list = (List<PurchaseOrder>)QueryUtil.list(q, getDialect(),
+						start, end);
 			}
 			catch (Exception e) {
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_ORDERBYUSERID,
-						finderArgs);
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
 				}
 
 				closeSession(session);
 			}
 		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first purchase order in the ordered set where UserId = &#63;.
+	 *
+	 * @param UserId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching purchase order
+	 * @throws com.sb.NoSuchPurchaseOrderException if a matching purchase order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PurchaseOrder findByOrderByUserId_First(int UserId,
+		OrderByComparator orderByComparator)
+		throws NoSuchPurchaseOrderException, SystemException {
+		PurchaseOrder purchaseOrder = fetchByOrderByUserId_First(UserId,
+				orderByComparator);
+
+		if (purchaseOrder != null) {
+			return purchaseOrder;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("UserId=");
+		msg.append(UserId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPurchaseOrderException(msg.toString());
+	}
+
+	/**
+	 * Returns the first purchase order in the ordered set where UserId = &#63;.
+	 *
+	 * @param UserId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching purchase order, or <code>null</code> if a matching purchase order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PurchaseOrder fetchByOrderByUserId_First(int UserId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<PurchaseOrder> list = findByOrderByUserId(UserId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last purchase order in the ordered set where UserId = &#63;.
+	 *
+	 * @param UserId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching purchase order
+	 * @throws com.sb.NoSuchPurchaseOrderException if a matching purchase order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PurchaseOrder findByOrderByUserId_Last(int UserId,
+		OrderByComparator orderByComparator)
+		throws NoSuchPurchaseOrderException, SystemException {
+		PurchaseOrder purchaseOrder = fetchByOrderByUserId_Last(UserId,
+				orderByComparator);
+
+		if (purchaseOrder != null) {
+			return purchaseOrder;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("UserId=");
+		msg.append(UserId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPurchaseOrderException(msg.toString());
+	}
+
+	/**
+	 * Returns the last purchase order in the ordered set where UserId = &#63;.
+	 *
+	 * @param UserId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching purchase order, or <code>null</code> if a matching purchase order could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PurchaseOrder fetchByOrderByUserId_Last(int UserId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByOrderByUserId(UserId);
+
+		List<PurchaseOrder> list = findByOrderByUserId(UserId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the purchase orders before and after the current purchase order in the ordered set where UserId = &#63;.
+	 *
+	 * @param PoId the primary key of the current purchase order
+	 * @param UserId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next purchase order
+	 * @throws com.sb.NoSuchPurchaseOrderException if a purchase order with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public PurchaseOrder[] findByOrderByUserId_PrevAndNext(int PoId,
+		int UserId, OrderByComparator orderByComparator)
+		throws NoSuchPurchaseOrderException, SystemException {
+		PurchaseOrder purchaseOrder = findByPrimaryKey(PoId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			PurchaseOrder[] array = new PurchaseOrderImpl[3];
+
+			array[0] = getByOrderByUserId_PrevAndNext(session, purchaseOrder,
+					UserId, orderByComparator, true);
+
+			array[1] = purchaseOrder;
+
+			array[2] = getByOrderByUserId_PrevAndNext(session, purchaseOrder,
+					UserId, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected PurchaseOrder getByOrderByUserId_PrevAndNext(Session session,
+		PurchaseOrder purchaseOrder, int UserId,
+		OrderByComparator orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_PURCHASEORDER_WHERE);
+
+		query.append(_FINDER_COLUMN_ORDERBYUSERID_USERID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
 			}
-			else {
-				return (PurchaseOrder)result;
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
 			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(UserId);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(purchaseOrder);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<PurchaseOrder> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
 		}
 	}
 
@@ -717,17 +954,15 @@ public class PurchaseOrderPersistenceImpl extends BasePersistenceImpl<PurchaseOr
 	}
 
 	/**
-	 * Removes the purchase order where UserId = &#63; from the database.
+	 * Removes all the purchase orders where UserId = &#63; from the database.
 	 *
 	 * @param UserId the user ID
-	 * @return the purchase order that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public PurchaseOrder removeByOrderByUserId(int UserId)
-		throws NoSuchPurchaseOrderException, SystemException {
-		PurchaseOrder purchaseOrder = findByOrderByUserId(UserId);
-
-		return remove(purchaseOrder);
+	public void removeByOrderByUserId(int UserId) throws SystemException {
+		for (PurchaseOrder purchaseOrder : findByOrderByUserId(UserId)) {
+			remove(purchaseOrder);
+		}
 	}
 
 	/**

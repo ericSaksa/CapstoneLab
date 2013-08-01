@@ -37,7 +37,9 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -81,6 +83,32 @@ public class ItemPersistenceImpl extends BasePersistenceImpl<Item>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_TITLE = new FinderPath(ItemModelImpl.ENTITY_CACHE_ENABLED,
+			ItemModelImpl.FINDER_CACHE_ENABLED, ItemImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByTitle",
+			new String[] {
+				String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_TITLE = new FinderPath(ItemModelImpl.ENTITY_CACHE_ENABLED,
+			ItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByTitle",
+			new String[] { String.class.getName() });
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_ARTIST = new FinderPath(ItemModelImpl.ENTITY_CACHE_ENABLED,
+			ItemModelImpl.FINDER_CACHE_ENABLED, ItemImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByArtist",
+			new String[] {
+				String.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_ARTIST = new FinderPath(ItemModelImpl.ENTITY_CACHE_ENABLED,
+			ItemModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByArtist",
+			new String[] { String.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ItemModelImpl.ENTITY_CACHE_ENABLED,
 			ItemModelImpl.FINDER_CACHE_ENABLED, ItemImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
@@ -282,7 +310,7 @@ public class ItemPersistenceImpl extends BasePersistenceImpl<Item>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
-		if (isNew) {
+		if (isNew || !ItemModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
@@ -412,6 +440,775 @@ public class ItemPersistenceImpl extends BasePersistenceImpl<Item>
 	}
 
 	/**
+	 * Returns all the items where Title LIKE &#63;.
+	 *
+	 * @param Title the title
+	 * @return the matching items
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Item> findByTitle(String Title) throws SystemException {
+		return findByTitle(Title, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the items where Title LIKE &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param Title the title
+	 * @param start the lower bound of the range of items
+	 * @param end the upper bound of the range of items (not inclusive)
+	 * @return the range of matching items
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Item> findByTitle(String Title, int start, int end)
+		throws SystemException {
+		return findByTitle(Title, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the items where Title LIKE &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param Title the title
+	 * @param start the lower bound of the range of items
+	 * @param end the upper bound of the range of items (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching items
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Item> findByTitle(String Title, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_TITLE;
+		finderArgs = new Object[] { Title, start, end, orderByComparator };
+
+		List<Item> list = (List<Item>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Item item : list) {
+				if (!Validator.equals(Title, item.getTitle())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_ITEM_WHERE);
+
+			if (Title == null) {
+				query.append(_FINDER_COLUMN_TITLE_TITLE_1);
+			}
+			else {
+				if (Title.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_TITLE_TITLE_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_TITLE_TITLE_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (Title != null) {
+					qPos.add(Title);
+				}
+
+				list = (List<Item>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first item in the ordered set where Title LIKE &#63;.
+	 *
+	 * @param Title the title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching item
+	 * @throws com.sb.NoSuchItemException if a matching item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Item findByTitle_First(String Title,
+		OrderByComparator orderByComparator)
+		throws NoSuchItemException, SystemException {
+		Item item = fetchByTitle_First(Title, orderByComparator);
+
+		if (item != null) {
+			return item;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("Title=");
+		msg.append(Title);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchItemException(msg.toString());
+	}
+
+	/**
+	 * Returns the first item in the ordered set where Title LIKE &#63;.
+	 *
+	 * @param Title the title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching item, or <code>null</code> if a matching item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Item fetchByTitle_First(String Title,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Item> list = findByTitle(Title, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last item in the ordered set where Title LIKE &#63;.
+	 *
+	 * @param Title the title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching item
+	 * @throws com.sb.NoSuchItemException if a matching item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Item findByTitle_Last(String Title,
+		OrderByComparator orderByComparator)
+		throws NoSuchItemException, SystemException {
+		Item item = fetchByTitle_Last(Title, orderByComparator);
+
+		if (item != null) {
+			return item;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("Title=");
+		msg.append(Title);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchItemException(msg.toString());
+	}
+
+	/**
+	 * Returns the last item in the ordered set where Title LIKE &#63;.
+	 *
+	 * @param Title the title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching item, or <code>null</code> if a matching item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Item fetchByTitle_Last(String Title,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByTitle(Title);
+
+		List<Item> list = findByTitle(Title, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the items before and after the current item in the ordered set where Title LIKE &#63;.
+	 *
+	 * @param ItemId the primary key of the current item
+	 * @param Title the title
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next item
+	 * @throws com.sb.NoSuchItemException if a item with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Item[] findByTitle_PrevAndNext(int ItemId, String Title,
+		OrderByComparator orderByComparator)
+		throws NoSuchItemException, SystemException {
+		Item item = findByPrimaryKey(ItemId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Item[] array = new ItemImpl[3];
+
+			array[0] = getByTitle_PrevAndNext(session, item, Title,
+					orderByComparator, true);
+
+			array[1] = item;
+
+			array[2] = getByTitle_PrevAndNext(session, item, Title,
+					orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Item getByTitle_PrevAndNext(Session session, Item item,
+		String Title, OrderByComparator orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_ITEM_WHERE);
+
+		if (Title == null) {
+			query.append(_FINDER_COLUMN_TITLE_TITLE_1);
+		}
+		else {
+			if (Title.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_TITLE_TITLE_3);
+			}
+			else {
+				query.append(_FINDER_COLUMN_TITLE_TITLE_2);
+			}
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		if (Title != null) {
+			qPos.add(Title);
+		}
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(item);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<Item> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns all the items where Artist LIKE &#63;.
+	 *
+	 * @param Artist the artist
+	 * @return the matching items
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Item> findByArtist(String Artist) throws SystemException {
+		return findByArtist(Artist, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the items where Artist LIKE &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param Artist the artist
+	 * @param start the lower bound of the range of items
+	 * @param end the upper bound of the range of items (not inclusive)
+	 * @return the range of matching items
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Item> findByArtist(String Artist, int start, int end)
+		throws SystemException {
+		return findByArtist(Artist, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the items where Artist LIKE &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param Artist the artist
+	 * @param start the lower bound of the range of items
+	 * @param end the upper bound of the range of items (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching items
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Item> findByArtist(String Artist, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ARTIST;
+		finderArgs = new Object[] { Artist, start, end, orderByComparator };
+
+		List<Item> list = (List<Item>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Item item : list) {
+				if (!Validator.equals(Artist, item.getArtist())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(2);
+			}
+
+			query.append(_SQL_SELECT_ITEM_WHERE);
+
+			if (Artist == null) {
+				query.append(_FINDER_COLUMN_ARTIST_ARTIST_1);
+			}
+			else {
+				if (Artist.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_ARTIST_ARTIST_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_ARTIST_ARTIST_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (Artist != null) {
+					qPos.add(Artist);
+				}
+
+				list = (List<Item>)QueryUtil.list(q, getDialect(), start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first item in the ordered set where Artist LIKE &#63;.
+	 *
+	 * @param Artist the artist
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching item
+	 * @throws com.sb.NoSuchItemException if a matching item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Item findByArtist_First(String Artist,
+		OrderByComparator orderByComparator)
+		throws NoSuchItemException, SystemException {
+		Item item = fetchByArtist_First(Artist, orderByComparator);
+
+		if (item != null) {
+			return item;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("Artist=");
+		msg.append(Artist);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchItemException(msg.toString());
+	}
+
+	/**
+	 * Returns the first item in the ordered set where Artist LIKE &#63;.
+	 *
+	 * @param Artist the artist
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching item, or <code>null</code> if a matching item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Item fetchByArtist_First(String Artist,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Item> list = findByArtist(Artist, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last item in the ordered set where Artist LIKE &#63;.
+	 *
+	 * @param Artist the artist
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching item
+	 * @throws com.sb.NoSuchItemException if a matching item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Item findByArtist_Last(String Artist,
+		OrderByComparator orderByComparator)
+		throws NoSuchItemException, SystemException {
+		Item item = fetchByArtist_Last(Artist, orderByComparator);
+
+		if (item != null) {
+			return item;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("Artist=");
+		msg.append(Artist);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchItemException(msg.toString());
+	}
+
+	/**
+	 * Returns the last item in the ordered set where Artist LIKE &#63;.
+	 *
+	 * @param Artist the artist
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching item, or <code>null</code> if a matching item could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Item fetchByArtist_Last(String Artist,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByArtist(Artist);
+
+		List<Item> list = findByArtist(Artist, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the items before and after the current item in the ordered set where Artist LIKE &#63;.
+	 *
+	 * @param ItemId the primary key of the current item
+	 * @param Artist the artist
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next item
+	 * @throws com.sb.NoSuchItemException if a item with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Item[] findByArtist_PrevAndNext(int ItemId, String Artist,
+		OrderByComparator orderByComparator)
+		throws NoSuchItemException, SystemException {
+		Item item = findByPrimaryKey(ItemId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Item[] array = new ItemImpl[3];
+
+			array[0] = getByArtist_PrevAndNext(session, item, Artist,
+					orderByComparator, true);
+
+			array[1] = item;
+
+			array[2] = getByArtist_PrevAndNext(session, item, Artist,
+					orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Item getByArtist_PrevAndNext(Session session, Item item,
+		String Artist, OrderByComparator orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_ITEM_WHERE);
+
+		if (Artist == null) {
+			query.append(_FINDER_COLUMN_ARTIST_ARTIST_1);
+		}
+		else {
+			if (Artist.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_ARTIST_ARTIST_3);
+			}
+			else {
+				query.append(_FINDER_COLUMN_ARTIST_ARTIST_2);
+			}
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		if (Artist != null) {
+			qPos.add(Artist);
+		}
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(item);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<Item> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
 	 * Returns all the items.
 	 *
 	 * @return the items
@@ -526,6 +1323,30 @@ public class ItemPersistenceImpl extends BasePersistenceImpl<Item>
 	}
 
 	/**
+	 * Removes all the items where Title LIKE &#63; from the database.
+	 *
+	 * @param Title the title
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByTitle(String Title) throws SystemException {
+		for (Item item : findByTitle(Title)) {
+			remove(item);
+		}
+	}
+
+	/**
+	 * Removes all the items where Artist LIKE &#63; from the database.
+	 *
+	 * @param Artist the artist
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByArtist(String Artist) throws SystemException {
+		for (Item item : findByArtist(Artist)) {
+			remove(item);
+		}
+	}
+
+	/**
 	 * Removes all the items from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -534,6 +1355,136 @@ public class ItemPersistenceImpl extends BasePersistenceImpl<Item>
 		for (Item item : findAll()) {
 			remove(item);
 		}
+	}
+
+	/**
+	 * Returns the number of items where Title LIKE &#63;.
+	 *
+	 * @param Title the title
+	 * @return the number of matching items
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByTitle(String Title) throws SystemException {
+		Object[] finderArgs = new Object[] { Title };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_TITLE,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_ITEM_WHERE);
+
+			if (Title == null) {
+				query.append(_FINDER_COLUMN_TITLE_TITLE_1);
+			}
+			else {
+				if (Title.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_TITLE_TITLE_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_TITLE_TITLE_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (Title != null) {
+					qPos.add(Title);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_TITLE,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of items where Artist LIKE &#63;.
+	 *
+	 * @param Artist the artist
+	 * @return the number of matching items
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByArtist(String Artist) throws SystemException {
+		Object[] finderArgs = new Object[] { Artist };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_ARTIST,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_ITEM_WHERE);
+
+			if (Artist == null) {
+				query.append(_FINDER_COLUMN_ARTIST_ARTIST_1);
+			}
+			else {
+				if (Artist.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_ARTIST_ARTIST_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_ARTIST_ARTIST_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (Artist != null) {
+					qPos.add(Artist);
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_ARTIST,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
 	}
 
 	/**
@@ -1147,15 +2098,24 @@ public class ItemPersistenceImpl extends BasePersistenceImpl<Item>
 	}
 
 	private static final String _SQL_SELECT_ITEM = "SELECT item FROM Item item";
+	private static final String _SQL_SELECT_ITEM_WHERE = "SELECT item FROM Item item WHERE ";
 	private static final String _SQL_COUNT_ITEM = "SELECT COUNT(item) FROM Item item";
+	private static final String _SQL_COUNT_ITEM_WHERE = "SELECT COUNT(item) FROM Item item WHERE ";
 	private static final String _SQL_GETITEMBANDMEMBERSES = "SELECT {Item_BandMembers.*} FROM Item_BandMembers INNER JOIN item ON (item.ItemId = Item_BandMembers.ItemId) WHERE (item.ItemId = ?)";
 	private static final String _SQL_GETITEMBANDMEMBERSESSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM Item_BandMembers WHERE ItemId = ?";
 	private static final String _SQL_CONTAINSITEMBANDMEMBERS = "SELECT COUNT(*) AS COUNT_VALUE FROM Item_BandMembers WHERE ItemId = ? AND ItemBandMemberId = ?";
 	private static final String _SQL_GETINVENTORIES = "SELECT {inventory.*} FROM inventory INNER JOIN item ON (item.ItemId = inventory.ItemId) WHERE (item.ItemId = ?)";
 	private static final String _SQL_GETINVENTORIESSIZE = "SELECT COUNT(*) AS COUNT_VALUE FROM inventory WHERE ItemId = ?";
 	private static final String _SQL_CONTAINSINVENTORY = "SELECT COUNT(*) AS COUNT_VALUE FROM inventory WHERE ItemId = ? AND InvId = ?";
+	private static final String _FINDER_COLUMN_TITLE_TITLE_1 = "item.Title LIKE NULL";
+	private static final String _FINDER_COLUMN_TITLE_TITLE_2 = "item.Title LIKE ?";
+	private static final String _FINDER_COLUMN_TITLE_TITLE_3 = "(item.Title IS NULL OR item.Title LIKE ?)";
+	private static final String _FINDER_COLUMN_ARTIST_ARTIST_1 = "item.Artist LIKE NULL";
+	private static final String _FINDER_COLUMN_ARTIST_ARTIST_2 = "item.Artist LIKE ?";
+	private static final String _FINDER_COLUMN_ARTIST_ARTIST_3 = "(item.Artist IS NULL OR item.Artist LIKE ?)";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "item.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No Item exists with the primary key ";
+	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No Item exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(ItemPersistenceImpl.class);

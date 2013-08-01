@@ -22,6 +22,12 @@
         <column name="Version" type="int"></column>
         <column name="BandMembers" type="Collection" entity="ItemBandMembers" mapping-key="ItemId"></column>
         <column name="Inventory" type="Collection" entity="Inventory" mapping-key="ItemId"></column>
+        <finder name="Title" return-type="Collection">
+            <finder-column name="Title" comparator="LIKE"></finder-column>
+        </finder>
+        <finder name="Artist" return-type="Collection">
+            <finder-column name="Artist" comparator="LIKE"></finder-column>
+        </finder>
     </entity>
     <entity name="ItemBandMembers" local-service="true" remote-service="false" table="Item_BandMembers">
         <column name="ItemBandMemberId" type="int" primary="true" id-type="identity"></column>
@@ -35,13 +41,13 @@
         <column name="Quantity" type="int"></column>
         <column name="UnitPrice" type="double"></column>
     </entity>
-    <entity name="PurchaseOrder" local-service="true" remote-service="false" table="PurchaseOrder"> 
+    <entity name="PurchaseOrder" local-service="true" remote-service="false" table="PurchaseOrder">
         <column name="PoId" type="int" primary="true" id-type="identity"></column>
         <column name="Status" type="int"></column>
         <column name="OrderDate" type="Date"></column>
         <column name="UserId" type="int"></column>
         <column name="PurchaseItems" type="Collection" entity="PurchaseItem" mapping-key="PoId"></column>
-        <finder name="OrderByUserId" return-type="PurchaseOrder">
+        <finder name="OrderByUserId" return-type="Collection">
             <finder-column name="UserId" comparator="="></finder-column>
         </finder>
     </entity>

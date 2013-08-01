@@ -97,6 +97,235 @@ public interface ItemPersistence extends BasePersistence<Item> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns all the items where Title LIKE &#63;.
+	*
+	* @param Title the title
+	* @return the matching items
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.sb.model.Item> findByTitle(java.lang.String Title)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns a range of all the items where Title LIKE &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param Title the title
+	* @param start the lower bound of the range of items
+	* @param end the upper bound of the range of items (not inclusive)
+	* @return the range of matching items
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.sb.model.Item> findByTitle(
+		java.lang.String Title, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns an ordered range of all the items where Title LIKE &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param Title the title
+	* @param start the lower bound of the range of items
+	* @param end the upper bound of the range of items (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching items
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.sb.model.Item> findByTitle(
+		java.lang.String Title, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first item in the ordered set where Title LIKE &#63;.
+	*
+	* @param Title the title
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching item
+	* @throws com.sb.NoSuchItemException if a matching item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.sb.model.Item findByTitle_First(java.lang.String Title,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.sb.NoSuchItemException;
+
+	/**
+	* Returns the first item in the ordered set where Title LIKE &#63;.
+	*
+	* @param Title the title
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching item, or <code>null</code> if a matching item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.sb.model.Item fetchByTitle_First(java.lang.String Title,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last item in the ordered set where Title LIKE &#63;.
+	*
+	* @param Title the title
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching item
+	* @throws com.sb.NoSuchItemException if a matching item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.sb.model.Item findByTitle_Last(java.lang.String Title,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.sb.NoSuchItemException;
+
+	/**
+	* Returns the last item in the ordered set where Title LIKE &#63;.
+	*
+	* @param Title the title
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching item, or <code>null</code> if a matching item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.sb.model.Item fetchByTitle_Last(java.lang.String Title,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the items before and after the current item in the ordered set where Title LIKE &#63;.
+	*
+	* @param ItemId the primary key of the current item
+	* @param Title the title
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next item
+	* @throws com.sb.NoSuchItemException if a item with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.sb.model.Item[] findByTitle_PrevAndNext(int ItemId,
+		java.lang.String Title,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.sb.NoSuchItemException;
+
+	/**
+	* Returns all the items where Artist LIKE &#63;.
+	*
+	* @param Artist the artist
+	* @return the matching items
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.sb.model.Item> findByArtist(
+		java.lang.String Artist)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns a range of all the items where Artist LIKE &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param Artist the artist
+	* @param start the lower bound of the range of items
+	* @param end the upper bound of the range of items (not inclusive)
+	* @return the range of matching items
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.sb.model.Item> findByArtist(
+		java.lang.String Artist, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns an ordered range of all the items where Artist LIKE &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param Artist the artist
+	* @param start the lower bound of the range of items
+	* @param end the upper bound of the range of items (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching items
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.sb.model.Item> findByArtist(
+		java.lang.String Artist, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first item in the ordered set where Artist LIKE &#63;.
+	*
+	* @param Artist the artist
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching item
+	* @throws com.sb.NoSuchItemException if a matching item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.sb.model.Item findByArtist_First(java.lang.String Artist,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.sb.NoSuchItemException;
+
+	/**
+	* Returns the first item in the ordered set where Artist LIKE &#63;.
+	*
+	* @param Artist the artist
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching item, or <code>null</code> if a matching item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.sb.model.Item fetchByArtist_First(java.lang.String Artist,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last item in the ordered set where Artist LIKE &#63;.
+	*
+	* @param Artist the artist
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching item
+	* @throws com.sb.NoSuchItemException if a matching item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.sb.model.Item findByArtist_Last(java.lang.String Artist,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.sb.NoSuchItemException;
+
+	/**
+	* Returns the last item in the ordered set where Artist LIKE &#63;.
+	*
+	* @param Artist the artist
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching item, or <code>null</code> if a matching item could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.sb.model.Item fetchByArtist_Last(java.lang.String Artist,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the items before and after the current item in the ordered set where Artist LIKE &#63;.
+	*
+	* @param ItemId the primary key of the current item
+	* @param Artist the artist
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next item
+	* @throws com.sb.NoSuchItemException if a item with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.sb.model.Item[] findByArtist_PrevAndNext(int ItemId,
+		java.lang.String Artist,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.sb.NoSuchItemException;
+
+	/**
 	* Returns all the items.
 	*
 	* @return the items
@@ -138,11 +367,49 @@ public interface ItemPersistence extends BasePersistence<Item> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the items where Title LIKE &#63; from the database.
+	*
+	* @param Title the title
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByTitle(java.lang.String Title)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the items where Artist LIKE &#63; from the database.
+	*
+	* @param Artist the artist
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByArtist(java.lang.String Artist)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Removes all the items from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of items where Title LIKE &#63;.
+	*
+	* @param Title the title
+	* @return the number of matching items
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByTitle(java.lang.String Title)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of items where Artist LIKE &#63;.
+	*
+	* @param Artist the artist
+	* @return the number of matching items
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByArtist(java.lang.String Artist)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
