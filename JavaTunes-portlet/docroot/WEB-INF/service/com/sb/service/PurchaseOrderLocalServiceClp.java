@@ -106,6 +106,14 @@ public class PurchaseOrderLocalServiceClp implements PurchaseOrderLocalService {
 		_methodName17 = "setBeanIdentifier";
 
 		_methodParameterTypes17 = new String[] { "java.lang.String" };
+
+		_methodName19 = "getItems";
+
+		_methodParameterTypes19 = new String[] { "int" };
+
+		_methodName20 = "findByOrderByUserId";
+
+		_methodParameterTypes20 = new String[] { "int" };
 	}
 
 	public com.sb.model.PurchaseOrder addPurchaseOrder(
@@ -634,6 +642,66 @@ public class PurchaseOrderLocalServiceClp implements PurchaseOrderLocalService {
 		throw new UnsupportedOperationException();
 	}
 
+	public java.util.List<com.sb.model.PurchaseItem> getItems(int orderId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName19,
+					_methodParameterTypes19, new Object[] { orderId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.sb.model.PurchaseItem>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	public java.util.List<com.sb.model.PurchaseOrder> findByOrderByUserId(
+		int UserId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.sb.NoSuchPurchaseOrderException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName20,
+					_methodParameterTypes20, new Object[] { UserId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof com.sb.NoSuchPurchaseOrderException) {
+				throw (com.sb.NoSuchPurchaseOrderException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.sb.model.PurchaseOrder>)ClpSerializer.translateOutput(returnObj);
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -671,4 +739,8 @@ public class PurchaseOrderLocalServiceClp implements PurchaseOrderLocalService {
 	private String[] _methodParameterTypes16;
 	private String _methodName17;
 	private String[] _methodParameterTypes17;
+	private String _methodName19;
+	private String[] _methodParameterTypes19;
+	private String _methodName20;
+	private String[] _methodParameterTypes20;
 }

@@ -267,6 +267,17 @@ public class ItemLocalServiceWrapper implements ItemLocalService,
 		return _itemLocalService.getInventory(itemId);
 	}
 
+	public java.util.List<com.sb.model.Item> findByTitle(java.lang.String Title)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _itemLocalService.findByTitle(Title);
+	}
+
+	public java.util.List<com.sb.model.Item> findByArtist(
+		java.lang.String Artist)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _itemLocalService.findByArtist(Artist);
+	}
+
 	/**
 	 * @deprecated Renamed to {@link #getWrappedService}
 	 */

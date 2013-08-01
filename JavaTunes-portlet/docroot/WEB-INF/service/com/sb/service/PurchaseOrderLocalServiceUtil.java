@@ -269,6 +269,18 @@ public class PurchaseOrderLocalServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static java.util.List<com.sb.model.PurchaseItem> getItems(
+		int orderId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getItems(orderId);
+	}
+
+	public static java.util.List<com.sb.model.PurchaseOrder> findByOrderByUserId(
+		int UserId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.sb.NoSuchPurchaseOrderException {
+		return getService().findByOrderByUserId(UserId);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

@@ -23,14 +23,18 @@ import com.sb.service.persistence.ItemUtil;
 
 /**
  * The implementation of the item local service.
- *
+ * 
  * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link com.sb.service.ItemLocalService} interface.
- *
+ * All custom service methods should be put in this class. Whenever methods are
+ * added, rerun ServiceBuilder to copy their definitions into the
+ * {@link com.sb.service.ItemLocalService} interface.
+ * 
  * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
+ * This is a local service. Methods of this service will not have security
+ * checks based on the propagated JAAS credentials because this service can only
+ * be accessed from within the same VM.
  * </p>
- *
+ * 
  * @author amifxw0
  * @see com.sb.service.base.ItemLocalServiceBaseImpl
  * @see com.sb.service.ItemLocalServiceUtil
@@ -38,12 +42,13 @@ import com.sb.service.persistence.ItemUtil;
 public class ItemLocalServiceImpl extends ItemLocalServiceBaseImpl {
 	/*
 	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this interface directly. Always use {@link com.sb.service.ItemLocalServiceUtil} to access the item local service.
+	 * 
+	 * Never reference this interface directly. Always use {@link
+	 * com.sb.service.ItemLocalServiceUtil} to access the item local service.
 	 */
-	
-	public List<ItemBandMembers> getBandMembers(int itemId) throws com.liferay.portal.kernel.exception.SystemException 
-	{
+
+	public List<ItemBandMembers> getBandMembers(int itemId)
+			throws com.liferay.portal.kernel.exception.SystemException {
 		List<ItemBandMembers> itemBandMembersList;
 
 		try {
@@ -54,9 +59,9 @@ public class ItemLocalServiceImpl extends ItemLocalServiceBaseImpl {
 
 		return itemBandMembersList;
 	}
-	
-	public List<Inventory> getInventory(int itemId) throws com.liferay.portal.kernel.exception.SystemException 
-	{
+
+	public List<Inventory> getInventory(int itemId)
+			throws com.liferay.portal.kernel.exception.SystemException {
 		List<Inventory> inventoryList;
 
 		try {
@@ -66,6 +71,26 @@ public class ItemLocalServiceImpl extends ItemLocalServiceBaseImpl {
 		}
 
 		return inventoryList;
+	}
+
+	public java.util.List<com.sb.model.Item> findByTitle(
+
+	java.lang.String Title)
+
+	throws com.liferay.portal.kernel.exception.SystemException {
+
+		return ItemUtil.findByTitle(Title);
+
+	}
+
+	public java.util.List<com.sb.model.Item> findByArtist(
+
+	java.lang.String Artist)
+
+	throws com.liferay.portal.kernel.exception.SystemException {
+
+		return ItemUtil.findByArtist(Artist);
+
 	}
 
 }

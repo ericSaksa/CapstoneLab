@@ -3,7 +3,6 @@ package com.purchaseOrders;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -28,7 +27,6 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.sb.model.Item;
 import com.sb.model.PurchaseItem;
 import com.sb.model.PurchaseOrder;
 import com.sb.service.ItemLocalServiceUtil;

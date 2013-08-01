@@ -242,4 +242,13 @@ public interface PurchaseOrderLocalService extends BaseLocalService,
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.sb.model.PurchaseItem> getItems(int orderId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<com.sb.model.PurchaseOrder> findByOrderByUserId(
+		int UserId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.sb.NoSuchPurchaseOrderException;
 }

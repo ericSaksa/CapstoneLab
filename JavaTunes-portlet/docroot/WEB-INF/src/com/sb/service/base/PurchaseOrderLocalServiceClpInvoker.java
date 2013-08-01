@@ -105,6 +105,14 @@ public class PurchaseOrderLocalServiceClpInvoker {
 		_methodName53 = "setBeanIdentifier";
 
 		_methodParameterTypes53 = new String[] { "java.lang.String" };
+
+		_methodName58 = "getItems";
+
+		_methodParameterTypes58 = new String[] { "int" };
+
+		_methodName59 = "findByOrderByUserId";
+
+		_methodParameterTypes59 = new String[] { "int" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -206,6 +214,16 @@ public class PurchaseOrderLocalServiceClpInvoker {
 			PurchaseOrderLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 		}
 
+		if (_methodName58.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes58, parameterTypes)) {
+			return PurchaseOrderLocalServiceUtil.getItems(((Integer)arguments[0]).intValue());
+		}
+
+		if (_methodName59.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes59, parameterTypes)) {
+			return PurchaseOrderLocalServiceUtil.findByOrderByUserId(((Integer)arguments[0]).intValue());
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -245,4 +263,8 @@ public class PurchaseOrderLocalServiceClpInvoker {
 	private String[] _methodParameterTypes52;
 	private String _methodName53;
 	private String[] _methodParameterTypes53;
+	private String _methodName58;
+	private String[] _methodParameterTypes58;
+	private String _methodName59;
+	private String[] _methodParameterTypes59;
 }
