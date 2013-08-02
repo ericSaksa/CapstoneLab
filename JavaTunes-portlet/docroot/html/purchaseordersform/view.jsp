@@ -18,7 +18,9 @@
 			width : "40%",
 			close: resetItemSearchDialog
 		}).dialog("close");
-
+		function resetItemSearchDialog() {
+			$('#addItemSearchDialog :input').not(':submit, :button, #addNewItemQuantity').val('');
+		};
 		//add event to the addItem button
 		$("#addAddItemsButton").on("click", function() {
 			addItemDialog.dialog('open');
@@ -30,9 +32,14 @@
 			min : 1
 		});
 		
+		// Hide submit button initially
+		jQuery("#submitPurchaseButton").hide();
+		
+		// Autocomplete
 		$('.searchString').autocomplete({
 		      source: "<%=autoComplete%>",
 		      select: function completeItemInformation(event, ui) {
+		    	 $(".itemID").val(ui.item.item_id);
 		  		$(".itemTitle").val(ui.item.item_title);
 		  		$(".itemArtist").val(ui.item.item_artist);
 		  		$(".itemListPrice").val(ui.item.item_listPrice);
@@ -42,13 +49,25 @@
 		  	}
 	    });
 		$('#addAddItemButton').on('click',function(){
-			items.push({'ItemId':responseitem[0].items.id,'Quantity':$('#addNewItemQuantity').val()});
-			$('table#addOrderItemTable tbody').append("<tr><td>"+responseitem[0].items.title+"</td><td>"+$('#addNewItemQuantity').val()+"</td><td><input type='button' value='delete'/></td></tr>");
+			items.push({'ItemId': $(".itemID").val(),'Quantity':$('#addNewItemQuantity').val()});
+			$('table#addOrderItemTable tbody').append("<tr><td>"+$('.itemID').val()+"</td><td>"+$('.itemTitle').val()+"</td><td>"+$('#addNewItemQuantity').val()+"</td><td><input type='button' value='delete'/></td></tr>");
+			$($('.searchString').val(""));
 			addItemDialog.dialog('close');
+			
+			jQuery("#submitPurchaseButton").show();
+			
 		});
+		
 		$('table#addOrderItemTable').on('click','input:button',function(){
-			console.log(this);
 			$(this).closest('tr').remove();
+			
+			var itemIDToBeDeleted = $.trim($($($(this).parents()[0]).siblings()[0]).html());
+			
+			for (var i=0;i<items.length;i++) {
+				if(items[i].ItemId===itemIDToBeDeleted) {
+					items.splice(i, 1);
+				}
+			}
 		});
 		
 		$('#submitPurchaseButton').on('click',function(){
@@ -56,8 +75,32 @@
 			$.ajax({
 				type: 'POST',
 				url: '${submitOrderForm}',
-				data: {items:"{\"purchaseItems\":"+JSON.stringify(items)+"}"}
+				data: {items:"{\"purchaseItems\":"+JSON.stringify(items)+"}"},
+			}).success(function(data){
+				var resultJson = JSON.parse(data);
+				var resultPOID;
+				var resultUserID;
+				
+				if(resultJson.ActivityStatus==="success") {
+					
+					resultPOID = resultJson.PoID;
+					resultUserID = resultJson.UserId;
+					resultOrderDate = resultJson.OrderDate;
+					resultOrderStatus = resultJson.OrderStatus;
+					
+					Liferay.fire('addedPurchaseOrder', {
+						"POID" : resultPOID,
+						"UserID" : resultUserID,
+						"OrderDate" : resultOrderDate,
+						"OrderStatus" : resultOrderStatus
+					});
+					
+					jQuery("#addOrderItemTable tbody tr").remove();
+					
+					jQuery("#submitPurchaseButton").hide();
+					}
 			});
+			clickableRowPurchaseOrderGrid();
 		});
 		/* jQuery("#submitPurchaseButton").click(function(event) {
 			
@@ -73,9 +116,7 @@
 		
 	});
 	
-	function resetItemSearchDialog() {
-		$('#addItemSearchDialog :input').not(':submit, :button, #addNewItemQuantity').val('');
-	};
+	
 </script>
 
 <portlet:defineObjects />
@@ -85,27 +126,14 @@
 <table class="bordered" id="addOrderItemTable">
 	<thead>
 	<tr>
+		<th>Item ID</th>
 		<th>Title</th>
 		<th>Quantity</th>
-		<th>Delete</th>
+		<th>Action</th>
 	</tr>
 	</thead>
 	<tbody>
-		<tr>
-			<td>name</td>
-			<td>number</td>
-			<td><input type="button" class='deleteItemFromAdd' value="delete"/></td>
-		</tr>
-		<tr>
-			<td>name</td>
-			<td>number</td>
-			<td><input type="button" class='deleteItemFromAdd' value="delete"/></td>
-		</tr>
-		<tr>
-			<td>name</td>
-			<td>number</td>
-			<td><input type="button" class='deleteItemFromAdd' value="delete"/></td>
-		</tr>
+
 	</tbody>
 </table>
 <br>
@@ -126,6 +154,10 @@
 	</table>
 	<br>
 	<table id="addItemInformation">
+		<tr>
+			<td align="right">ID:</td>
+			<td align="left"><input type="text" readonly class="itemID"></td>
+		</tr>
 		<tr>
 			<td align="right">Title:</td>
 			<td align="left"><input class='itemTitle' type="text" readonly size="20"/></td>
