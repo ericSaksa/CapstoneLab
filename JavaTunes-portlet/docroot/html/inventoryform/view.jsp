@@ -70,24 +70,23 @@
 				             Quantity : $("#quantity").val()
 				        }
 				);
-					clickableRow(); 
+				clickableRow(); 
+				clearInventoryFormFields();
 				 });
 			
 			}
-			
-			 
-			 
-			 
-			 
-/* 			 $("#title").val("");
-             $("#artist").val("");
-             $("#listPrice").val("");
-             $("#yourPrice").val("");
-             $("#releaseDate").val("08/02/2013");
-             $("#version").val("");
-             $("#quantity").val("1"); */
 		});
 	});
+	
+	function clearInventoryFormFields() {
+		 $("#title").val("");
+         $("#artist").val("");
+         $("#listPrice").val("");
+         $("#yourPrice").val("");
+         $("#releaseDate").val("08/02/2013");
+         $("#version").val("");
+         $("#quantity").val("1");
+	};
 </script>
 
 
@@ -127,12 +126,12 @@
 		<tr>
 			<td align="right">Version:</td>
 			<td align="left"><input type="text" size="20" name="version"
-				id="version" /></td>
+				id="version" />
+				<input type="hidden" id="newItemQuantity" size="15" value="1"
+				name="quantity" id="quantity" />
+				</td>
 		</tr>
-		<tr>
-			<td align="right">Quantity:</td>
-			<td><input type="text" id="newItemQuantity" size="15" value="1"
-				name="quantity" id="quantity" /></td>
+			
 	</table>
 </form>
 <br>
