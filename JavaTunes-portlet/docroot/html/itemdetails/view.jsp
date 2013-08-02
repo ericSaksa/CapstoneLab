@@ -33,6 +33,9 @@
 		// Hide the dialog
 		$("#newMemberDialog").hide();
 		
+		// Hide the submit change
+		$("#tabs").hide();
+		
 		//add event to the addItem button
 		$("#addMemberOpenDialogButton").on("click", function(){
 			//create the dialog for adding a new member
@@ -48,11 +51,13 @@
 			var memberName = $("#addMemberNameField").val();
 			$.get("<%=addMemberResourceURL%>", {"itemID":itemID, "memberName":memberName}, function(data){
 				var itemMemberID = $.trim(data);
-				
-				//$("#itemBandMemberDataRow_"+itemMemberID).after("<tr><td>"+itemMemberID+"</td><td>"+memberName+"</td><td><input type='button' value='delete' onclick='deleteMember("+itemMemberID+")'/></td></tr>")
 				$("#newMemberDialog").dialog("close");
-				$("#BandMemberTable > tr:lastChild").after("<tr><td>"+itemMemberID+"</td><td>"+memberName+"</td><td><input type='button' value='delete' onclick='deleteMember("+itemMemberID+")'/></td></tr>")
-				$("#inventoryListRow_"+itemID).click();
+				if($.trim($("#BandMemberTable tbody").html()).indexOf("found")!=-1) {
+					$("#BandMemberTable thead").html("<tr><th>Member ID</th><th>Member Name</th><th>Action</th></tr>");
+					$("#BandMemberTable tbody").html("");
+				}
+				$("#BandMemberTable tbody").before("<thead><tr><th>Member ID</th><th>Member Name</th><th>Action</th></tr></thead>");
+				$("#BandMemberTable tbody").append("<tr><td>"+itemMemberID+"</td><td>"+memberName+"</td><td><input type='button' value='delete' onclick='deleteMember("+itemMemberID+")'/></td></tr>");
 			});
 		});
 		
@@ -71,6 +76,9 @@
 		});
 		
 		Liferay.on('itemBandMembers', function(event){
+			
+			$("#tabs").show();
+			$("#itemDetailEmptyMessage").hide();
 			
 			var itemID = event.itemID;
 			$("#addMemberItemIDField").val(itemID);
@@ -177,7 +185,7 @@
 			});
 	};
 </script>
-
+<div id="itemDetailEmptyMessage"><h3 align='center'>Please select an item from the grid to view details.</h3></div>
 <div id="tabs">
 	<ul>
 		<li><a href="#tabs-1">Edit Item</a></li>
@@ -255,7 +263,7 @@
 				style="margin-left: auto; margin-right: auto">
 				<tr>
 					<td align="right">Name:</td>
-					<td align="left"><input type="text" id="addMemberItemIDField"/><input type="text" size="20" name="name"
+					<td align="left"><input type="hidden" id="addMemberItemIDField"/><input type="text" size="20" name="name"
 						id="addMemberNameField" value="Enter name"/></td>
 					<td><input id="addMemberSubmitButton" type="button" value="Submit" /></td>
 				</tr>

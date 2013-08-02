@@ -71,12 +71,14 @@
             	data: {"addInfo" : JSON.stringify(datatopassback)}
             });
             // append to table
-            $("#editPO_PITable_head").after("<tr><td>" + $(".itemTitle").val() +"</td>"
-											+ "<td>" + $("#editPO_addPIQuantity").val() +"</td>"
-											+ "<td>" + $(".itemYourPrice").val() +"</td>"
+            $("#editPO_PITable tbody").prepend("<tr><td>" + itemIdToAdd +"</td>"
+											+ "<td class='PIQuantity'>" + $("#editPO_addPIQuantity").val() +"</td>"
+											+ "<td>$<span class='PIUnitPrice'>" + $(".itemYourPrice").val() +"</span</td>"
 			+ "<td><button value=\""+itemIdToAdd+"\" class=\"editPO_removePI\">remove</button></td></tr>");
             
             addItemDialog.dialog('close');
+            
+            findTotals();
     	}); 
 		
 		/********************* DELETE PURCHASE ITEM '****************************/
@@ -90,7 +92,7 @@
 			}); 
 			// remove row from DOM
 			$(this).closest('tr').remove();
-			/*updateTotalPrice();*/
+			findTotals();
 		});
 		
 	});
@@ -115,31 +117,50 @@
 		}); */
 	}
 	
+	function findTotals() {
+		var totalprice = 0;
+	    $("#editPO_PITable tbody tr").each(function() {
+	        
+	        var quantity = $(this).find('td.PIQuantity').text();
+	        var unitprice = $(this).find('span.PIUnitPrice').text();
+	        row_total = quantity * unitprice; 
+	        totalprice += row_total;
+	       
+	    });
+	    $("#editPO_totalPrice").text(totalprice);
+
+	}
+
 	
-	Liferay.on(
-            'purchaseOrderInfo',
-            function(event) {
+	Liferay.on('purchaseOrderInfo',function(event) {
             	var jsonobj = $.parseJSON(event.purchaseItems);
+            	clearContentPortlet();
             	generatePItemTable(jsonobj);
-               jQuery("#message").html(event.purchaseItems+" to "+event.destination);
+               /* jQuery("#message").html(event.purchaseItems+" to "+event.destination); */
             }
     ); 
-	
+	function clearContentPortlet() {
+		$('#editPO_PITable tbody tr').slice(0,-1).remove();
+	}
 	function generatePItemTable(jsonobj) {
 		if (jsonobj.purchaseItems.length > 0) {
 			console.log(jsonobj.purchaseItems[0].PoId);
-			$('#header2').append("Order Number: <span id='PoIdSpan'>"+jsonobj.purchaseItems[0].PoId+"</span>");
+			$('#header2').html("Order Number: <span id='PoIdSpan'>"+jsonobj.purchaseItems[0].PoId+"</span>");
 			$.each(jsonobj.purchaseItems, function(i,item){
-				$('table#editPO_PITable tbody').prepend("<tr><td>"+item.ItemId+"</td><td>"+item.Quantity+" </td><td>"+item.UnitPrice+"</td><td><input type='hidden' name='PurchaseItemId' value='"+item.PurchaseItemId+"' ><button class='editPO_removePI' value='"+item.PurchaseItemId+"'>remove</button></td></tr>");
+				$('table#editPO_PITable tbody').prepend("<tr><td>"+item.ItemId+"</td><td class='PIQuantity'>"+item.Quantity+" </td><td>$<span class='PIUnitPrice'>"+item.UnitPrice+"</span></td><td><input type='hidden' name='PurchaseItemId' value='"+item.PurchaseItemId+"' ><button class='editPO_removePI' value='"+item.PurchaseItemId+"'>remove</button></td></tr>");
 			});
 			$('#editPO_addPI').prop('disabled',false);
+			
+			findTotals();
 		}
 	}
+	
+	
 </script>
 
 <portlet:defineObjects />
 
-<h2 align="center" id='header2'></h2>
+<h2 align="center" id='header2'>Please click on an order to view its details</h2>
 <br>
 <table class="bordered" id='editPO_PITable'>
 	<thead id="editPO_PITable_head">
@@ -153,7 +174,7 @@
 	<tbody>
 		<tr>
 			<td colspan="2" align="right">Total:</td>
-			<td>$100.00</td>
+			<td>$<span id='editPO_totalPrice'>0</span></td>
 			<td></td>
 		</tr>
 	</tbody>
@@ -209,4 +230,4 @@
 			style="width: 25%" />
 	</div>
 </div>
-<div id="message"></div>
+<!-- <div id="message"></div> -->
