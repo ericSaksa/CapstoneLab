@@ -6,7 +6,22 @@
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <link rel="stylesheet"
 	href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-	
+<style>
+.successstatus {
+  width: 200px ;
+  margin-left: auto ;
+  margin-right: auto ;
+  text-align: center ;
+  background-color:#e0ffff;
+}
+.errorstatus {
+  width: 200px ;
+  margin-left: auto ;
+  margin-right: auto ;
+  text-align: center ;
+  background-color:#FF0040;
+}
+</style>	
 <portlet:defineObjects />
 <portlet:resourceURL var="editItem" id="editItem"></portlet:resourceURL>
 <portlet:resourceURL var="deleteMember" id="deleteMember"></portlet:resourceURL>
@@ -126,7 +141,13 @@
 	};
 	
 	function changeItemDetail() {
-		
+			
+			if($("#itemDetailID").val() === "")
+			{
+				$( "#ItemDetailsStatus" ).addClass( "errorstatus" ).text( "Not a valid Item" ).fadeIn(2000).fadeOut(6000);
+				return;
+			}
+			
 			var editItemString = {
 					ItemId: $("#itemDetailID").val(),
 					Title: $("#itemDetailTitle").val(),
@@ -139,6 +160,20 @@
 			
 			$.get("<%=editItem%>", {"editItemString" : JSON.stringify(editItemString)}, function(data) {
 					console.log(data);
+					var resp = JSON.parse(data);
+					if(resp.ActivityStatus)
+					{
+						$("#itemDetailID").val("");
+						$("#itemDetailTitle").val("");
+						$("#itemDetailArtist").val("");
+						$("#itemDetailListPrice").val("");
+						$("#itemDetailYourPrice").val("");
+						$("#itemDetailReleaseDate").val("");
+						$("#itemDetailVersion").val("");
+						$( "#ItemDetailsStatus" ).addClass( "successstatus" ).text( "Update Successful!!" ).fadeIn(2000).fadeOut(4000);
+					}else{
+						$( "#ItemDetailsStatus" ).addClass( "errorstatus" ).text( "Update Failed!!" ).fadeIn(2000).fadeOut(4000);
+					}
 			});
 	};
 </script>
@@ -150,6 +185,9 @@
 	</ul>
 	<div id="tabs-1">
 		<h2 align="center">Item Details</h2>
+		<br>
+		<div id="ItemDetailsStatus">
+		</div>
 		<br>
 		<form id="editItemForm" method="post">
 			<table id="itemInformation"
@@ -192,9 +230,9 @@
 			<div>
 				<table>
 					<tr>
-						<td align="right">Quantity:</td>
-						<td><input type="text" id="quantity" size="15"
-							value="1" name="quantity" /></td>
+						<!-- <td align="right">Quantity:</td> -->
+						<!-- <td><input type="text" id="quantity" size="15"
+							value="1" name="quantity" /></td> -->
 					</tr>
 				</table>
 			</div>
