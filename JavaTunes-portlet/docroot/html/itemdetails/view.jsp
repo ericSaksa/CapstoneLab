@@ -200,7 +200,7 @@
 			</div>
 			<br>
 			<div align="right" style="width: 100%">
-				<input id="changeItemButtonSubmitChange" onclick="changeItemDetail()" type="button" value="Submit a Changes" style="width: 130px" />
+				<input id="changeItemButtonSubmitChange" onclick="changeItemDetail()" type="button" value="Submit Changes" style="width: 130px" />
 			</div>
 		</form>
 	</div>
