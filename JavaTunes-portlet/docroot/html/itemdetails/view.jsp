@@ -21,6 +21,9 @@
 		// Hide the dialog
 		$("#newMemberDialog").hide();
 		
+		// Hide the submit change
+		$("#tabs").hide();
+		
 		//add event to the addItem button
 		$("#addMemberOpenDialogButton").on("click", function(){
 			//create the dialog for adding a new member
@@ -39,11 +42,12 @@
 			// Make Ajax call
 			$.get("<%=addMemberResourceURL%>", {"itemID":itemID, "memberName":memberName}, function(data){
 				var itemMemberID = $.trim(data);
-				
-				//$("#itemBandMemberDataRow_"+itemMemberID).after("<tr><td>"+itemMemberID+"</td><td>"+memberName+"</td><td><input type='button' value='delete' onclick='deleteMember("+itemMemberID+")'/></td></tr>")
 				$("#newMemberDialog").dialog("close");
-				$("#BandMemberTable > tr:lastChild").after("<tr><td>"+itemMemberID+"</td><td>"+memberName+"</td><td><input type='button' value='delete' onclick='deleteMember("+itemMemberID+")'/></td></tr>")
-				$("#inventoryListRow_"+itemID).click();
+				if($.trim($("#BandMemberTable tbody").html()).indexOf("found")!=-1) {
+					$("#BandMemberTable tbody").html("");
+				}
+				var itemBandMemberDataRowForThisRow = 'itemBandMemberDataRow_'+ itemMemberID;
+				$("#BandMemberTable tbody").append("<tr id="+itemBandMemberDataRowForThisRow+"><td>"+itemMemberID+"</td><td>"+memberName+"</td><td><input type='button' value='delete' onclick='deleteMember("+itemMemberID+")'/></td></tr>");
 			});
 		});
 		
@@ -64,6 +68,9 @@
 		// Define a liferay event
 		Liferay.on('itemBandMembers', function(event){
 			
+			$("#tabs").show();
+			$("#itemDetailEmptyMessage").hide();
+			
 			var itemID = event.itemID;
 			$("#addMemberItemIDField").val(itemID);
 			var bandMemberListString = event.bandMemberList;
@@ -71,13 +78,12 @@
 			var json = JSON.parse(bandMemberListString);
 			var array = json.bandMemberList;
 	
-			var memberListTableString = "<table id=\"BandMemberTable\" class='bordered'>";
+			var memberListTableString = "";
 
 			if(array.length===0) {
-				memberListTableString += "<tr><th>Member ID</th><th>Member Name</th><th>Action</th></tr><tr><td align='center'colspan='3'>No data found</td></tr></table>";
+				memberListTableString += "<tr colspan='3'><td>No data found</td></tr>";
 				
 			} else {
-				memberListTableString += "<tr><th>Member ID</th><th>Member Name</th><th>Action</th></tr>";
 				for ( var key in array) {
 					if (array.hasOwnProperty(key)) {
 						var ItemBandMemberId = array[key].ItemBandMemberId;
@@ -88,9 +94,7 @@
 				}
 			}
 			
-			memberListTableString+="</table>";
-			
-			$("#bandMemberTable").html(memberListTableString);
+			$("#BandMemberTable tbody").html(memberListTableString);
 			
 		});
 
@@ -145,11 +149,19 @@
 			};
 			
 			$.get("<%=editItem%>", {"editItemString" : JSON.stringify(editItemString)}, function(data) {
-					console.log(data);
+				
+				data = JSON.parse(data).ActivityStatus;
+				
+				if(data==="success") {
+						Liferay.fire("inventoryRowUpdatedSuccessful", {
+								"updatedRow":JSON.stringify(editItemString)
+						});
+					}
 			});
+			
 	};
 </script>
-
+<div id="itemDetailEmptyMessage"><h3 align='center'>Please select an item from the grid to view details.</h3></div>
 <div id="tabs">
 	<ul>
 		<li><a href="#tabs-1">Edit Item</a></li>
@@ -197,24 +209,29 @@
 			</table>
 			<br>
 			<div>
-				<table>
-					<tr>
-						<td align="right">Quantity:</td>
-						<td><input type="text" id="quantity" size="15"
-							value="1" name="quantity" /></td>
-					</tr>
-				</table>
+				<input type="hidden" id="quantity" size="15"
+							value="1" name="quantity" />
 			</div>
 			<br>
 			<div align="right" style="width: 100%">
-				<input id="changeItemButtonSubmitChange" onclick="changeItemDetail()" type="button" value="Submit a Changes" style="width: 25%" />
+				<input id="changeItemButtonSubmitChange" onclick="changeItemDetail()" type="button" value="Submit Changes" style="width: 130px" />
 			</div>
 		</form>
 	</div>
 	<div id="tabs-2">
 		<h2 align="center">Band Member Details</h2>
 		<br />
-		<div id="bandMemberTable"></div>
+		<table class="bordered" id="BandMemberTable">
+			<thead>
+					<tr>
+					<th>Member ID</th>
+					<th>Member Name</th>
+					<th>Action</th>
+					</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
 		<br>
 		<button id="addMemberOpenDialogButton" style="width: 25%">Add Member</button>
 		
@@ -224,7 +241,7 @@
 				style="margin-left: auto; margin-right: auto">
 				<tr>
 					<td align="right">Name:</td>
-					<td align="left"><input type="text" id="addMemberItemIDField"/><input type="text" size="20" name="name"
+					<td align="left"><input type="hidden" id="addMemberItemIDField"/><input type="text" size="20" name="name"
 						id="addMemberNameField" value="Enter name"/></td>
 					<td><input id="addMemberSubmitButton" type="button" value="Submit" /></td>
 				</tr>

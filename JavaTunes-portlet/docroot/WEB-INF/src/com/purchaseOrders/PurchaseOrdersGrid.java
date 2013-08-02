@@ -74,6 +74,7 @@ public class PurchaseOrdersGrid {
 			itemJSONObj.put("PurchaseItemId", item.getPurchaseItemId());
 			itemJSONObj.put("PoId", item.getPoId());
 			itemJSONObj.put("ItemId", item.getItemId());
+			System.out.println("purchaseordergrid: poid: " +item.getPoId());
 			itemJSONObj.put("Quantity", item.getQuantity());
 			itemJSONObj.put("UnitPrice", item.getUnitPrice());
 

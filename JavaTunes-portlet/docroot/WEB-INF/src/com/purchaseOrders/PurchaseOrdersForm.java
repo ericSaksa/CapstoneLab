@@ -114,6 +114,7 @@ public class PurchaseOrdersForm {
 			for (Item item : itemsByArtist) {
 
 				JSONObject obj = JSONFactoryUtil.createJSONObject();
+				obj.put("item_id", item.getItemId());
 				obj.put("item_title", item.getTitle());
 				obj.put("item_artist", item.getArtist());
 				obj.put("item_itemId", item.getItemId());
@@ -133,6 +134,7 @@ public class PurchaseOrdersForm {
 			for (Item item : itemsByTitle) {
 
 				JSONObject obj = JSONFactoryUtil.createJSONObject();
+				obj.put("item_id", item.getItemId());
 				obj.put("item_title", item.getTitle());
 				obj.put("item_artist", item.getArtist());
 				obj.put("item_itemId", item.getItemId());
@@ -164,6 +166,7 @@ public class PurchaseOrdersForm {
 	 * @throws PortalException
 	 */
 	@ResourceMapping(value = "submitOrderForm")
+<<<<<<< HEAD
 	public void submitOrderForm(ResourceRequest request,
 			ResourceResponse response) throws SystemException, PortalException,
 			IOException {
@@ -172,6 +175,12 @@ public class PurchaseOrdersForm {
 		String purchaseOrderString = request.getParameter("items");
 
 		// Create JSON object and array that will be used
+=======
+	public void submitOrderForm(ResourceRequest request, ResourceResponse response) throws SystemException, PortalException, IOException {
+	
+		String purchaseOrderString = request.getParameter("items");
+
+>>>>>>> 6be1047ac6ac3faeb2eceaf0157a2d50dc54626f
 		JSONObject resultJson = JSONFactoryUtil.createJSONObject();
 		JSONArray purchaseItemsID = JSONFactoryUtil.createJSONArray();
 
@@ -240,6 +249,8 @@ public class PurchaseOrdersForm {
 		// Write values into return JSON object
 		resultJson.put("ActivityStatus", activityStatus);
 		resultJson.put("PoID", poID);
+		resultJson.put("OrderDate", purchaseOrder.getOrderDate());
+		resultJson.put("OrderStatus", purchaseOrder.getStatus());
 		resultJson.put("UserId", userID);
 
 		// Return JSON back to front end

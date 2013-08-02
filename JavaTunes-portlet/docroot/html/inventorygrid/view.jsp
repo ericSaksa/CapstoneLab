@@ -21,8 +21,12 @@
 </div>
 <script>
 var clickableRow;
+<<<<<<< HEAD
 
 	// document ready
+=======
+var inventoryGridSelectedRowJavascriptObject;
+>>>>>>> 6be1047ac6ac3faeb2eceaf0157a2d50dc54626f
 	$(function() {
 		
 		// set an event as a function
@@ -43,8 +47,14 @@ var clickableRow;
 				Liferay.fire('itemBandMembers',{itemID:itemID, bandMemberList:data})
 			});
 			
+<<<<<<< HEAD
 			// Fire an Liferay event
+=======
+			inventoryGridSelectedRowJavascriptObject = $(this);
+			
+>>>>>>> 6be1047ac6ac3faeb2eceaf0157a2d50dc54626f
 			Liferay.fire('itemInfo', {
+				
 				item : $.trim($($(this).children()[0]).html())+"*"
 				+
 				$.trim($($(this).children()[1]).html())+"*"
@@ -78,6 +88,27 @@ var clickableRow;
 								+"<td>$"+event.ListPrice+"</td>"
 								+"<td>$"+event.YourPrice+"</td>"
 								+"</tr>");
+		});
+		
+		Liferay.on("inventoryRowUpdatedSuccessful", function(event) {
+			
+			var updatedRowJsonObject = JSON.parse(event.updatedRow);
+			
+			var ItemId = updatedRowJsonObject.ItemId;
+			var Title = updatedRowJsonObject.Title;
+			var Artist = updatedRowJsonObject.Artist;
+			var ListPrice = updatedRowJsonObject.ListPrice;
+			var YourPrice = updatedRowJsonObject.YourPrice;
+			var ReleaseDate = updatedRowJsonObject.ReleaseDate;
+			var Version = updatedRowJsonObject.Version;
+			
+			$(inventoryGridSelectedRowJavascriptObject.children()[0]).html(ItemId);
+			$(inventoryGridSelectedRowJavascriptObject.children()[1]).html(Title);
+			$(inventoryGridSelectedRowJavascriptObject.children()[2]).html(Artist);
+			$(inventoryGridSelectedRowJavascriptObject.children()[3]).html(ReleaseDate);
+			$(inventoryGridSelectedRowJavascriptObject.children()[4]).html(Version);
+			$(inventoryGridSelectedRowJavascriptObject.children()[5]).html("$"+ListPrice);
+			$(inventoryGridSelectedRowJavascriptObject.children()[6]).html("$"+YourPrice);
 		});
 	});
 </script>
