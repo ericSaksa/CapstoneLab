@@ -171,13 +171,6 @@
 					var resp = JSON.parse(data);
 					if(resp.ActivityStatus)
 					{
-						$("#itemDetailID").val("");
-						$("#itemDetailTitle").val("");
-						$("#itemDetailArtist").val("");
-						$("#itemDetailListPrice").val("");
-						$("#itemDetailYourPrice").val("");
-						$("#itemDetailReleaseDate").val("");
-						$("#itemDetailVersion").val("");
 						$( "#ItemDetailsStatus" ).addClass( "successstatus" ).text( "Update Successful!!" ).fadeIn(2000).fadeOut(4000);
 					}else{
 						$( "#ItemDetailsStatus" ).addClass( "errorstatus" ).text( "Update Failed!!" ).fadeIn(2000).fadeOut(4000);
