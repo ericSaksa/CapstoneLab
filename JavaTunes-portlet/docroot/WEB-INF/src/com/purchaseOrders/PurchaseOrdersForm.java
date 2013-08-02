@@ -166,7 +166,7 @@ public class PurchaseOrdersForm {
 	 * @throws PortalException
 	 */
 	@ResourceMapping(value = "submitOrderForm")
-<<<<<<< HEAD
+
 	public void submitOrderForm(ResourceRequest request,
 			ResourceResponse response) throws SystemException, PortalException,
 			IOException {
@@ -175,12 +175,7 @@ public class PurchaseOrdersForm {
 		String purchaseOrderString = request.getParameter("items");
 
 		// Create JSON object and array that will be used
-=======
-	public void submitOrderForm(ResourceRequest request, ResourceResponse response) throws SystemException, PortalException, IOException {
-	
-		String purchaseOrderString = request.getParameter("items");
 
->>>>>>> 6be1047ac6ac3faeb2eceaf0157a2d50dc54626f
 		JSONObject resultJson = JSONFactoryUtil.createJSONObject();
 		JSONArray purchaseItemsID = JSONFactoryUtil.createJSONArray();
 
