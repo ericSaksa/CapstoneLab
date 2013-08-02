@@ -7,9 +7,7 @@
 	
 <portlet:resourceURL id="submitOrderForm" var="submitOrderForm"></portlet:resourceURL>
 <portlet:resourceURL id="autoComplete" var="autoComplete"></portlet:resourceURL>
-<div style="margin-left:auto; margin-right:auto; width:100%" align="center">
-<img height="120px" width="200px" src="http://technology-services.www.gresham.k12.or.us/modules/groups/homepagefiles/cms/1597670/Image/Tech%20Center%20Images/computer_purchases_opt.jpg"/>
-</div>
+
 <script>
 	var items = [];
 	$(function() {
@@ -27,6 +25,9 @@
 		$("#addAddItemsButton").on("click", function() {
 			addItemDialog.dialog('open');
 		});
+		
+		// Hide the add item submit button initially
+		$("#addAddItemButton").hide();
 		
 		//create the quantity selector on the new item dialog
 		$("#addNewItemQuantity").spinner({
@@ -48,6 +49,7 @@
 		  		$(".itemYourPrice").val(ui.item.item_price);
 		  		$(".itemReleaseDate").val(ui.item.item_releaseDate);
 		  		$(".itemVersion").val(ui.item.item_version);
+		  		$("#addAddItemButton").show();
 		  	}
 	    });
 		$('#addAddItemButton').on('click',function(){

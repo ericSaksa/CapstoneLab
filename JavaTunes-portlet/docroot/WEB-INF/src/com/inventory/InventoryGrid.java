@@ -29,110 +29,58 @@ import com.sb.service.ItemLocalServiceUtil;
 
 /**
  * Portlet implementation class InventoryGrid
- * 
- * This class handles requests and responses from Inventory Grid portlet
  */
 @Controller(value = "inventorygrid")
 @RequestMapping("VIEW")
 public class InventoryGrid {
-
-	/**
-	 * The Render Phase of Liferay
-	 * 
-	 * @param request
-	 * @param response
-	 * @param model
-	 * @return
-	 * @throws SystemException
-	 */
+	
 	@RenderMapping
 	public String defaultRenderrer(RenderRequest request,
-			RenderResponse response, Model model) throws SystemException {
-
-		// Get the current logged in user ID from Liferay
+			RenderResponse response, Model model) throws SystemException{
+		// Get the current logged in user ID
 		String loggedInUserID = request.getRemoteUser();
 
 		/*
-		 * If the logged in user ID is not in the session, add it to the session
+		 * If the logged in user ID is not in the session,
 		 */
 		if (loggedInUserID != null
 				&& request.getPortletSession().getAttribute("loggedInUserID") == null)
 			request.getPortletSession().setAttribute("loggedInUserID",
 					loggedInUserID);
 
-		// Get all items from DB
+		// Get all of items from DB
 		List<Item> inventoryList = ItemLocalServiceUtil.getItems(0,
 				ItemLocalServiceUtil.getItemsCount());
-
-		// Put the list of all items in the session
 		request.getPortletSession().setAttribute("items", inventoryList,
 				PortletSession.PORTLET_SCOPE);
-
-		// Return default view
 		return "view";
 	}
-
-	/**
-	 * The processAction Phase method for Liferay
-	 * 
-	 * @param request
-	 * @param response
-	 */
+	
 	@ActionMapping
-	public void actionMapping(ActionRequest request, ActionResponse response)
-			throws SystemException {
+	public void actionMapping(ActionRequest request, ActionResponse response) throws SystemException {
+		
 	}
-
-	/**
-	 * This function handles the request for get item band members
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws JSONException
-	 * @throws IOException
-	 * @throws SystemException
-	 */
+	
 	@ResourceMapping(value = "getItemBandMembers")
 	public void getItemDetails(ResourceRequest request,
-			ResourceResponse response) throws JSONException, IOException,
-			SystemException {
-
-		// Get item Id from front end
+			ResourceResponse response) throws JSONException, IOException, SystemException {
+		
 		int itemID = Integer.parseInt(request.getParameter("itemID"));
-
-		// Get a list of band members from DB using item Id
-		List<ItemBandMembers> bandMemberList = ItemLocalServiceUtil
-				.getBandMembers(itemID);
-
-		/*
-		 * Create result JSON Object and return it back to front end
-		 */
-		// THis JSON Array holds a list of Item Band Member
+		List<ItemBandMembers> bandMemberList = ItemLocalServiceUtil.getBandMembers(itemID);
+		
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
-		// The result JSON object
 		JSONObject resultJson = JSONFactoryUtil.createJSONObject();
-		/*
-		 * Iterate the list of band members, create JSON object for each band
-		 * member and fill in the corresponding information
-		 */
-		for (ItemBandMembers mem : bandMemberList) {
-
-			// new JSON object
-			JSONObject eachMemberJson = JSONFactoryUtil.createJSONObject();
+		for(ItemBandMembers mem : bandMemberList) {
 			
-			// put values in the object
+			JSONObject eachMemberJson = JSONFactoryUtil.createJSONObject();
 			eachMemberJson.put("ItemBandMemberId", mem.getItemBandMemberId());
 			eachMemberJson.put("ItemId", mem.getItemId());
 			eachMemberJson.put("Member", mem.getMember());
-			
-			// put the object in the JSON array
 			jsonArray.put(eachMemberJson);
 		}
-		
-		// Put JSON array in the returned JSON object
 		resultJson.put("bandMemberList", jsonArray);
-		
 		// Return JSON back
 		response.getWriter().println(resultJson.toString());
 	}
+
 }

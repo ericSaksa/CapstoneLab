@@ -11,9 +11,6 @@
 <portlet:resourceURL var="editItem" id="editItem"></portlet:resourceURL>
 <portlet:resourceURL var="deleteMember" id="deleteMember"></portlet:resourceURL>
 <portlet:resourceURL var="addMemberResourceURL" id="addMember"></portlet:resourceURL>
-<div style="margin-left:auto; margin-right:auto; width:100%" align="center">
-<img height="120px" width="200px" src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRqG4vSB1LUe9XnkTBRaO5vib_OOOCx20UmRLwDZFfGZ8bK_iQwTbyKjuI-"/>
-</div>
 
 <script>
 	$(function() {
@@ -34,12 +31,9 @@
 			});
 		});
 		
-		//add event to the addMember button
 		$("#addMemberSubmitButton").on("click", function(){
 			var itemID = $("#addMemberItemIDField").val();
 			var memberName = $("#addMemberNameField").val();
-			
-			// Make Ajax call
 			$.get("<%=addMemberResourceURL%>", {"itemID":itemID, "memberName":memberName}, function(data){
 				var itemMemberID = $.trim(data);
 				$("#newMemberDialog").dialog("close");
@@ -65,7 +59,6 @@
 			changeYear : true
 		});
 		
-		// Define a liferay event
 		Liferay.on('itemBandMembers', function(event){
 			
 			$("#tabs").show();

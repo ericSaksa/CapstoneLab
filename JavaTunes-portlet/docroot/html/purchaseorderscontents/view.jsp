@@ -10,15 +10,13 @@
 <portlet:resourceURL var="deleteItem" id="deleteItem"></portlet:resourceURL>
 <portlet:resourceURL var="addItem" id="addItem"></portlet:resourceURL>
 <%-- <portlet:actionURL var="addItem" id="addItem"></portlet:actionURL> --%>
-<div style="margin-left:auto; margin-right:auto; width:100%" align="center">
-<img height="120px" width="200px" src="http://us.cdn3.123rf.com/168nwm/dirkercken/dirkercken1001/dirkercken100100034/6269149-magnifying-glass-enlarging-part-of-3d-word-detail-in-red-with-reflections.jpg"/>
-</div>
+
 <script>
 	jQuery(function() {
 		var itemIdToAdd;
 		$('#editPO_addPI').prop('disabled',true);
 		$("#editPO_addPI").on("click", function() {
-
+			$("#editPO_submitAddPI").hide();
             addItemDialog.dialog("open");
 
    		 });
@@ -55,6 +53,7 @@
 				$(".itemVersion").val(ui.item.item_version);
 				$("#editPO_addPIQuantity").val(1);
 				itemIdToAdd = ui.item.item_itemId;
+				$("#editPO_submitAddPI").show();
 			}
 		});
 		
@@ -71,7 +70,7 @@
             $.ajax({
             	type: 'POST',
             	url: '${addItem}',
-            	data: {"addInfo" : JSON.stringify(datatopassback)}
+            	data: {"addInfo" : JSON.stringify(datatopassback)},
             });
             // append to table
             $("#editPO_PITable tbody").prepend("<tr><td>" + itemIdToAdd +"</td>"
@@ -130,7 +129,7 @@
 	Liferay.on('purchaseOrderInfo',function(event) {
             	var jsonobj = $.parseJSON(event.purchaseItems);
             	clearContentPortlet();
-            	generatePItemTable(jsonobj);
+            	generatePItemTable(jsonobj, event.PoIdFromGrid);
                jQuery("#message").html(event.purchaseItems+" to "+event.destination);
             }
     ); 
@@ -139,20 +138,22 @@
 		$('#editPO_totalPrice').text(0);
 		$('h2#header2').text('Please click on an order to view its details');
 	}
-	function generatePItemTable(jsonobj) {
-		if (jsonobj.purchaseItems.length == 0) {
-			$('#header2').html("Please add new item");
-		}
-		if (jsonobj.purchaseItems.length > 0) {
-			console.log(jsonobj.purchaseItems[0].PoId);
-			$('#header2').html("Order Number: <span id='PoIdSpan'>"+jsonobj.purchaseItems[0].PoId+"</span>");
-			$.each(jsonobj.purchaseItems, function(i,item){
+	function generatePItemTable(jsonobj,poid) {
+		console.log(jsonobj);
+		var pis = jsonobj.purchaseItems;
+		if (pis.length == 0) {
+			$('#header2').html("Please add new item<span style='display:none;' id='PoIdSpan'>"+poid+"</span");
+		}else if (pis.length > 0) {
+			console.log(pis[0].PoId);
+			$('#header2').html("Order Number: <span id='PoIdSpan'>"+pis[0].PoId+"</span>");
+			$.each(pis, function(i,item){
 				$('table#editPO_PITable tbody').prepend("<tr><td>"+item.ItemId+"</td><td class='PIQuantity'>"+item.Quantity+" </td><td>$<span class='PIUnitPrice'>"+item.UnitPrice+"</span></td><td><input type='hidden' name='PurchaseItemId' value='"+item.PurchaseItemId+"' ><button class='editPO_removePI' value='"+item.PurchaseItemId+"'>remove</button></td></tr>");
 			});
-			$('#editPO_addPI').prop('disabled',false);
+			
 			
 			findTotals();
 		}
+		$('#editPO_addPI').prop('disabled',false);
 	}
 	
 	
@@ -230,4 +231,3 @@
 			style="width: 25%" />
 	</div>
 </div>
-<div id="message"></div>

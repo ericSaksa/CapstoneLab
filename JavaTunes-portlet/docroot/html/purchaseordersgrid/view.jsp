@@ -15,9 +15,7 @@
 	List<PurchaseOrder> purchaseOrders = (List<PurchaseOrder>) portletSession.getAttribute("purchaseOrders",javax.portlet.PortletSession.PORTLET_SCOPE);
 %>
 
-<div style="margin-left:auto; margin-right:auto; width:100%" align="center">
-<img height="120px" width="200px" src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTnEep6zyK9zpjeDkORDohC73H5gJ8TbNgGoBfgEDIOIpN8NM6x1w"/>
-</div>
+
 <script type="text/javascript">
 var clickableRowPurchaseOrderGrid;
 	jQuery(function() {
@@ -33,7 +31,7 @@ var clickableRowPurchaseOrderGrid;
 				 Liferay.fire(
 				            'purchaseOrderInfo', {
 				            purchaseItems: resp,
-							destination : 'mumbai'
+							PoIdFromGrid: poId
 				        }
 				    ); 
 			});
