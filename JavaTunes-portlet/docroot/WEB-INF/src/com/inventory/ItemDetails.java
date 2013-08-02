@@ -28,20 +28,18 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.sb.model.Item;
 import com.sb.model.ItemBandMembers;
-import com.sb.model.PurchaseOrder;
 import com.sb.service.ItemBandMembersLocalServiceUtil;
 import com.sb.service.ItemLocalServiceUtil;
-import com.sb.service.PurchaseOrderLocalServiceUtil;
 
 /**
  * @author FW
  * 
- * Portlet implementation class ItemDetails
+ *         Portlet implementation class ItemDetails
  */
 @Controller(value = "itemdetails")
 @RequestMapping("VIEW")
 public class ItemDetails {
-	
+
 	/**
 	 * Default render to the view.jsp
 	 * 
@@ -51,10 +49,11 @@ public class ItemDetails {
 	 * @return
 	 */
 	@RenderMapping
-	public String defaultRenderrer(RenderRequest request, RenderResponse response, Model model){
+	public String defaultRenderrer(RenderRequest request,
+			RenderResponse response, Model model) {
 		return "view";
 	}
-	
+
 	/**
 	 * Action mapping handling, nothing to do for purchase order
 	 * 
@@ -64,10 +63,10 @@ public class ItemDetails {
 	 * @throws PortletException
 	 */
 	@ActionMapping
-	public void actionMapping(ActionRequest request, ActionResponse response) throws IOException, PortletException {
-	
+	public void actionMapping(ActionRequest request, ActionResponse response)
+			throws IOException, PortletException {
 	}
-	
+
 	/**
 	 * Edit an item by given every item fields
 	 * 
@@ -76,56 +75,61 @@ public class ItemDetails {
 	 * @throws IOException
 	 * @throws PortletException
 	 * @throws JSONException
-	 * @throws SystemException 
-	 * @throws ParseException 
+	 * @throws SystemException
+	 * @throws ParseException
 	 */
 	@ResourceMapping(value = "editItem")
-	public void editItem(ResourceRequest request, ResourceResponse response) throws IOException, PortletException, JSONException, SystemException, ParseException{
+	public void editItem(ResourceRequest request, ResourceResponse response)
+			throws IOException, PortletException, JSONException,
+			SystemException, ParseException {
 		// Receive search criteria string
 		String editItemString = request.getParameter("editItemString");
 		// Convert parameter to JSON Object
-		JSONObject editItemJson = JSONFactoryUtil.createJSONObject(editItemString);
+		JSONObject editItemJson = JSONFactoryUtil
+				.createJSONObject(editItemString);
 		// JSON Object for returning result
 		JSONObject resultJson = JSONFactoryUtil.createJSONObject();
-		
+
 		// Indicator for the activity status
 		String activityStatus = "success";
-		
+
+		/*
+		 * Get all the attributes needed for the item being edited
+		 */
 		int itemID = Integer.parseInt(editItemJson.getString("ItemId"));
 		String title = editItemJson.getString("Title");
 		String artist = editItemJson.getString("Artist");
-		double listPrice = Double.parseDouble(editItemJson.getString("ListPrice"));
-		double yourPrice = Double.parseDouble(editItemJson.getString("YourPrice"));
-
-		//		Date releaseDate = new Date(editItemJson.getString("ReleaseDate"));
+		double listPrice = Double.parseDouble(editItemJson
+				.getString("ListPrice"));
+		double yourPrice = Double.parseDouble(editItemJson
+				.getString("YourPrice"));
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date releaseDate = sdf.parse(editItemJson.getString("ReleaseDate"));
-		
 		int version = Integer.parseInt(editItemJson.getString("Version"));
-		
-		// Retrieve Item object via item ID
+
+		// Retrieve Item object being edited via item ID
 		Item currentItem = ItemLocalServiceUtil.fetchItem(itemID);
-		
-		// Set attributes
+
+		// Edit attributes
 		currentItem.setTitle(title);
 		currentItem.setArtist(artist);
 		currentItem.setListPrice(listPrice);
 		currentItem.setPrice(yourPrice);
 		currentItem.setReleaseDate(releaseDate);
 		currentItem.setVersion(version);
-		
+
 		/*
 		 * Call service util to save
 		 */
 		ItemLocalServiceUtil.updateItem(currentItem);
-		
+
 		// Put back acitivity status
 		resultJson.put("ActivityStatus", activityStatus);
-		
+
 		// Return JSON back
 		response.getWriter().println(resultJson.toString());
 	}
-	
+
 	/**
 	 * Add a band member by given parameters, the ID will be auto-generated
 	 * 
@@ -133,29 +137,32 @@ public class ItemDetails {
 	 * @param response
 	 * @throws IOException
 	 * @throws PortletException
-	 * @throws SystemException 
+	 * @throws SystemException
 	 */
 	@ResourceMapping(value = "addMember")
-	public void addMember(ResourceRequest request, ResourceResponse response) throws IOException, PortletException, SystemException{
-	
-		// Receive request
+	public void addMember(ResourceRequest request, ResourceResponse response)
+			throws IOException, PortletException, SystemException {
+
+		// Get values from request
 		int itemID = Integer.parseInt(request.getParameter("itemID"));
 		String memberName = request.getParameter("memberName");
-		System.out.println(itemID);	
-		System.out.println(memberName);	
-		// Create a new member
-		ItemBandMembers newMember = ItemBandMembersLocalServiceUtil.createItemBandMembers(new Long(CounterLocalServiceUtil.increment(ItemBandMembers.class.getName())).intValue());
 		
+		// Create a new member
+		ItemBandMembers newMember = ItemBandMembersLocalServiceUtil
+				.createItemBandMembers(new Long(CounterLocalServiceUtil
+						.increment(ItemBandMembers.class.getName())).intValue());
+
 		// Set attributes
 		newMember.setItemId(itemID);
 		newMember.setMember(memberName);
-		
+
 		// Add member
 		ItemBandMembersLocalServiceUtil.addItemBandMembers(newMember);
+		
 		// Return JSON back
 		response.getWriter().println(newMember.getItemBandMemberId());
 	}
-	
+
 	/**
 	 * Delete a band member by a given member ID
 	 * 
@@ -166,15 +173,18 @@ public class ItemDetails {
 	 * @throws JSONException
 	 */
 	@ResourceMapping(value = "deleteMember")
-	public void deleteMember(ResourceRequest request, ResourceResponse response) throws IOException, PortletException, JSONException{
-		
-		// Receive request 
-		int itemBandMemberID = Integer.parseInt(request.getParameter("itemBandMemberID"));
-		
+	public void deleteMember(ResourceRequest request, ResourceResponse response)
+			throws IOException, PortletException, JSONException {
+
+		// Receive request
+		int itemBandMemberID = Integer.parseInt(request
+				.getParameter("itemBandMemberID"));
+
 		String activityStatus = "success";
-		
+
 		try {
-			ItemBandMembersLocalServiceUtil.deleteItemBandMembers(itemBandMemberID);
+			ItemBandMembersLocalServiceUtil
+					.deleteItemBandMembers(itemBandMemberID);
 		} catch (PortalException e) {
 			e.printStackTrace();
 			activityStatus = "failure";
@@ -182,6 +192,7 @@ public class ItemDetails {
 			e.printStackTrace();
 			activityStatus = "failure";
 		}
+		
 		// Return JSON back
 		response.getWriter().println(activityStatus);
 	}

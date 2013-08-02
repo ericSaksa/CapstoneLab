@@ -7,7 +7,9 @@
 
 <portlet:defineObjects />
 <portlet:resourceURL var="createNewItem" id="createNewItem"></portlet:resourceURL>
-
+<div style="margin-left:auto; margin-right:auto; width:100%" align="center">
+<img height="120px" width="200px" src="http://www.kapmoldcreations.com/uploads/8/9/0/1/8901005/3655490.jpg"/>
+</div>
 <script>
 
 	$(function() {
@@ -35,6 +37,9 @@
 		});
 		*/
 		
+		/* check id all the values in the form table is empty, 
+		them open the dialog */
+		
 		jQuery("#addItemButton").click(function(event) {
 			if($.trim($("#title").val()) == "" ||
 			   $.trim($("#artist").val()) == "" ||
@@ -43,9 +48,12 @@
 			$.trim($("#releaseDate").val()) == "" ||
 			$.trim($("#version").val()) == "" ||
 			$.trim($("#quantity").val()) == ""){
+				
 				$("#formNotFullDialog").dialog("open");
 			}
 			else{
+				
+				/* Create a new js object containing the form information */
 				var newItem = {
 						
 						 Title : $("#title").val(),
@@ -55,9 +63,12 @@
 			             ReleaseDate : $("#releaseDate").val(),
 			             Version : $("#version").val(),
 			             Quantity : $("#quantity").val()
-				}; 
+				};
+				
+				/* Make a Ajax call, pass in the JSON string */
 				$.get("<%=createNewItem%>", {"newItemInfo" : JSON.stringify(newItem)}, function(resp){
-					 
+					
+					/* Fire an liferay event, and pass the values needed */ 
 					Liferay.fire(
 				            'AddItemEvent', {
 				           	 ItemId : resp,
@@ -72,13 +83,8 @@
 				);
 					clickableRow(); 
 				 });
-			
 			}
 			
-			 
-			 
-			 
-			 
 /* 			 $("#title").val("");
              $("#artist").val("");
              $("#listPrice").val("");
@@ -96,6 +102,7 @@
 
 <h2 align="center">New Inventory Item Form</h2>
 <br>
+<!-- Table shows detail item information -->
 <form id="newItemForm">
 	<table id="itemInformation"
 		style="margin-left: auto; margin-right: auto">
@@ -146,6 +153,8 @@
 	<h4 align="center">Please fill out all fields on the form.</h4>
 </div>
 <script>
+
+	/* AUI form validation */
 	AUI().use('aui-form-validator', function(Y) {
 
 		//create the rules for the form validation

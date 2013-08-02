@@ -10,7 +10,9 @@
 <portlet:resourceURL var="deleteItem" id="deleteItem"></portlet:resourceURL>
 <portlet:resourceURL var="addItem" id="addItem"></portlet:resourceURL>
 <%-- <portlet:actionURL var="addItem" id="addItem"></portlet:actionURL> --%>
-
+<div style="margin-left:auto; margin-right:auto; width:100%" align="center">
+<img height="120px" width="200px" src="http://us.cdn3.123rf.com/168nwm/dirkercken/dirkercken1001/dirkercken100100034/6269149-magnifying-glass-enlarging-part-of-3d-word-detail-in-red-with-reflections.jpg"/>
+</div>
 <script>
 	jQuery(function() {
 		var itemIdToAdd;

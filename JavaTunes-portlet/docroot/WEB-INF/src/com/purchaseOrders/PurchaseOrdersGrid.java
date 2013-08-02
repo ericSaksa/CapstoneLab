@@ -35,87 +35,93 @@ import com.sb.service.PurchaseOrderLocalServiceUtil;
 public class PurchaseOrdersGrid {
 
 	@ActionMapping
-	public void actionMapping(ActionRequest request, ActionResponse response) throws NoSuchPurchaseOrderException, NumberFormatException, SystemException {
+	public void actionMapping(ActionRequest request, ActionResponse response)
+			throws NoSuchPurchaseOrderException, NumberFormatException,
+			SystemException {}
 
-		// Get the current logged in user ID
-		String loggedInUserID = request.getRemoteUser();
-
-		/*
-		 * If the logged in user ID is not in the session,
-		 */
-		if (loggedInUserID != null
-				&& request.getPortletSession().getAttribute("loggedInUserID") == null)
-			request.getPortletSession().setAttribute("loggedInUserID",
-					loggedInUserID);
-		
-		// Get a list of Purchase Orders using the user ID
-		List<PurchaseOrder> orders = PurchaseOrderLocalServiceUtil.findByOrderByUserId(Integer.parseInt(loggedInUserID));
-		
-		System.out.println(loggedInUserID);
-		System.out.println(orders);
-		
-		request.getPortletSession().setAttribute("purchaseOrders", orders);
-	}
-
+	/**
+	 * Serve Resource handling getPurchaseContents request
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws JSONException
+	 * @throws IOException
+	 * @throws SystemException
+	 */
 	@ResourceMapping(value = "getPurchaseContents")
 	public void getPurchaseContents(ResourceRequest request,
-			ResourceResponse response) throws JSONException, IOException, SystemException {
-		
-		//int PoId = (Integer) request.getAttribute("purchaseContents");
+			ResourceResponse response) throws JSONException, IOException,
+			SystemException {
+
+		// Get JSON string from front end that contains detailed information
 		int PoId = Integer.parseInt(request.getParameter("purchaseContents"));
-		
+
+		// Create JSON object and array that will be used
 		JSONObject outputJSONObj = JSONFactoryUtil.createJSONObject();
-		
 		JSONArray jArray = JSONFactoryUtil.createJSONArray();
-		
+
 		// Get items from the DB using PoId, and put them in the JSON Array
-		List<PurchaseItem> purchaseItems = PurchaseOrderLocalServiceUtil.getItems(PoId);
-		System.out.println(purchaseItems.size());
-		for(PurchaseItem item : purchaseItems) {
-			
+		List<PurchaseItem> purchaseItems = PurchaseOrderLocalServiceUtil
+				.getItems(PoId);
+
+		/*
+		 * Iterate through the list and set attribute values
+		 */
+		for (PurchaseItem item : purchaseItems) {
+
 			JSONObject itemJSONObj = JSONFactoryUtil.createJSONObject();
-			
+
 			itemJSONObj.put("PurchaseItemId", item.getPurchaseItemId());
 			itemJSONObj.put("PoId", item.getPoId());
 			itemJSONObj.put("ItemId", item.getItemId());
 			itemJSONObj.put("Quantity", item.getQuantity());
 			itemJSONObj.put("UnitPrice", item.getUnitPrice());
-			
+
 			jArray.put(itemJSONObj);
 		}
-		
+
+		// Write values into return JSON object
 		outputJSONObj.put("ActivityStatus", "success");
 		outputJSONObj.put("purchaseItems", jArray);
-		
+
 		// Return JSON back
 		response.getWriter().println(outputJSONObj.toString());
 	}
-	
+
+	/**
+	 * 
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 * @throws NoSuchPurchaseOrderException
+	 * @throws NumberFormatException
+	 * @throws SystemException
+	 */
 	@RenderMapping
 	public String defaultRenderrer(RenderRequest request,
 			RenderResponse response, Model model)
-			throws NoSuchPurchaseOrderException, NumberFormatException, SystemException {
-		
+			throws NoSuchPurchaseOrderException, NumberFormatException,
+			SystemException {
+
 		// Get the current logged in user ID
 		String loggedInUserID = request.getRemoteUser();
 
 		/*
 		 * If the logged in user ID is not in the session,
 		 */
-		System.out.println(":::: Login Information is ::::::");
 		if (loggedInUserID != null
 				&& request.getPortletSession().getAttribute("loggedInUserID") == null)
 			request.getPortletSession().setAttribute("loggedInUserID",
 					loggedInUserID);
-		
+
 		// Get a list of Purchase Orders using the user ID
-		List<PurchaseOrder> orders = PurchaseOrderLocalServiceUtil.findByOrderByUserId(Integer.parseInt(loggedInUserID));
-		
-		System.out.println(loggedInUserID);
-		System.out.println(orders.size());
-		
+		List<PurchaseOrder> orders = PurchaseOrderLocalServiceUtil
+				.findByOrderByUserId(Integer.parseInt(loggedInUserID));
+
 		request.getPortletSession().setAttribute("purchaseOrders", orders);
 
+		// Return the default view
 		return "view";
 	}
 }
