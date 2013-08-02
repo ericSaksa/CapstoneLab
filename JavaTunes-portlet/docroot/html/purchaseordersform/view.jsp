@@ -68,6 +68,11 @@
 					items.splice(i, 1);
 				}
 			}
+			
+			// Hide the submit button when nothing in shopping cart
+			if(items.length==0) {
+				jQuery("#submitPurchaseButton").hide();
+			}
 		});
 		
 		$('#submitPurchaseButton').on('click',function(){

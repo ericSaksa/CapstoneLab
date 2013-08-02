@@ -42,7 +42,7 @@
 
 		$("#editPO_searchToAdd").autocomplete({
 			source : "<%= autoComplete%>",
-			minLength : 2,
+			minLength : 0,
 			// publish item information to the table
 			select : function completeItemInformation(event, ui) 	{
 				$(".itemTitle").val(ui.item.item_title);
@@ -51,6 +51,7 @@
 				$(".itemYourPrice").val(ui.item.item_price);
 				$(".itemReleaseDate").val(ui.item.item_releaseDate);
 				$(".itemVersion").val(ui.item.item_version);
+				$("#editPO_addPIQuantity").val(1);
 				itemIdToAdd = ui.item.item_itemId;
 			}
 		});
@@ -99,14 +100,6 @@
 	function resetItemSearchDialog() {
 		$('#editPO_addPIDialog :input').not(':submit, :button').val('');
 	}
-	function completeItemInformation(event, ui) {
-		$('.itemTitle').val(ui.item.itemInfo.title);
-		$('.itemArtist').val(ui.item.itemInfo.artist);
-		$('.itemListPrice').val(ui.item.itemInfo.listPrice);
-		$('.itemYourPrice').val(ui.item.itemInfo.yourPrice);
-		$('.itemReleaseDate').val(ui.item.itemInfo.releaseDate);
-		$('.itemVersion').val(ui.item.itemInfo.version);
-	}
 	/* function resetItemSearchDialog() {
 		$('#addItemSearchDialog :input').not(':submit, :button, #addNewItemQuantity').val('');
 	} */
@@ -136,13 +129,18 @@
             	var jsonobj = $.parseJSON(event.purchaseItems);
             	clearContentPortlet();
             	generatePItemTable(jsonobj);
-               /* jQuery("#message").html(event.purchaseItems+" to "+event.destination); */
+               jQuery("#message").html(event.purchaseItems+" to "+event.destination);
             }
     ); 
 	function clearContentPortlet() {
 		$('#editPO_PITable tbody tr').slice(0,-1).remove();
+		$('#editPO_totalPrice').text(0);
+		$('h2#header2').text('Please click on an order to view its details');
 	}
 	function generatePItemTable(jsonobj) {
+		if (jsonobj.purchaseItems.length == 0) {
+			$('#header2').html("Please add new item");
+		}
 		if (jsonobj.purchaseItems.length > 0) {
 			console.log(jsonobj.purchaseItems[0].PoId);
 			$('#header2').html("Order Number: <span id='PoIdSpan'>"+jsonobj.purchaseItems[0].PoId+"</span>");
@@ -230,4 +228,4 @@
 			style="width: 25%" />
 	</div>
 </div>
-<!-- <div id="message"></div> -->
+<div id="message"></div>

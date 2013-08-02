@@ -6,22 +6,7 @@
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <link rel="stylesheet"
 	href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-<style>
-.successstatus {
-  width: 200px ;
-  margin-left: auto ;
-  margin-right: auto ;
-  text-align: center ;
-  background-color:#e0ffff;
-}
-.errorstatus {
-  width: 200px ;
-  margin-left: auto ;
-  margin-right: auto ;
-  text-align: center ;
-  background-color:#FF0040;
-}
-</style>	
+	
 <portlet:defineObjects />
 <portlet:resourceURL var="editItem" id="editItem"></portlet:resourceURL>
 <portlet:resourceURL var="deleteMember" id="deleteMember"></portlet:resourceURL>
@@ -53,11 +38,10 @@
 				var itemMemberID = $.trim(data);
 				$("#newMemberDialog").dialog("close");
 				if($.trim($("#BandMemberTable tbody").html()).indexOf("found")!=-1) {
-					$("#BandMemberTable thead").html("<tr><th>Member ID</th><th>Member Name</th><th>Action</th></tr>");
 					$("#BandMemberTable tbody").html("");
 				}
-				$("#BandMemberTable tbody").before("<thead><tr><th>Member ID</th><th>Member Name</th><th>Action</th></tr></thead>");
-				$("#BandMemberTable tbody").append("<tr><td>"+itemMemberID+"</td><td>"+memberName+"</td><td><input type='button' value='delete' onclick='deleteMember("+itemMemberID+")'/></td></tr>");
+				var itemBandMemberDataRowForThisRow = 'itemBandMemberDataRow_'+ itemMemberID;
+				$("#BandMemberTable tbody").append("<tr id="+itemBandMemberDataRowForThisRow+"><td>"+itemMemberID+"</td><td>"+memberName+"</td><td><input type='button' value='delete' onclick='deleteMember("+itemMemberID+")'/></td></tr>");
 			});
 		});
 		
@@ -87,13 +71,12 @@
 			var json = JSON.parse(bandMemberListString);
 			var array = json.bandMemberList;
 	
-			var memberListTableString = "<table id=\"BandMemberTable\" class='bordered'>";
+			var memberListTableString = "";
 
 			if(array.length===0) {
-				memberListTableString += "<tr><th>Member ID</th><th>Member Name</th><th>Action</th></tr><tr><td align='center'colspan='3'>No data found</td></tr></table>";
+				memberListTableString += "<tr colspan='3'><td>No data found</td></tr>";
 				
 			} else {
-				memberListTableString += "<tr><th>Member ID</th><th>Member Name</th><th>Action</th></tr>";
 				for ( var key in array) {
 					if (array.hasOwnProperty(key)) {
 						var ItemBandMemberId = array[key].ItemBandMemberId;
@@ -104,9 +87,7 @@
 				}
 			}
 			
-			memberListTableString+="</table>";
-			
-			$("#bandMemberTable").html(memberListTableString);
+			$("#BandMemberTable tbody").html(memberListTableString);
 			
 		});
 
@@ -149,13 +130,7 @@
 	};
 	
 	function changeItemDetail() {
-			
-			if($("#itemDetailID").val() === "")
-			{
-				$( "#ItemDetailsStatus" ).addClass( "errorstatus" ).text( "Not a valid Item" ).fadeIn(2000).fadeOut(6000);
-				return;
-			}
-			
+		
 			var editItemString = {
 					ItemId: $("#itemDetailID").val(),
 					Title: $("#itemDetailTitle").val(),
@@ -167,15 +142,16 @@
 			};
 			
 			$.get("<%=editItem%>", {"editItemString" : JSON.stringify(editItemString)}, function(data) {
-					console.log(data);
-					var resp = JSON.parse(data);
-					if(resp.ActivityStatus)
-					{
-						$( "#ItemDetailsStatus" ).addClass( "successstatus" ).text( "Update Successful!!" ).fadeIn(2000).fadeOut(4000);
-					}else{
-						$( "#ItemDetailsStatus" ).addClass( "errorstatus" ).text( "Update Failed!!" ).fadeIn(2000).fadeOut(4000);
+				
+				data = JSON.parse(data).ActivityStatus;
+				
+				if(data==="success") {
+						Liferay.fire("inventoryRowUpdatedSuccessful", {
+								"updatedRow":JSON.stringify(editItemString)
+						});
 					}
 			});
+			
 	};
 </script>
 <div id="itemDetailEmptyMessage"><h3 align='center'>Please select an item from the grid to view details.</h3></div>
@@ -186,9 +162,6 @@
 	</ul>
 	<div id="tabs-1">
 		<h2 align="center">Item Details</h2>
-		<br>
-		<div id="ItemDetailsStatus">
-		</div>
 		<br>
 		<form id="editItemForm" method="post">
 			<table id="itemInformation"
@@ -229,13 +202,8 @@
 			</table>
 			<br>
 			<div>
-				<table>
-					<tr>
-						<!-- <td align="right">Quantity:</td> -->
-						<!-- <td><input type="text" id="quantity" size="15"
-							value="1" name="quantity" /></td> -->
-					</tr>
-				</table>
+				<input type="hidden" id="quantity" size="15"
+							value="1" name="quantity" />
 			</div>
 			<br>
 			<div align="right" style="width: 100%">
@@ -246,7 +214,17 @@
 	<div id="tabs-2">
 		<h2 align="center">Band Member Details</h2>
 		<br />
-		<div id="bandMemberTable"></div>
+		<table class="bordered" id="BandMemberTable">
+			<thead>
+					<tr>
+					<th>Member ID</th>
+					<th>Member Name</th>
+					<th>Action</th>
+					</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
 		<br>
 		<button id="addMemberOpenDialogButton" style="width: 25%">Add Member</button>
 		
