@@ -8,6 +8,12 @@
 <portlet:defineObjects />
 <portlet:resourceURL var="createNewItem" id="createNewItem"></portlet:resourceURL>
 
+<div style="margin-left:auto; margin-right:auto; width:100%" align="center">
+<img height="120px" width="200px" src="http://www.kapmoldcreations.com/uploads/8/9/0/1/8901005/3655490.jpg"/>
+</div>
+
+<div id="addInventoryItemSuccessDialog" style="display:none"><h4>Inventory Item has been added.</h4></div>
+
 <script>
 
 	$(function() {
@@ -72,11 +78,26 @@
 				);
 				clickableRow(); 
 				clearInventoryFormFields();
-				 });
+				
+				showInventoryItemAddedSuccessDialog();
+				
+				});
 			
 			}
 		});
 	});
+	
+	function showInventoryItemAddedSuccessDialog() {
+		$("#addInventoryItemSuccessDialog").dialog({
+			modal:true,
+			title:"Operation Successful",
+			buttons:{
+				"Close" : function(){
+					$(this).dialog("close");
+				}
+			}
+		});
+	};
 	
 	function clearInventoryFormFields() {
 		 $("#title").val("");

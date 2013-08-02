@@ -12,6 +12,13 @@
 <portlet:resourceURL var="deleteMember" id="deleteMember"></portlet:resourceURL>
 <portlet:resourceURL var="addMemberResourceURL" id="addMember"></portlet:resourceURL>
 
+<div style="margin-left:auto; margin-right:auto; width:100%" align="center">
+<img height="120px" width="200px" src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRqG4vSB1LUe9XnkTBRaO5vib_OOOCx20UmRLwDZFfGZ8bK_iQwTbyKjuI-"/>
+</div>
+
+
+<div id="editInventoryItemSuccessDialog" style="display:none"><h4>Inventory Item has been updated.</h4></div>
+
 <script>
 	$(function() {
 		
@@ -118,6 +125,18 @@
 
 	});
 	
+	function showInventoryItemEditedSuccessDialog() {
+		$("#editInventoryItemSuccessDialog").dialog({
+			modal:true,
+			title:"Operation Successful",
+			buttons:{
+				"Close" : function(){
+					$(this).dialog("close");
+				}
+			}
+		});
+	};
+	
 	function deleteMember(itemBandMemberID) {
 		$.get("<%=deleteMember%>",{"itemBandMemberID":itemBandMemberID}, function(data){
 			if($.trim(data)==="success") {
@@ -149,6 +168,7 @@
 						Liferay.fire("inventoryRowUpdatedSuccessful", {
 								"updatedRow":JSON.stringify(editItemString)
 						});
+						showInventoryItemEditedSuccessDialog();
 					}
 			});
 			

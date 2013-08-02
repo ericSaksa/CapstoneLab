@@ -8,6 +8,10 @@
 <portlet:resourceURL id="submitOrderForm" var="submitOrderForm"></portlet:resourceURL>
 <portlet:resourceURL id="autoComplete" var="autoComplete"></portlet:resourceURL>
 
+<div style="margin-left:auto; margin-right:auto; width:100%" align="center">
+<img height="120px" width="200px" src="http://technology-services.www.gresham.k12.or.us/modules/groups/homepagefiles/cms/1597670/Image/Tech%20Center%20Images/computer_purchases_opt.jpg"/>
+</div>
+
 <script>
 	var items = [];
 	$(function() {
@@ -156,6 +160,7 @@
 	<input id="submitPurchaseButton" type="button" value="Submit"
 		style="width: 25%" />
 </div>
+
 <div id="addItemSearchDialog">
 	<table>
 		<tr>

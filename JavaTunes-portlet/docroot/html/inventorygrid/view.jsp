@@ -16,6 +16,10 @@
 
 <portlet:defineObjects />
 
+<div style="margin-left:auto; margin-right:auto; width:100%" align="center">
+<img height="120px" width="200px" src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQpD_SoJ2yAXzjwW0gELQMcWcEjQZMpG4H3_E4ru3Yy_gzVk4UpAw"/>
+</div>
+
 <script>
 var clickableRow;
 var inventoryGridSelectedRowJavascriptObject;
