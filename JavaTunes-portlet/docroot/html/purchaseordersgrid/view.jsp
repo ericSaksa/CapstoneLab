@@ -35,31 +35,31 @@ var clickableRowPurchaseOrderGrid;
 				        }
 				    ); 
 			});
+			
+			Liferay.on(
+		            'PurchaseOrderEvent',
+		            function(event) {
+		               jQuery("#message1").html(event.PoId+"  "+event.OrderDate+ " "+event.status);
+		               var tableContents=jQuery(".bordered").html();
+		               jQuery("#purchaseOrdersTable").html(tableContents+"<tr><td>"+ "asdfhasdfasd" +"</td><td>"+event.PoId +"</td><td>"+ event.status+"</td></tr>");
+		            }
+		    );
+			
 			return false;
 		});
 	};
 	clickableRowPurchaseOrderGrid();
-		Liferay.on(
-	            'PurchaseOrderEvent',
-	            function(event) {
-	               jQuery("#message1").html(event.PoId+"  "+event.OrderDate+ " "+event.status);
-	               var tableContents=jQuery(".bordered").html();
-	               jQuery("#purchaseOrdersTable").html(tableContents+"<tr><td>"+ "asdfhasdfasd" +"</td><td>"+event.PoId +"</td><td>"+ event.status+"</td></tr>");
-	            }
-	    );
-		
-		Liferay.on(
-	            'addedPurchaseOrder',
-	            function(event) {
-	            	
-	            	 var d = new Date();
-			       		var month = d.getMonth()+1;
-			       		var day = d.getDate();
-			       		var output = d.getFullYear() + '-' + ((''+month).length<2 ? '0' : '') + month + '-' + ((''+day).length<2 ? '0' : '') + day;
-	            	
-		             jQuery("#purchaseOrdersTable tbody").append("<tr class='purchaseOrder'><td>"+ output +"</td><td>"+event.POID +"</td><td>"+ event.OrderStatus+"</td></tr>");
-	            }
-	    );
+	Liferay.on(
+            'addedPurchaseOrder',
+            function(event) {
+            	 var d = new Date();
+		       		var month = d.getMonth()+1;
+		       		var day = d.getDate();
+		       		var output = d.getFullYear() + '-' + ((''+month).length<2 ? '0' : '') + month + '-' + ((''+day).length<2 ? '0' : '') + day;
+            	
+	             jQuery("#purchaseOrdersTable tbody").append("<tr class='purchaseOrder'><td>"+ output +"</td><td>"+event.POID +"</td><td>"+ event.OrderStatus+"</td></tr>");
+            }
+    );
 	});
 	
 </script>

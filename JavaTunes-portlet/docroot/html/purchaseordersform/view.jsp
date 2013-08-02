@@ -98,9 +98,11 @@
 					jQuery("#addOrderItemTable tbody tr").remove();
 					
 					jQuery("#submitPurchaseButton").hide();
-					}
+					items.splice(0, items.length);
+				}
+				clickableRowPurchaseOrderGrid();
 			});
-			clickableRowPurchaseOrderGrid();
+			
 		});
 		/* jQuery("#submitPurchaseButton").click(function(event) {
 			
